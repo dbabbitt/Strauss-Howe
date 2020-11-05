@@ -1,4 +1,5 @@
 # Strauss-Howe
 Various visualizations of the Strauss–Howe generational theory
 
-![](https://i.imgur.com/UnOAOY1.gifv)
+<img src="https://imgur.com/UnOAOY1"
+     style="float: left; margin-right: 10px;" />
