@@ -4,12 +4,22 @@
 # Ignore whole folders
 **/.git/
 data/saeculum
-saves/movies
+#saves/movies
+saves/movies/**/*.png
 
 # Ignore big files (GitHub will warn you when pushing files larger than 50 MB. You will not be allowed to
 # push files larger than 100 MB.) Tip: If you regularly push large files to GitHub, consider introducing
 # Git Large File Storage (Git LFS) as part of your workflow.
 saves/gif/net_neutrality.gif
+saves/movies/diagonal/Another_Attempt_to_Visualize_my_Patriline_Data.gif
+saves/movies/diagonal/baby_boy_babbitt_movie.gif
+saves/movies/diagonal/movie.gif
+saves/movies/movie.gif
+saves/movies/saeculum/saeculum_movie.gif
+saves/movies/saeculum_fashionable/baby_boy_babbitt_movie.gif
+saves/movies/saeculum_fashionable/movie_to_2020.gif
+saves/movies/saeculum_fashionable/saeculum_fashionable_movie.gif
+saves/movies/saeculum_movie.gif
 
 # Exclude Strauss–Howe stuff that I didn't make
 data/mov/2020-01-09_14-46-28.mov
