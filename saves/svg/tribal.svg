@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg contentScriptType="text/ecmascript" width="1201.8307"
+     xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"
+     contentStyleType="text/css"
+     viewBox="-532.822021 -550.343750 1201.830688 1352.914063"
+     height="1352.9141" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <g id="edges">
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,279.969513 C -314.136078,33.833435 363.863922,-26.574844 610.000000,179.289063"
+              class="id_SJAs_(Social_Justice_Activists) id_Alt-Lite"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,279.969513 C -293.050934,54.918594 384.949066,57.765793 610.000000,284.714844"
+              class="id_SJAs_(Social_Justice_Activists) id_Alt-Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,279.969513 C -520.280945,86.652863 -230.727417,-203.743469 -37.410759,-204.024399"
+              class="id_SJAs_(Social_Justice_Activists) id_Sorters"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,279.969513 C -344.054474,3.915039 333.945526,-146.248383 610.000000,29.697157"
+              class="id_SJAs_(Social_Justice_Activists) id_Trumpists"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,416.768677 C -341.495911,143.272766 336.504089,0.784988 610.000000,179.289063"
+              class="id_Black_Lives_Matter id_Alt-Lite" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,416.768677 C -320.410767,164.357910 357.589233,85.125610 610.000000,284.714844"
+              class="id_Black_Lives_Matter id_Alt-Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,416.768677 C -371.414307,113.354370 306.585693,-118.888535 610.000000,29.697157"
+              class="id_Black_Lives_Matter id_Trumpists" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,416.768677 C -415.024597,214.299728 46.141907,68.059509 248.610840,173.034943"
+              class="id_Black_Lives_Matter id_Establishment_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,495.780823 C -357.298340,206.482468 320.701660,16.587402 610.000000,179.289063"
+              class="id_#MeToo id_Alt-Lite" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,495.780823 C -304.975769,258.805054 373.024231,225.877777 610.000000,440.902008"
+              class="id_#MeToo id_MRA_(Mens_Right_Advocates)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,495.780823 C -295.647369,268.133453 382.352631,263.191345 610.000000,487.543976"
+              class="id_#MeToo id_Manosphere" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,495.780823 C -273.802643,289.978149 404.197357,350.570251 610.000000,596.767578"
+              class="id_#MeToo id_Incels" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,344.079651 C -532.822021,331.257629 -532.822021,292.791534 -520.000000,279.969513"
+              class="id_Gender-Critical_Feminists id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,344.079651 C -274.635529,137.444107 403.364471,195.537521 610.000000,440.902008"
+              class="id_Gender-Critical_Feminists id_MRA_(Mens_Right_Advocates)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-140.000000 C -378.141083,-157.247162 -139.481995,29.670456 -122.234833,171.529358"
+              class="id_Modern_Neo-Marxists id_Establishment_Left"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-140.000000 C -303.670837,-231.115173 157.495667,-43.294212 248.610840,173.034943"
+              class="id_Modern_Neo-Marxists id_Establishment_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-85.660233 C -219.924988,-237.585220 458.075012,-15.360168 610.000000,284.714844"
+              class="id_Antifa id_Alt-Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-85.660233 C -241.010147,-258.670380 436.989868,-99.700790 610.000000,179.289063"
+              class="id_Antifa id_Alt-Lite" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-85.660233 C -209.055038,-226.715286 468.944946,28.119568 610.000000,339.064545"
+              class="id_Antifa id_Modern_Neo-Nazis" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-85.660233 C -270.928528,-288.588745 407.071472,-219.374329 610.000000,29.697157"
+              class="id_Antifa id_Trumpists" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-34.651001 C -399.210876,-72.967972 -160.551804,50.740250 -122.234833,171.529358"
+              class="id_Occupy id_Establishment_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,-34.651001 C -324.740631,-146.835983 136.425858,-22.224411 248.610840,173.034943"
+              class="id_Occupy id_Establishment_Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,81.661865 C -480.338470,121.323395 -480.338470,240.307983 -520.000000,279.969513"
+              class="id_Dirtbag_Left id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,81.661865 C -253.389404,-103.727554 424.610596,18.104233 610.000000,284.714844"
+              class="id_Dirtbag_Left id_Alt-Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,81.661865 C -422.473450,20.082321 -183.814377,74.002823 -122.234833,171.529358"
+              class="id_Dirtbag_Left id_Establishment_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,21.205288 C -410.382141,-28.282928 -171.723053,61.911507 -122.234833,171.529358"
+              class="id_DSA_(Democratic_Socialists_of_America) id_Establishment_Left"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,21.205288 C -335.911896,-102.150955 125.254601,-11.053162 248.610840,173.034943"
+              class="id_DSA_(Democratic_Socialists_of_America) id_Establishment_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,21.205288 C -292.301636,-203.096344 385.698364,-198.001221 610.000000,29.697157"
+              class="id_DSA_(Democratic_Socialists_of_America) id_Trumpists"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -520.000000,21.205288 C -241.298096,-152.092804 436.701904,6.012939 610.000000,284.714844"
+              class="id_DSA_(Democratic_Socialists_of_America) id_Alt-Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -122.234833,171.529358 C -47.764580,97.661339 174.742828,98.564690 248.610840,173.034943"
+              class="id_Establishment_Left id_Establishment_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -122.234833,171.529358 C -231.852692,221.017578 -470.511780,130.823135 -520.000000,21.205288"
+              class="id_Establishment_Left id_DSA_(Democratic_Socialists_of_America)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -122.234833,171.529358 C -219.761368,233.108902 -458.420471,179.188400 -520.000000,81.661865"
+              class="id_Establishment_Left id_Dirtbag_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -19.038013,-538.094482 C 220.327911,-550.343750 597.750732,-209.668762 610.000000,29.697157"
+              class="id_Optimists id_Trumpists" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -19.038013,-538.094482 C 291.585876,-479.085815 669.008667,75.363022 610.000000,385.986908"
+              class="id_Optimists id_Neoreactionaries" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -19.038013,-538.094482 C 271.331482,-499.340210 648.754272,-5.654633 610.000000,284.714844"
+              class="id_Optimists id_Alt-Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -19.038013,-538.094482 C 44.382385,-274.289307 -256.194824,216.549118 -520.000000,279.969513"
+              class="id_Optimists id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -17.034801,-388.648987 C 170.398987,-452.029114 546.619873,-265.948639 610.000000,-78.514847"
+              class="id_New_Atheists id_Christian_Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -17.034801,-388.648987 C 15.814926,-347.648865 3.589352,-236.874115 -37.410759,-204.024399"
+              class="id_New_Atheists id_Sorters" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -24.422598,-443.088776 C 175.376709,-497.058502 556.030273,-278.314148 610.000000,-78.514847"
+              class="id_Street_Epistemologists id_Christian_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -24.422598,-443.088776 C 20.792648,-392.678284 12.999752,-249.239655 -37.410759,-204.024399"
+              class="id_Street_Epistemologists id_Sorters" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -22.024231,-347.153564 C 3.805222,-122.133804 -294.980225,254.140060 -520.000000,279.969513"
+              class="id_Rationalist_Diaspora id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -22.024231,-347.153564 C 251.008728,-326.930298 630.223267,112.953941 610.000000,385.986908"
+              class="id_Rationalist_Diaspora id_Neoreactionaries"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -37.410759,-204.024399 C -37.129829,-10.707756 -326.683350,279.688568 -520.000000,279.969513"
+              class="id_Sorters id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -37.410759,-204.024399 C 6.032455,32.454483 -283.521118,452.337585 -520.000000,495.780823"
+              class="id_Sorters id_#MeToo" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -17.442772,-256.214111 C -10.717499,-48.465935 -312.251831,273.244232 -520.000000,279.969513"
+              class="id_Intellectual_Dark_Web id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-130.452393 C 466.084381,177.631989 -211.915619,423.885132 -520.000000,279.969513"
+              class="id_Benedictines id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-130.452393 C 432.953735,-56.684746 56.732841,-211.602722 -17.034801,-388.648987"
+              class="id_Benedictines id_New_Atheists" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-78.514847 C 513.561890,117.940971 74.220985,267.967499 -122.234833,171.529358"
+              class="id_Christian_Right id_Establishment_Left"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-78.514847 C 422.566223,-15.134712 46.345333,-201.215210 -17.034801,-388.648987"
+              class="id_Christian_Right id_New_Atheists" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-78.514847 C 410.200684,-24.545097 29.547142,-243.289459 -24.422598,-443.088776"
+              class="id_Christian_Right id_Street_Epistemologists"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 248.610840,173.034943 C 174.140594,246.902954 -48.366814,245.999603 -122.234833,171.529358"
+              class="id_Establishment_Right id_Establishment_Left"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 248.610840,173.034943 C 292.221130,72.089554 509.054626,-13.913116 610.000000,29.697157"
+              class="id_Establishment_Right id_Trumpists" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 248.610840,173.034943 C 343.224640,123.093094 560.058167,190.101044 610.000000,284.714844"
+              class="id_Establishment_Right id_Alt-Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-25.294388 C 502.917786,160.517334 63.576893,278.611572 -122.234833,171.529358"
+              class="id_Tea_Party id_Establishment_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,-25.294388 C 577.388062,86.649307 360.554535,205.646912 248.610840,173.034943"
+              class="id_Tea_Party id_Establishment_Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,29.697157 C 491.919464,204.510574 52.578583,289.609894 -122.234833,171.529358"
+              class="id_Trumpists id_Establishment_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,29.697157 C 566.389709,130.642548 349.556213,216.645218 248.610840,173.034943"
+              class="id_Trumpists id_Establishment_Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,29.697157 C 434.054474,305.751617 -243.945526,455.915039 -520.000000,279.969513"
+              class="id_Trumpists id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,29.697157 C 360.928528,232.625671 -317.071472,163.411255 -520.000000,-85.660233"
+              class="id_Trumpists id_Antifa" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,85.066483 C 480.845612,248.806030 41.504719,300.683777 -122.234833,171.529358"
+              class="id_InfoWarriors id_Establishment_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,85.066483 C 555.315857,174.938019 338.482361,227.719086 248.610840,173.034943"
+              class="id_InfoWarriors id_Establishment_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,130.284515 C 471.802002,284.980469 32.461113,309.727356 -122.234833,171.529358"
+              class="id_QAnoners id_Establishment_Left" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,130.284515 C 546.272278,211.112427 329.438751,236.762695 248.610840,173.034943"
+              class="id_QAnoners id_Establishment_Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,179.289063 C 404.136078,425.425171 -273.863922,485.833435 -520.000000,279.969513"
+              class="id_Alt-Lite id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,179.289063 C 447.298340,468.587433 -230.701645,658.482483 -520.000000,495.780823"
+              class="id_Alt-Lite id_#MeToo" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,179.289063 C 431.495911,452.784973 -246.504074,595.272766 -520.000000,416.768677"
+              class="id_Alt-Lite id_Black_Lives_Matter" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,179.289063 C 331.010132,352.299194 -346.989868,193.329620 -520.000000,-85.660233"
+              class="id_Alt-Lite id_Antifa" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,284.714844 C 309.924988,436.639832 -368.075012,214.414780 -520.000000,-85.660233"
+              class="id_Alt-Right id_Antifa" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,284.714844 C 383.050934,509.765747 -294.949066,506.918579 -520.000000,279.969513"
+              class="id_Alt-Right id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,284.714844 C 410.410767,537.125610 -267.589233,616.357910 -520.000000,416.768677"
+              class="id_Alt-Right id_Black_Lives_Matter" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,284.714844 C 515.386169,334.656708 298.552704,267.648743 248.610840,173.034943"
+              class="id_Alt-Right id_Establishment_Right" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,284.714844 C 588.914856,263.629700 588.914856,200.374222 610.000000,179.289063"
+              class="id_Alt-Right id_Alt-Lite" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,339.064545 C 299.055054,480.119598 -378.944946,225.284744 -520.000000,-85.660233"
+              class="id_Modern_Neo-Nazis id_Antifa" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,339.064545 C 372.181000,553.245544 -305.819000,517.788513 -520.000000,279.969513"
+              class="id_Modern_Neo-Nazis id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,339.064545 C 430.045990,452.004456 -9.294895,351.483368 -122.234833,171.529358"
+              class="id_Modern_Neo-Nazis id_Establishment_Left"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,339.064545 C 504.516235,378.136444 287.682739,278.518707 248.610840,173.034943"
+              class="id_Modern_Neo-Nazis id_Establishment_Right"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,385.986908 C 362.796509,590.783447 -315.203491,527.172974 -520.000000,279.969513"
+              class="id_Neoreactionaries id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,385.986908 C 336.967041,365.763641 -42.247490,-74.120598 -22.024231,-347.153564"
+              class="id_Neoreactionaries id_Rationalist_Diaspora"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,440.902008 C 351.813507,634.715515 -326.186493,538.156006 -520.000000,279.969513"
+              class="id_MRA_(Mens_Right_Advocates) id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,440.902008 C 394.975769,677.877808 -283.024231,710.805054 -520.000000,495.780823"
+              class="id_MRA_(Mens_Right_Advocates) id_#MeToo"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,440.902008 C 364.635529,647.537537 -313.364471,589.444153 -520.000000,344.079651"
+              class="id_MRA_(Mens_Right_Advocates) id_Gender-Critical_Feminists"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,487.543976 C 342.485107,672.029114 -335.514893,547.484436 -520.000000,279.969513"
+              class="id_Manosphere id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,487.543976 C 385.647369,715.191345 -292.352631,720.133423 -520.000000,495.780823"
+              class="id_Manosphere id_#MeToo" stroke-opacity="1.0"
+              stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,487.543976 C 355.307129,684.851074 -322.692871,598.772522 -520.000000,344.079651"
+              class="id_Manosphere id_Gender-Critical_Feminists"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,539.702576 C 599.568298,529.270874 599.568298,497.975708 610.000000,487.543976"
+              class="id_MGTOW_(Men_Going_Their_Own_Way) id_Manosphere"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,539.702576 C 332.053375,713.755981 -345.946625,557.916138 -520.000000,279.969513"
+              class="id_MGTOW_(Men_Going_Their_Own_Way) id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,539.702576 C 344.875427,726.578003 -333.124573,609.204224 -520.000000,344.079651"
+              class="id_MGTOW_(Men_Going_Their_Own_Way) id_Gender-Critical_Feminists"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,596.767578 C 320.640381,759.407959 -357.359619,569.329102 -520.000000,279.969513"
+              class="id_Incels id_SJAs_(Social_Justice_Activists)"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 610.000000,596.767578 C 363.802643,802.570251 -314.197357,741.978149 -520.000000,495.780823"
+              class="id_Incels id_#MeToo" stroke-opacity="1.0" stroke="#000000"/>
+    </g>
+</svg>

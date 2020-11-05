@@ -1,0 +1,27 @@
+﻿generation_name,childhood_turning_entered,saeculum_name,turnings_archetype,generations_archetype,birth_year_begin,birth_year_end,childhood_turning_description,turning_year_begin,turning_year_end
+Arthurian,3,Late Medieval,Hero,Civic,1433,1460,Retreat from France,1435,1459
+Humanist,4,Late Medieval,Artist,Adaptive,1461,1482,War of the Roses,1459,1497
+Reformation,1,Reformation,Prophet,Idealist,1483,1511,Tudor Renaissance,1497,1517
+Reprisal,2,Reformation,Nomad,Reactive,1512,1540,Protestant Reformation,1517,1542
+Elizabethan,3,Reformation,Hero,Civic,1541,1565,"Marian Restoration, Counter-Reformation",1542,1569
+Parliamentary,4,Reformation,Artist,Adaptive,1566,1587,Armada Crisis,1569,1594
+Puritan,1,New World,Prophet,Idealist,1588,1617,Merrie England,1594,1621
+Cavalier,2,New World,Nomad,Reactive,1618,1647,"Puritan Awakening,Antinomian Controversy",1621,1649
+Glorious,3,New World,Hero,Civic,1648,1673,"English Civil War, Republic, Restoration",1649,1675
+Enlightenment,4,New World,Artist,Adaptive,1674,1700,"Salem Witch Trials, King Philip's War, Glorious Revolution, War of the Spanish Succession",1675,1704
+Awakening,1,Revolutionary,Prophet,Idealist,1701,1723,Augustan Age of Empire,1704,1727
+Liberty,2,Revolutionary,Nomad,Reactive,1724,1741,"Great Awakening, Age of Enlightenment",1727,1746
+Republican,3,Revolutionary,Hero,Civic,1742,1766,"French and Indian War, British Imperialism",1746,1773
+Compromise,4,Revolutionary,Artist,Adaptive,1767,1791,"American Revolution, Age of Revolution",1773,1794
+Transcendental,1,Civil War,Prophet,Idealist,1792,1821,Era of Good Feelings,1794,1822
+Gilded,2,Civil War,Nomad,Reactive,1822,1842,"Transcendental Awakening, Romanticism, Abolitionism",1822,1844
+Civil War,3,Civil War,Hero,Civic,1822,1842,"Mexican War and Sectionalism, Gold Rush, Wild West",1844,1860
+Progressive,4,Civil War,Artist,Adaptive,1843,1859,American Civil War,1860,1865
+Missionary,1,Great Power,Prophet,Idealist,1860,1882,"Reconstruction, Gilded Age",1865,1886
+Lost,2,Great Power,Nomad,Reactive,1883,1900,"Missionary Awakening, Progressive era",1886,1908
+G.I.,3,Great Power,Hero,Civic,1901,1924,"World War I, Prohibition, Roaring Twenties",1908,1929
+Silent,4,Great Power,Artist,Adaptive,1925,1942,"Great Depression, World War II, Dust Bowl",1929,1946
+Baby Boom,1,Millennial,Prophet,Idealist,1943,1960,"Superpower America, Golden Age of Capitalism",1946,1963
+13th,2,Millennial,Nomad,Reactive,1961,1981,"Consciousness Revolution, Fourth Great Awakening",1963,1983
+Millennial,3,Millennial,Hero,Civic,1982,2004,"Culture Wars, Postmodernism, Neoliberalism, Great Regression, Gulf War",1984,2008
+Homeland,4,Millennial,Artist,Adaptive,2005,,"Great Recession, War on Terror, Climate Change, Cold War II, Opioid epidemic",2008,

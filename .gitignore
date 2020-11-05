@@ -1,3 +1,61 @@
+
+# C:\Users\dev\Documents\repositories\Strauss-Howe\.gitignore
+
+# Ignore whole folders
+**/.git/
+data/saeculum
+saves/movies
+
+# Ignore big files (GitHub will warn you when pushing files larger than 50 MB. You will not be allowed to
+# push files larger than 100 MB.) Tip: If you regularly push large files to GitHub, consider introducing
+# Git Large File Storage (Git LFS) as part of your workflow.
+saves/gif/net_neutrality.gif
+
+# Exclude Strauss–Howe stuff that I didn't make
+data/mov/2020-01-09_14-46-28.mov
+data/mp4/2020-01-09_14-49-27.mp4
+data/png/1970s Bell-bottoms.png
+data/png/1970s Mexican peasant blouse.png
+data/png/1970s Tie-dye.png
+data/png/1971.png
+data/png/1972.png
+data/png/1973.png
+data/png/1974.png
+data/png/1975.png
+data/png/1976.png
+data/png/1977.png
+data/png/1978.png
+data/png/1979.png
+data/png/Reconstruction & Gilded Age.png
+saves/png/1784-1788.png
+saves/png/1784-1866.png
+saves/png/1789-1795.png
+saves/png/1796-1803.png
+saves/png/1804-1811.png
+saves/png/1812-1819.png
+saves/png/1820-1827.png
+saves/png/1835-1841.png
+saves/png/1842-1848.png
+saves/png/1855-1860.png
+saves/png/1861-1866.png
+saves/png/1867-1874.png
+saves/png/1867-1970.png
+saves/png/1875-1882.png
+saves/png/1883-1890.png
+saves/png/1899-1907.png
+saves/png/1908-1914.png
+saves/png/1922-1929.png
+saves/png/1930-1938.png
+saves/png/1939-1946.png
+saves/png/1947-1954.png
+saves/png/1955-1962.png
+saves/png/1963-1970.png
+saves/png/1971-1979.png
+
+# Ignore JPEGs and GIMP files
+*.jpg
+*.xcf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
