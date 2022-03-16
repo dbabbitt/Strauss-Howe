@@ -195,3 +195,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+*.dxf
+*.eps
+*.fx
+*.fxg
+*.gpl
+*.pov
+*.ps
+*.sif

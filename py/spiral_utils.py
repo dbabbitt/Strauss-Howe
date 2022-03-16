@@ -20,7 +20,7 @@ import logging
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import pandas as pd
-np = pd.np
+import numpy as np
 import os
 import random
 import re
@@ -133,24 +133,25 @@ class StraussHoweUtilities(object):
     
     def add_guide(self, zoom_image):
         file_path = os.path.join(self.diagonal_movie_folder, 'guide.png')
-        guide_image = Image.open(fp=file_path, mode='r')
-        guide_size_tuple = guide_image.size
-        zoom_size_tuple = zoom_image.size
-        guide_x = 4
-        guide_y = int((zoom_size_tuple[1]-guide_size_tuple[1])/2) + 1
-        zoom_x = 4 + guide_size_tuple[0] + 4
-        zoom_y = 0
-        frame_width = zoom_x + zoom_size_tuple[0]
-        frame_height = zoom_size_tuple[1]
-        frame_image = Image.new(mode=zoom_image.mode,
-                                size=(frame_width, frame_height),
-                                color=(255, 255, 255, 255))
-        frame_image.paste(im=zoom_image, box=(zoom_x, zoom_y),
-                          mask=zoom_image)
-        frame_image.paste(im=guide_image, box=(guide_x, guide_y),
-                          mask=guide_image)
-        
-        return frame_image
+        if os.path.isfile(file_path):
+            guide_image = Image.open(fp=file_path, mode='r')
+            guide_size_tuple = guide_image.size
+            zoom_size_tuple = zoom_image.size
+            guide_x = 4
+            guide_y = int((zoom_size_tuple[1]-guide_size_tuple[1])/2) + 1
+            zoom_x = 4 + guide_size_tuple[0] + 4
+            zoom_y = 0
+            frame_width = zoom_x + zoom_size_tuple[0]
+            frame_height = zoom_size_tuple[1]
+            frame_image = Image.new(mode=zoom_image.mode,
+                                    size=(frame_width, frame_height),
+                                    color=(255, 255, 255, 255))
+            frame_image.paste(im=zoom_image, box=(zoom_x, zoom_y),
+                              mask=zoom_image)
+            frame_image.paste(im=guide_image, box=(guide_x, guide_y),
+                              mask=guide_image)
+
+            return frame_image
     
     def get_image_array(self, stop_year, png_suffix, movie_folder):
         zoom_image = self.get_zoom_in(self.cycles_image, stop_year)
@@ -452,7 +453,7 @@ class StraussHoweUtilities(object):
         
         return df
     
-    def conjunctify_list(self, noun_list):
+    def conjunctify_nouns(self, noun_list):
         if len(noun_list) > 2:
             list_str = ', and '.join([', '.join(noun_list[:-1])] + [noun_list[-1]])
         elif len(noun_list) == 2:
