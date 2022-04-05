@@ -1,0 +1,24 @@
+
+def get_dir_tree(module_name, max_levels=2, contains_str=None):
+    if max_levels < 1:
+        return None
+    base_eval_str = f"['{module_name}.{{}}'.format(fn) for fn in dir({module_name}) if not fn.startswith('_')]"
+    if contains_str is None:
+        eval_str = base_eval_str
+    else:
+        eval_str = f"['{module_name}.{{}}'.format(fn) for fn in dir({module_name}) if '{contains_str.lower()}' in fn.lower()]"
+    try:
+        dir_list = eval(eval_str)
+        if len(dir_list):
+            print()
+            print(module_name)
+            print(dir_list)
+    except Exception as e:
+        print(f'The evaluated list {eval_str} gets this error: {str(e).strip()}')
+    try:
+        base_dir_list = eval(base_eval_str)
+        if len(base_dir_list):
+            for base_module_name in base_dir_list:
+                get_dir_tree(base_module_name, max_levels=max_levels-1, contains_str=contains_str)
+    except:
+        return None

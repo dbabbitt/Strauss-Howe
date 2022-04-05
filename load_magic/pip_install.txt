@@ -1,0 +1,10 @@
+
+import sys
+
+# After this has completed, run these commands in a PowerShell window:
+# cd $Env:UserProfile\Documents\Repositories\job-hunting\ps1
+# clear
+# .\create_job_hunting_temp_environment_yml_file.ps1
+command_str = f'{sys.executable} -m pip install --upgrade xxxxxxx'
+print(command_str)
+!{command_str}
