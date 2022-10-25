@@ -21,6 +21,12 @@ saves/movies/saeculum_fashionable/movie_to_2020.gif
 saves/movies/saeculum_fashionable/saeculum_fashionable_movie.gif
 saves/movies/saeculum_movie.gif
 
+# Exclude secrets
+**/json/*secret*.json
+**/json/*credential*.json
+saves/json/secrets.json
+data/json/secrets.json
+
 # Exclude Strauss–Howe stuff that I didn't make
 data/mov/2020-01-09_14-46-28.mov
 data/mp4/2020-01-09_14-49-27.mp4
@@ -62,9 +68,10 @@ saves/png/1955-1962.png
 saves/png/1963-1970.png
 saves/png/1971-1979.png
 
-# Ignore JPEGs and GIMP files
+# Ignore JPEGs and GIMP files and backups
 *.jpg
 *.xcf
+*.bak
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

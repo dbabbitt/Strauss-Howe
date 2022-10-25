@@ -4,6 +4,9 @@
 # Dave Babbitt <dave.babbitt@gmail.com>
 # Author: Dave Babbitt, Data Scientist
 # coding: utf-8
+
+# Soli Deo gloria
+
 """
 ScrapingUtilities: A set of utility functions common to web scraping
 """
@@ -32,7 +35,6 @@ import os
 import pandas as pd
 import random
 import re
-import storage as s
 import time
 import urllib
 import wikipedia
@@ -52,8 +54,12 @@ class ScrapingUtilities(object):
     >>> u = scraping_utils.ScrapingUtilities()
     """
     
-    def __init__(self):
-        self.s = s.Storage()
+    def __init__(self, s=None, verbose=False):
+        if s is None:
+            from storage import Storage
+            self.s = Storage()
+        else:
+            self.s = s
         
         # Obscuration error pattern
         self.obscure_regex = re.compile('<([^ ]+)[^>]*class="([^"]+)"[^>]*>')
@@ -63,10 +69,38 @@ class ScrapingUtilities(object):
     
     
     
-    def get_page_tables(self, url_or_filepath_or_html, verbose=True):
-        if self.url_regex.fullmatch(url_or_filepath_or_html) or self.filepath_regex.fullmatch(url_or_filepath_or_html):
-            tables_df_list = pd.read_html(url_or_filepath_or_html)
+    def get_page_tables(self, url_or_filepath_or_html, driver=None, pdf_file_name=None, verbose=True):
+        '''
+        tables_url = 'https://en.wikipedia.org/wiki/Provinces_of_Afghanistan'
+        page_tables_list = u.get_page_tables(tables_url)
+        
+        url = 'https://crashstats.nhtsa.dot.gov/Api/Public/Publication/812581'
+        file_name = '2016_State_Traffic_Data_CrashStats_NHTSA.pdf'
+        page_tables_list = u.get_page_tables(url, pdf_file_name=file_name)
+        '''
+        tables_df_list = []
+        if pdf_file_name is not None:
+            data_pdf_folder = os.path.join(self.s.data_folder, 'pdf')
+            os.makedirs(name=data_pdf_folder, exist_ok=True)
+            file_path = os.path.join(data_pdf_folder, pdf_file_name)
+            import requests
+            response = requests.get(url_or_filepath_or_html)
+            with open(file_path, 'wb') as f:
+                f.write(response.content)
+            import tabula
+            tables_df_list = tabula.read_pdf(file_path, pages='all')
+        elif self.url_regex.fullmatch(url_or_filepath_or_html) or self.filepath_regex.fullmatch(os.path.abspath(url_or_filepath_or_html)):
+            from urllib.error import HTTPError
+            try:
+                tables_df_list = pd.read_html(url_or_filepath_or_html)
+            except (ValueError, HTTPError) as e:
+                if verbose: print(str(e).strip())
+                page_soup = self.get_page_soup(url_or_filepath_or_html, driver=driver)
+                table_soups_list = page_soup.find_all('table')
+                for table_soup in table_soups_list:
+                    tables_df_list += self.get_page_tables(str(table_soup), driver=None, verbose=False)
         else:
+            import io
             f = io.StringIO(url_or_filepath_or_html)
             tables_df_list = pd.read_html(f)
         if verbose:

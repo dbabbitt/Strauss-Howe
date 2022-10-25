@@ -4,8 +4,11 @@
 # Dave Babbitt <dave.babbitt@gmail.com>
 # Author: Dave Babbitt, Data Scientist
 # coding: utf-8
+
+# Soli Deo gloria
+
 """
-isc: A set of utility functions common to spiral audio web scraping
+self: A set of utility functions common to spiral visualization
 """
 from PIL import Image, ImageDraw, ImageFont
 from cycler import cycler
@@ -25,7 +28,6 @@ import os
 import random
 import re
 import requests
-import storage as s
 import webcolors
 import warnings
 warnings.filterwarnings('ignore')
@@ -41,23 +43,44 @@ class StraussHoweUtilities(object):
     >>> u = spiral_utils.StraussHoweUtilities()
     """
     
-    def __init__(self):
-        self.s = s.Storage()
+    def __init__(self, s=None, verbose=False):
+        if s is None:
+            from storage import Storage
+            self.s = Storage()
+        else:
+            self.s = s
         
         # Get datasets
-        self.archetypes_df = self.s.load_object('archetypes_df')
-        self.dresses_file_dict = self.s.load_object('dresses_file_dict')
-        self.eras_df = self.s.load_object('eras_df')
-        self.generations_df = self.s.load_object('generations_df')
-        self.history_radius_dict = self.s.load_object('history_radius_dict')
-        self.history_year_dict = self.s.load_object('history_year_dict')
-        self.patriline_df = self.s.load_object('patriline_df')
-        self.saecula_df = self.s.load_object('saecula_df')
-        self.saeculum_cmap_dict = self.s.load_object('saeculum_cmap_dict')
-        self.turnings_df = self.s.load_object('turnings_df')
-        self.turning_numbers_df = self.s.load_object('turning_numbers_df')
-        self.us_presidents_df = self.s.load_object('us_presidents_df')
+        if self.s.pickle_exists('archetypes_df'):
+            self.archetypes_df = self.s.load_object('archetypes_df')
+        if self.s.pickle_exists('dresses_file_dict'):
+            self.dresses_file_dict = self.s.load_object('dresses_file_dict')
+        if self.s.pickle_exists('eras_df'):
+            self.eras_df = self.s.load_object('eras_df')
+        if self.s.pickle_exists('generations_df'):
+            self.generations_df = self.s.load_object('generations_df')
+        if self.s.pickle_exists('history_radius_dict'):
+            self.history_radius_dict = self.s.load_object('history_radius_dict')
+        if self.s.pickle_exists('history_year_dict'):
+            self.history_year_dict = self.s.load_object('history_year_dict')
+        if self.s.pickle_exists('patriline_df'):
+            self.patriline_df = self.s.load_object('patriline_df')
+        if self.s.pickle_exists('saecula_df'):
+            self.saecula_df = self.s.load_object('saecula_df')
+        if self.s.pickle_exists('saeculum_cmap_dict'):
+            self.saeculum_cmap_dict = self.s.load_object('saeculum_cmap_dict')
+        if self.s.pickle_exists('turnings_df'):
+            self.turnings_df = self.s.load_object('turnings_df')
+        if self.s.pickle_exists('turning_numbers_df'):
+            self.turning_numbers_df = self.s.load_object('turning_numbers_df')
+        if self.s.pickle_exists('us_presidents_df'):
+            self.us_presidents_df = self.s.load_object('us_presidents_df')
         self.min_year = self.patriline_df['year_of_birth'].min()
+        self.max_year = self.patriline_df['year_of_birth'].max()
+        
+        # URL and file path patterns
+        self.url_regex = re.compile(r'\b(https?|file)://[-A-Z0-9+&@#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]', re.IGNORECASE)
+        self.filepath_regex = re.compile(r'\b[c-d]:\\(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F]\\)*(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F])', re.IGNORECASE)
         
         # Create movie folders
         self.jpg_dir = os.path.join(self.s.saves_folder, 'jpg')
@@ -150,23 +173,23 @@ class StraussHoweUtilities(object):
                               mask=zoom_image)
             frame_image.paste(im=guide_image, box=(guide_x, guide_y),
                               mask=guide_image)
+        else:
+            frame_image = zoom_image
 
-            return frame_image
+        return frame_image
     
     def get_image_array(self, stop_year, png_suffix, movie_folder):
         zoom_image = self.get_zoom_in(self.cycles_image, stop_year)
-        # png_name = 'plot_{}{}.png'.format(stop_year, png_suffix)
-        # png_path = os.path.join(movie_folder, png_name)
-        # zoom_image.save(png_path)
-        # image_array = imageio.imread(png_path)
         image_io = BytesIO()
         zoom_image.save(fp=image_io, format='png')
         image_array = imageio.imread(image_io.getvalue(), format='png')
         
         return image_array
         
-    def make_a_movie(self, min_year, stop_year, movie_folder,
+    def make_a_movie(self, min_year, stop_year, movie_folder=None,
                      png_suffix='', movie_name=None):
+        if movie_folder is None:
+            movie_folder = self.movie_folder
         images_list = []
         for stopped_year in range(min_year, stop_year):
             image_array = self.get_image_array(stopped_year, png_suffix, movie_folder)
@@ -235,14 +258,18 @@ class StraussHoweUtilities(object):
         right = self.convert_years_to_x(right_year, y_tuple=y_tuple)
         lower = size_tuple[1]
         
-        # (Upper left x coordinate, upper left y coordinate, lower right x coordinate, lower right y coordinate)
+        # (Upper left x coordinate, upper left y coordinate,
+        # lower right x coordinate, lower right y coordinate)
         crop_tuple = (left, upper, right, lower)
         img = img.crop(box=crop_tuple)
         
-        birth_match_series = (self.patriline_df.year_of_birth >= left_year) & (self.patriline_df.year_of_birth <= center_year)
-        death_match_series = (self.patriline_df.year_of_death >= left_year) & (self.patriline_df.year_of_death <= right_year)
+        df = self.patriline_df
+        birth_match_series = (df.year_of_birth >= left_year)
+        birth_match_series = birth_match_series & (df.year_of_birth <= center_year)
+        death_match_series = (df.year_of_death >= left_year)
+        death_match_series = death_match_series & (df.year_of_death <= right_year)
         mask_series = birth_match_series | death_match_series
-        for patriarch_name, row_series in self.patriline_df[mask_series].iterrows():
+        for patriarch_name, row_series in df[mask_series].iterrows():
             year_of_birth = row_series.year_of_birth
             year_of_death = row_series.year_of_death
             if (str(year_of_death) == 'nan') or (year_of_death > center_year):
@@ -253,18 +280,22 @@ class StraussHoweUtilities(object):
             css4_color = row_series.css4_color
             rgb_obj = webcolors.name_to_rgb(css4_color, spec='css3')
             rgb_tuple = (rgb_obj.red, rgb_obj.green, rgb_obj.blue, 255)
-            xy_tuple = self.draw_life_line(center_year=center_year, year_of_death=year_of_death,
-                                      img=img, year_of_birth=year_of_birth, age_of_birth=age_of_birth,
-                                      rgb_tuple=rgb_tuple)
+            xy_tuple = self.draw_life_line(
+                center_year=center_year, year_of_death=year_of_death,
+                img=img, year_of_birth=year_of_birth, age_of_birth=age_of_birth,
+                rgb_tuple=rgb_tuple)
             #print(xy_tuple)
             css4_text_color = row_series.css4_text_color
             rgb_obj = webcolors.name_to_rgb(css4_text_color, spec='css3')
             rgb_tuple = (rgb_obj.red, rgb_obj.green, rgb_obj.blue, 255)
-            if patriarch_name.strip() == 'Stephen Elkanah Babbitt':
-                patriarch_name = 'Baby Boy Babbitt'
-            self.label_life_line(img=img, label_text=patriarch_name, xy_tuple=xy_tuple, rgb_tuple=rgb_tuple)
+            # if patriarch_name.strip() == 'Stephen Elkanah Babbitt':
+                # patriarch_name = 'Baby Boy Babbitt'
+            self.label_life_line(img=img, label_text=patriarch_name, xy_tuple=xy_tuple,
+                                 rgb_tuple=rgb_tuple)
         size_tuple = img.size
-        frame_img = Image.new(mode=img.mode, size=(size_tuple[0]+8, size_tuple[1]+8), color=(255, 255, 255, 255))
+        frame_img = Image.new(
+            mode=img.mode, size=(size_tuple[0]+8, size_tuple[1]+8),
+            color=(255, 255, 255, 255))
         #frame_img.paste(img, (4, 4, 4 + size_tuple[0], 4 + size_tuple[1]), img)
         frame_img.paste(im=img, box=(4, 4), mask=img)
         frame_img = self.add_guide(frame_img)
@@ -766,10 +797,43 @@ class StraussHoweUtilities(object):
         
         return xy_list
     
-    def get_page_tables(self, tables_url):
-        tables_df_list = pd.read_html(tables_url)
-        print(sorted([(i, df.shape) for (i, df) in enumerate(tables_df_list)],
-                     key=lambda x: x[1][0], reverse=True))
+    def get_page_tables(self, url_or_filepath_or_html, driver=None, pdf_file_name=None, verbose=True):
+        '''
+        tables_url = 'https://en.wikipedia.org/wiki/Provinces_of_Afghanistan'
+        page_tables_list = u.get_page_tables(tables_url)
+        
+        url = 'https://crashstats.nhtsa.dot.gov/Api/Public/Publication/812581'
+        file_name = '2016_State_Traffic_Data_CrashStats_NHTSA.pdf'
+        page_tables_list = u.get_page_tables(url, pdf_file_name=file_name)
+        '''
+        tables_df_list = []
+        if pdf_file_name is not None:
+            data_pdf_folder = os.path.join(self.s.data_folder, 'pdf')
+            os.makedirs(name=data_pdf_folder, exist_ok=True)
+            file_path = os.path.join(data_pdf_folder, pdf_file_name)
+            import requests
+            response = requests.get(url_or_filepath_or_html)
+            with open(file_path, 'wb') as f:
+                f.write(response.content)
+            import tabula
+            tables_df_list = tabula.read_pdf(file_path, pages='all')
+        elif self.url_regex.fullmatch(url_or_filepath_or_html) or self.filepath_regex.fullmatch(os.path.abspath(url_or_filepath_or_html)):
+            from urllib.error import HTTPError
+            try:
+                tables_df_list = pd.read_html(url_or_filepath_or_html)
+            except (ValueError, HTTPError) as e:
+                if verbose: print(str(e).strip())
+                page_soup = self.get_page_soup(url_or_filepath_or_html, driver=driver)
+                table_soups_list = page_soup.find_all('table')
+                for table_soup in table_soups_list:
+                    tables_df_list += self.get_page_tables(str(table_soup), driver=None, verbose=False)
+        else:
+            import io
+            f = io.StringIO(url_or_filepath_or_html)
+            tables_df_list = pd.read_html(f)
+        if verbose:
+            print(sorted([(i, df.shape) for (i, df) in enumerate(tables_df_list)],
+                         key=lambda x: x[1][0], reverse=True))
         
         return tables_df_list
     
@@ -916,7 +980,7 @@ class StraussHoweUtilities(object):
             ax.yaxis.set_visible(False)
             ax.xaxis.set_visible(False)
             ax.set_axis_off()
-            ax.set_title(title, fontsize=24, loc="left", pad=10)
+            ax.set_title(title, fontsize=24, loc='left', pad=10)
             
             for i, name in enumerate(names):
                 row = i % nrows
@@ -1009,21 +1073,28 @@ class StraussHoweUtilities(object):
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
     
-    def show_color_proximity(self, distance_df, color_dict=mcolors.XKCD_COLORS,
-                             color_title='XKCD', color_str='Red', saeculum_title='Reformation',
-                             nearness_str='close to'):
+    def show_color_proximity(self, distance_df=None, color_dict=mcolors.XKCD_COLORS,
+                             color_title='XKCD', color_str='Red',
+                             saeculum_title='Reformation', nearness_str='close to'):
+        if distance_df is None:
+            colors_dict = {name: mcolors.to_rgb(color) for name,
+                           color in mcolors.XKCD_COLORS.items()}
+            xkcd_colors_df = self.colors_dict_to_dataframe(colors_dict)
+            distance_df = self.get_distance_dataframe(xkcd_colors_df, color_title='XKCD')
         distance_dict = {}
         for name, color in color_dict.items():
             mask_series = (distance_df.index == name)
-            distance_list = distance_df[mask_series]['distance_from_{}'.format(color_str.lower())].tolist()
+            column_name = 'distance_from_{}'.format(color_str.lower())
+            distance_list = distance_df[mask_series][column_name].tolist()
             if len(distance_list) == 1:
                 distance_dict[name] = distance_list[0]
-        color_tuple_list = sorted((distance, name) for name, distance in distance_dict.items())
+        color_tuple_list = sorted((distance, name) for name,
+                                  distance in distance_dict.items())
         test_list = color_tuple_list[:32]
         self.display_test_colors(test_list=test_list, saeculum_title=saeculum_title,
-                            face_title=color_str, nearness_str=nearness_str,
-                            color_dict=color_dict, color_title=color_title,
-                            face_point='Corner')
+                                 face_title=color_str, nearness_str=nearness_str,
+                                 color_dict=color_dict, color_title=color_title,
+                                 face_point='Corner')
     
     def show_face_proximity(self, distance_df):
         for row_index, row_series in distance_df.iterrows():
@@ -1264,3 +1335,265 @@ class StraussHoweUtilities(object):
             X += np.random.normal(scale=noise, size=X.shape)
         
         return Dataset(data=X[indices], target=y[indices])
+    
+    def get_generation_name(self, year_of_birth):
+        mask_series = (self.generations_df['birth_year_begin'] <= year_of_birth)
+        mask_series = mask_series & (self.generations_df['birth_year_end'] >= year_of_birth)
+        generation_name_list = self.generations_df[mask_series].index.tolist()
+        if len(generation_name_list):
+            generation_name = generation_name_list[0]
+        else:
+            generation_name = np.nan
+        
+        return generation_name
+    
+    def fit_year_curve(self, df=None, column_prefix='birth_year'):
+        if df is None:
+            df = self.generations_df
+        begin_column = '{}_begin'.format(column_prefix)
+        end_column = '{}_end'.format(column_prefix)
+        
+        def func(x, a, b):
+            
+            return a*x + b
+        
+        columns_list = [begin_column, end_column]
+        mask_series = False
+        for column_name in columns_list:
+            df[column_name] = pd.to_numeric(df[column_name])
+            mask_series = mask_series | df[column_name].isnull()
+        df = df[~mask_series][columns_list]
+        begin_data = np.array(object=df[begin_column].tolist())
+        end_data = np.array(object=df[end_column].tolist())
+        from scipy.optimize import curve_fit
+        popt, pcov = curve_fit(func, begin_data, end_data)
+        line_2d_obj = plt.plot(begin_data, end_data, 'b-', label='data')
+
+        def get_end_year(begin_year):
+            '''Get the end year given the begin year'''
+
+            return popt[0]*begin_year + popt[1]
+
+        label_str = 'fit: end_year = %5.1f * begin_year + %5.1f' % tuple(popt)
+        line_2d_obj = plt.plot(begin_data, get_end_year(begin_data), 'r-', label=label_str)
+        plt.xlabel('Begin Year')
+        plt.ylabel('End Year')
+        legend_obj = plt.legend()
+        
+        return popt, get_end_year
+    
+    def get_event_story(self, event_year=1918, event_name='Spanish Flu'):
+        mask_series = (self.patriline_df.year_of_birth < event_year)
+        mask_series = mask_series & (self.patriline_df.year_of_death > event_year)
+        f_str = f'The members of the patriline that were alive during the {event_name} '
+        f_str += 'were {}. '
+        p_list = self.patriline_df[mask_series].index
+        story_str = f_str.format(self.conjunctify_nouns(p_list)).replace('..', '.')
+        f_str = '{} was {} years old at this time'
+        patriarch_strs_list = []
+        for patriarch, row_series in self.patriline_df[mask_series].iterrows():
+            patriarch_str = f_str.format(patriarch, event_year - row_series.year_of_birth)
+            patriarch_strs_list.append(patriarch_str)
+        story_str += self.conjunctify_nouns(patriarch_strs_list)
+        
+        return story_str
+    
+    def get_column_descriptions(self, df, column_list=None):
+        if column_list is None:
+            column_list = df.columns
+        groups_dict = df.columns.to_series().groupby(df.dtypes).groups
+        rows_list = []
+        for dtype, dtype_column_list in groups_dict.items():
+            for column_name in dtype_column_list:
+                if column_name in column_list:
+                    null_mask_series = df[column_name].isnull()
+                    blank_mask_series = df[column_name].map(lambda x: not len(str(x)))
+                    mask_series = null_mask_series | blank_mask_series
+
+                    # Get input row in dictionary format; key = col_name
+                    row_dict = {}
+                    row_dict['column_name'] = column_name
+                    row_dict['dtype'] = str(dtype)
+                    row_dict['count_nulls'] = null_mask_series.sum()
+                    row_dict['count_blanks'] = blank_mask_series.sum()
+
+                    # Count how many unique numbers there are
+                    try:
+                        row_dict['count_uniques'] = len(df[column_name].unique())
+                    except Exception:
+                        row_dict['count_uniques'] = np.nan
+
+                    # Count how many zeroes the column has
+                    try:
+                        row_dict['count_zeroes'] = int((df[column_name] == 0).sum())
+                    except Exception:
+                        row_dict['count_zeroes'] = np.nan
+
+                    # Check to see if the column has any dates
+                    date_series = pd.to_datetime(df[column_name], errors='coerce')
+                    null_series = date_series[~date_series.notnull()]
+                    row_dict['has_dates'] = (null_series.shape[0] < date_series.shape[0])
+
+                    # Show the minimum value in the column
+                    try:
+                        row_dict['min_value'] = df[~mask_series][column_name].min()
+                    except Exception:
+                        row_dict['min_value'] = np.nan
+
+                    # Show the maximum value in the column
+                    try:
+                        row_dict['max_value'] = df[~mask_series][column_name].max()
+                    except Exception:
+                        row_dict['max_value'] = np.nan
+
+                    # Show whether the column contains only integers
+                    try:
+                        oib = (df[column_name].apply(lambda x: float(x).is_integer())).all()
+                        row_dict['only_integers'] = oib
+                    except Exception:
+                        row_dict['only_integers'] = float('nan')
+
+                    rows_list.append(row_dict)
+
+        columns_list = ['column_name', 'dtype', 'count_nulls', 'count_blanks',
+                        'count_uniques', 'count_zeroes', 'has_dates',
+                        'min_value', 'max_value', 'only_integers']
+        blank_ranking_df = pd.DataFrame(rows_list, columns=columns_list)
+
+        return(blank_ranking_df)
+    
+    def get_max_rsquared_adj(self, df, columns_list, verbose=False):
+        if verbose:
+            t0 = time.time()
+        rows_list = []
+        n = len(columns_list)
+        import statsmodels.api as sm
+        for i in range(n-1):
+            first_column = columns_list[i]
+            first_series = df[first_column]
+            max_correlation = 0.0
+            max_column = first_column
+            for j in range(i+1, n):
+                second_column = columns_list[j]
+                second_series = df[second_column]
+                
+                # Assume the first column is never identical to the second column
+                X, y = first_series.values.reshape(-1, 1), second_series.values.reshape(-1, 1)
+                
+                # Compute with statsmodels, by adding intercept manually
+                X1 = sm.add_constant(X)
+                result = sm.OLS(y, X1).fit()
+                this_correlation = abs(result.rsquared_adj)
+                
+                if this_correlation > max_correlation:
+                    max_correlation = this_correlation
+                    max_column = second_column
+
+            # Get input row in dictionary format; key = col_name
+            row_dict = {}
+            row_dict['reference_column'] = first_column
+            row_dict['max_column'] = max_column
+            row_dict['columns_correlation'] = max_correlation
+
+            rows_list.append(row_dict)
+
+        column_list = ['reference_column', 'max_column', 'columns_correlation']
+        column_similarities_df = pd.DataFrame(rows_list, columns=column_list)
+        if verbose:
+            t1 = time.time()
+            print(t1-t0, time.ctime(t1))
+
+        return column_similarities_df
+    
+    def show_3d_plot(self, three_d_df, z_column='Red', x_column='Green', y_column='Blue'):
+        fig = plt.figure(figsize=(18, 8))
+        ax = fig.add_subplot(111, projection='3d', autoscale_on=True)
+        xlabel_text = ax.set_xlabel(x_column)
+        ylabel_text = ax.set_ylabel(y_column)
+        zlabel_text = ax.set_zlabel(z_column)
+        columns_list = [x_column, y_column, z_column]
+        df = three_d_df[columns_list].dropna(axis='index', how='any')
+        pca_ndarray = df.values
+        path_collection = ax.scatter(pca_ndarray[:, 0], pca_ndarray[:, 1],
+                                     pca_ndarray[:, 2], alpha=0.75, c=df.index)
+        title_text = 'Scatterplot of the {}, {}, and {} Data'
+        text_obj = ax.set_title(title_text.format(x_column, y_column, z_column))
+    
+    def get_begin_turning_name(self, year):
+        begin_turning_name = None
+        begin_mask_series = (self.turnings_df.turning_year_begin == year)
+        if self.turnings_df[begin_mask_series].shape[0]:
+            begin_turning_name = self.turnings_df[begin_mask_series].index.array[0]
+            if begin_turning_name.lower().startswith('the '):
+                begin_turning_name = begin_turning_name[4:]
+        
+        return begin_turning_name
+    
+    def get_facts_about(self, year):
+        
+        # Get generational information
+        mask_series = (self.generations_df.birth_year_begin <= year)
+        mask_series &= (self.generations_df.birth_year_end >= year)
+        df = self.generations_df[mask_series]
+        if df.shape[0]:
+            generation_name = df.index.array[0]
+            generations_archetype = self.generations_df[mask_series].generations_archetype.squeeze().lower()
+            print(f'The {generations_archetype} {generation_name} generation were being born at this time.')
+        
+        # Get Babbitt information
+        mask_series = (self.patriline_df.year_of_birth <= year)
+        end_mask_series = (self.patriline_df.year_of_death >= year)
+        mask_series &= (end_mask_series | self.patriline_df.year_of_death.isnull())
+        patriarch_names_list = self.patriline_df[mask_series].sort_values('year_of_birth').index.tolist()
+        if patriarch_names_list:
+            waswere = 'were' if len(patriarch_names_list) > 1 else 'was'
+            print(self.conjunctify_nouns(patriarch_names_list) + f' {waswere} alive during this year.')
+        
+        # Get saecular information
+        mask_series = (self.saecula_df.awakening_year_begin <= year)
+        mask_series &= (self.saecula_df.awakening_year_end >= year)
+        if self.saecula_df[mask_series].shape[0]:
+            saeculum_name = self.saecula_df[mask_series].index.array[0]
+            climax_mask_series = (self.saecula_df.awakening_climax_year == year)
+            if self.saecula_df[climax_mask_series].shape[0]:
+                awakening_name = self.saecula_df[climax_mask_series].awakening_name.squeeze()
+                awakening_name = f"{saeculum_name} saeculum's {awakening_name}"
+                print(f'The {awakening_name} was climaxing at this time.')
+            else:
+                awakening_name = f"{saeculum_name} saeculum's {self.saecula_df[mask_series].awakening_name.squeeze()}"
+                print(f'This year was during the {awakening_name}.')
+        mask_series = (self.saecula_df.crisis_year_begin <= year) & (self.saecula_df.crisis_year_end >= year)
+        if self.saecula_df[mask_series].shape[0]:
+            saeculum_name = self.saecula_df[mask_series].index.array[0]
+            climax_mask_series = (self.saecula_df.crisis_climax_year == year)
+            if self.saecula_df[climax_mask_series].shape[0]:
+                crisis_name = f"{saeculum_name} saeculum's {self.saecula_df[climax_mask_series].crisis_name.squeeze()}"
+                print(f'The {crisis_name} was climaxing at this time.')
+            else:
+                crisis_name = f"{saeculum_name} saeculum's {self.saecula_df[mask_series].crisis_name.squeeze()}"
+                print(f'This year was during the {crisis_name}.')
+        
+        # Get Turning information
+        end_mask_series = (self.turnings_df.turning_year_end == year)
+        if self.turnings_df[end_mask_series].shape[0]:
+            end_turning_name = self.turnings_df[end_mask_series].index.array[0]
+            if end_turning_name.lower().startswith('the '):
+                end_turning_name = end_turning_name[4:]
+            print(f'This year was the end of the {end_turning_name}', end='')
+            begin_turning_name = self.get_begin_turning_name(year)
+            if begin_turning_name is not None:
+                print(f', and the beginning of the {begin_turning_name}.')
+            else: print('.')
+        else:
+            begin_turning_name = self.get_begin_turning_name(year)
+            if begin_turning_name is not None:
+                print(f'This year was the beginning of the {begin_turning_name}.')
+        mask_series = (self.turnings_df.turning_year_end > year) & (self.turnings_df.turning_year_begin <= year)
+        if self.turnings_df[mask_series].shape[0]:
+            turning_notes = self.turnings_df[mask_series].turning_notes.squeeze().strip()
+            print(turning_notes)
+        mask_series = (self.us_presidents_df.year_reign_end >= year)
+        mask_series &= (self.us_presidents_df.year_reign_begin <= year)
+        if self.us_presidents_df[mask_series].shape[0]:
+            president_name = self.us_presidents_df[mask_series].index.array[0]
+            print(f'{president_name} was president during this year.')

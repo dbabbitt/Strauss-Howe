@@ -50,16 +50,17 @@ def first_order_linear_scatterplot(df, xname, yname,
                                    aspect_ratio=FACEBOOK_ASPECT_RATIO,
                                    least_x_xytext=(40, -10), most_x_xytext=(-150, 55),
                                    least_y_xytext=(-200, -10), most_y_xytext=(45, 0),
-                                   reference_xytext=(-75, 25), color_list=None):
+                                   reference_xytext=(-75, 25), color_list=None, verbose=False):
     '''
     Create a first order (linear) scatter plot assuming the data frame
     has a index called Country or something
     '''
+    df = df[[xname, yname]].dropna()
     fig_width = 18
     fig_height = fig_width/aspect_ratio
     fig = plt.figure(figsize=(fig_width, fig_height))
     ax = fig.add_subplot(111, autoscale_on=True)
-    line_kws = dict(c='k', zorder=1, alpha=.25)
+    line_kws = dict(color='k', zorder=1, alpha=.25)
     if color_list is None:
         scatter_kws = dict(s=30, lw=.5, edgecolors='k', zorder=2)
     else:
@@ -86,7 +87,11 @@ def first_order_linear_scatterplot(df, xname, yname,
     least_y = ydata.min()
     
     least_x_tried = most_x_tried = least_y_tried = most_y_tried = False
+    if verbose:
+        print(least_x, most_x, most_y, least_y)
     for label, x, y in zip(df.index, xdata, ydata):
+        if verbose:
+            print(label, x, y)
         if (x == least_x) and not least_x_tried:
             annotation = plt.annotate('{} (least {})'.format(label, x_adj),
                                       xy=(x, y), xytext=least_x_xytext, **kwargs)
