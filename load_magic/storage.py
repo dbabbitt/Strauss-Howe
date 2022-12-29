@@ -1,7 +1,13 @@
+
 #!/usr/bin/env python
+# Utility Functions to store and load objects
+# Use it something like this:
+#
+# %run ../load_magic/storage.py
+#
+# Dave Babbitt <dave.babbitt@gmail.com>
+# Author: Dave Babbitt, Data Scientist
 # coding: utf-8
-
-
 
 # Soli Deo gloria
 

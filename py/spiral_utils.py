@@ -15,19 +15,20 @@ from cycler import cycler
 from datetime import date, datetime, timedelta
 from io import BytesIO
 from itertools import combinations
-from math import cos, sin, pi, sqrt, atan
+from math import cos, sin, pi, sqrt, atan, tan
 from matplotlib.pyplot import imshow
 from pathlib import Path
 import imageio
 import logging
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
 import os
+import pandas as pd
 import random
 import re
 import requests
+import shutil
 import webcolors
 import warnings
 warnings.filterwarnings('ignore')
@@ -75,8 +76,8 @@ class StraussHoweUtilities(object):
             self.turning_numbers_df = self.s.load_object('turning_numbers_df')
         if self.s.pickle_exists('us_presidents_df'):
             self.us_presidents_df = self.s.load_object('us_presidents_df')
-        self.min_year = self.patriline_df['year_of_birth'].min()
-        self.max_year = self.patriline_df['year_of_birth'].max()
+        self.min_year = self.patriline_df.year_of_birth.min()
+        self.max_year = self.patriline_df.year_of_birth.max()
         
         # URL and file path patterns
         self.url_regex = re.compile(r'\b(https?|file)://[-A-Z0-9+&@#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]', re.IGNORECASE)
@@ -87,10 +88,10 @@ class StraussHoweUtilities(object):
         self.png_folder = os.path.join(self.s.saves_folder, 'png')
         self.movie_folder = os.path.join(self.s.saves_folder, 'movies')
         os.makedirs(name=self.movie_folder, exist_ok=True)
+        self.temp_movie_folder = os.path.join(self.movie_folder, 'temp')
+        os.makedirs(name=self.temp_movie_folder, exist_ok=True)
         self.bare_movie_folder = os.path.join(self.movie_folder, 'bare')
         os.makedirs(name=self.bare_movie_folder, exist_ok=True)
-        self.diagonal_movie_folder = os.path.join(self.movie_folder, 'diagonal')
-        os.makedirs(name=self.diagonal_movie_folder, exist_ok=True)
         self.saeculum_dir = os.path.join(self.s.data_folder, 'saeculum')
         os.makedirs(name=self.saeculum_dir, exist_ok=True)
         self.saeculum_movie_folder = os.path.join(self.movie_folder, 'saeculum')
@@ -104,45 +105,50 @@ class StraussHoweUtilities(object):
         self.white_tuple = (255, 255, 255, 0)
         self.black_tuple = (0, 0, 0, 255)
         
-        # Diagonal diagram values
-        self.cycles_image = Image.open(fp=os.path.join(self.s.data_folder, 'png',
-                                                       'cycle_rectangles_boxes.png'),
-                                       mode='r')
-        self.babbitt_years_tuple = (1435, 2029)
-        self.babbitt_min_year = min(self.patriline_df.year_of_birth.min(),
-                                    self.patriline_df.year_of_death.min())
-        self.zoom_image = self.get_zoom_in(self.cycles_image, self.babbitt_min_year)
-        self.babbitt_random_year = random.randrange(self.babbitt_years_tuple[0],
-                                                    self.babbitt_years_tuple[1]+1)
+        # Diagram values
         self.now_year = datetime.now().year
+    
+    def empty_temp_folder(self, temp_folder=None, verbose=False):
+        if temp_folder is None:
+            temp_folder = self.temp_movie_folder
+        for file_name in os.listdir(temp_folder):
+            file_path = os.path.join(temp_folder, file_name)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                if verbose:
+                    print('Failed to delete {file_path}. Reason: {str(e).strip()}')
     
     def show_generation_blurb(self, generation_name):
         if str(generation_name) != 'nan':
             print('{}'.format(generation_name))
             mask_series = (self.generations_df.index == generation_name[:-1])
-            turnings_archetype_list = self.generations_df[mask_series]['turnings_archetype'].tolist()
+            turnings_archetype_list = self.generations_df[mask_series].turnings_archetype.tolist()
             if not len(turnings_archetype_list):
                 mask_series = (self.generations_df.index == generation_name)
-                turnings_archetype_list = self.generations_df[mask_series]['turnings_archetype'].tolist()
+                turnings_archetype_list = self.generations_df[mask_series].turnings_archetype.tolist()
             if len(turnings_archetype_list):
                 turnings_archetype = turnings_archetype_list[0].lower()
                 print('({})'.format(turnings_archetype))
-            generations_archetype_list = self.generations_df[mask_series]['generations_archetype'].tolist()
+            generations_archetype_list = self.generations_df[mask_series].generations_archetype.tolist()
             if len(generations_archetype_list):
                 generations_archetype = generations_archetype_list[0].lower()
                 print('{}'.format(generations_archetype))
     
     def print_turnings(self):
         for turning_name, row_series in self.turnings_df.iterrows():
-            turning_begin_year = row_series['turning_begin_year']
-            turning_end_year = row_series['turning_end_year']
-            turning_notes = row_series['turning_notes']
-            entering_elderhood = row_series['entering_elderhood']
-            entering_midlife = row_series['entering_midlife']
-            entering_young_adulthood = row_series['entering_young_adulthood']
-            entering_childhood = row_series['entering_childhood']
+            turning_year_begin = row_series.turning_year_begin
+            turning_year_end = row_series.turning_year_end
+            turning_notes = row_series.turning_notes
+            entering_elderhood = row_series.entering_elderhood
+            entering_midlife = row_series.entering_midlife
+            entering_young_adulthood = row_series.entering_young_adulthood
+            entering_childhood = row_series.entering_childhood
             print()
-            print('{}-{}'.format(turning_begin_year, turning_end_year))
+            print('{}-{}'.format(turning_year_begin, turning_year_end))
             print('{}'.format('\n'.join(turning_notes.split('. '))))
             print('-------------------------')
             self.show_generation_blurb(entering_elderhood)
@@ -154,153 +160,12 @@ class StraussHoweUtilities(object):
             self.show_generation_blurb(entering_childhood)
             print('-------------------------')
     
-    def add_guide(self, zoom_image):
-        file_path = os.path.join(self.diagonal_movie_folder, 'guide.png')
-        if os.path.isfile(file_path):
-            guide_image = Image.open(fp=file_path, mode='r')
-            guide_size_tuple = guide_image.size
-            zoom_size_tuple = zoom_image.size
-            guide_x = 4
-            guide_y = int((zoom_size_tuple[1]-guide_size_tuple[1])/2) + 1
-            zoom_x = 4 + guide_size_tuple[0] + 4
-            zoom_y = 0
-            frame_width = zoom_x + zoom_size_tuple[0]
-            frame_height = zoom_size_tuple[1]
-            frame_image = Image.new(mode=zoom_image.mode,
-                                    size=(frame_width, frame_height),
-                                    color=(255, 255, 255, 255))
-            frame_image.paste(im=zoom_image, box=(zoom_x, zoom_y),
-                              mask=zoom_image)
-            frame_image.paste(im=guide_image, box=(guide_x, guide_y),
-                              mask=guide_image)
-        else:
-            frame_image = zoom_image
-
-        return frame_image
-    
-    def get_image_array(self, stop_year, png_suffix, movie_folder):
-        zoom_image = self.get_zoom_in(self.cycles_image, stop_year)
-        image_io = BytesIO()
-        zoom_image.save(fp=image_io, format='png')
-        image_array = imageio.imread(image_io.getvalue(), format='png')
-        
-        return image_array
-        
-    def make_a_movie(self, min_year, stop_year, movie_folder=None,
-                     png_suffix='', movie_name=None):
-        if movie_folder is None:
-            movie_folder = self.movie_folder
-        images_list = []
-        for stopped_year in range(min_year, stop_year):
-            image_array = self.get_image_array(stopped_year, png_suffix, movie_folder)
-            for i in range(2):
-                images_list.append(image_array)
-        image_array = self.get_image_array(stop_year, png_suffix, movie_folder)
-        for i in range(100):
-            images_list.append(image_array)
-        if movie_name is None:
-            movie_name = '_'.join(png_suffix.split('_')[1:] + ['movie']) + '.gif'
-        gif_path = os.path.join(movie_folder, movie_name)
-        imageio.mimsave(uri=gif_path, ims=images_list, format='gif')
-        
-        return os.path.abspath(gif_path)
-    
-    def label_life_line(self, img, label_text, xy_tuple, rgb_tuple):
-        font_obj = ImageFont.truetype(r'C:\Windows\Fonts\Arial.ttf', size=12)
-        width, height = font_obj.getsize(label_text)
-        
-        text_img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
-        draw = ImageDraw.Draw(text_img)
-        draw.text((0, 0), text=label_text, font=font_obj, fill=rgb_tuple)
-        
-        text_img = text_img.rotate(41, expand=1)
-        
-        sx, sy = text_img.size
-        px = int(xy_tuple[0] + (xy_tuple[2]-xy_tuple[0])/2 - sx/2)
-        py = int(xy_tuple[1] + (xy_tuple[3]-xy_tuple[1])/2 - sy/2)
-        img.paste(text_img, (px, py, px + sx, py + sy), text_img)
-    
     def convert_years_to_x(self, year, y_tuple=(0, 2220), years_tuple=(1435, 2029)):
         a = (y_tuple[1]-y_tuple[0])/(years_tuple[1]-years_tuple[0])
         b = y_tuple[0] - (years_tuple[0]*a)
         x = a*year + b
         
         return x
-    
-    def draw_life_line(self, center_year, year_of_death, img=None, year_of_birth=1961,
-                       age_of_birth=0, rgb_tuple=(0, 255, 0)):
-        if img is None:
-            img = self.get_zoom_in(self.cycles_image, center_year)
-        draw = ImageDraw.Draw(img)
-        right_year = center_year + 80
-        y_tuple = (0, img.size[0])
-        if year_of_birth < center_year - 80:
-            left_year = center_year - 80
-        else:
-            left_year = year_of_birth
-        years_tuple = (center_year - 80, right_year)
-        xy_tuple = (self.convert_years_to_x(left_year, y_tuple=y_tuple, years_tuple=years_tuple),
-                    self.convert_age_to_y(age_of_birth),
-                    self.convert_years_to_x(year_of_death, y_tuple=y_tuple, years_tuple=years_tuple),
-                    self.convert_age_to_y(year_of_death-year_of_birth))
-        #print('xy_tuple: {}'.format(xy_tuple))
-        draw.line(xy=xy_tuple, fill=rgb_tuple, width=12)
-        
-        return xy_tuple
-    
-    def get_zoom_in(self, img, center_year):
-        size_tuple = img.size
-        y_tuple = (0, size_tuple[0])
-        left_year = center_year - 80
-        right_year = center_year + 80
-        left = self.convert_years_to_x(left_year, y_tuple=y_tuple)
-        upper = 0
-        right = self.convert_years_to_x(right_year, y_tuple=y_tuple)
-        lower = size_tuple[1]
-        
-        # (Upper left x coordinate, upper left y coordinate,
-        # lower right x coordinate, lower right y coordinate)
-        crop_tuple = (left, upper, right, lower)
-        img = img.crop(box=crop_tuple)
-        
-        df = self.patriline_df
-        birth_match_series = (df.year_of_birth >= left_year)
-        birth_match_series = birth_match_series & (df.year_of_birth <= center_year)
-        death_match_series = (df.year_of_death >= left_year)
-        death_match_series = death_match_series & (df.year_of_death <= right_year)
-        mask_series = birth_match_series | death_match_series
-        for patriarch_name, row_series in df[mask_series].iterrows():
-            year_of_birth = row_series.year_of_birth
-            year_of_death = row_series.year_of_death
-            if (str(year_of_death) == 'nan') or (year_of_death > center_year):
-                year_of_death = center_year
-            age_of_birth = 0
-            if year_of_birth < left_year:
-                age_of_birth = left_year - year_of_birth
-            css4_color = row_series.css4_color
-            rgb_obj = webcolors.name_to_rgb(css4_color, spec='css3')
-            rgb_tuple = (rgb_obj.red, rgb_obj.green, rgb_obj.blue, 255)
-            xy_tuple = self.draw_life_line(
-                center_year=center_year, year_of_death=year_of_death,
-                img=img, year_of_birth=year_of_birth, age_of_birth=age_of_birth,
-                rgb_tuple=rgb_tuple)
-            #print(xy_tuple)
-            css4_text_color = row_series.css4_text_color
-            rgb_obj = webcolors.name_to_rgb(css4_text_color, spec='css3')
-            rgb_tuple = (rgb_obj.red, rgb_obj.green, rgb_obj.blue, 255)
-            # if patriarch_name.strip() == 'Stephen Elkanah Babbitt':
-                # patriarch_name = 'Baby Boy Babbitt'
-            self.label_life_line(img=img, label_text=patriarch_name, xy_tuple=xy_tuple,
-                                 rgb_tuple=rgb_tuple)
-        size_tuple = img.size
-        frame_img = Image.new(
-            mode=img.mode, size=(size_tuple[0]+8, size_tuple[1]+8),
-            color=(255, 255, 255, 255))
-        #frame_img.paste(img, (4, 4, 4 + size_tuple[0], 4 + size_tuple[1]), img)
-        frame_img.paste(im=img, box=(4, 4), mask=img)
-        frame_img = self.add_guide(frame_img)
-        
-        return frame_img
     
     def convert_age_to_y(self, age, size_tuple=(333, 133), age_tuple=(20, 80)):
         a = (size_tuple[0] - size_tuple[1])/(age_tuple[0] - age_tuple[1])
@@ -366,7 +231,7 @@ class StraussHoweUtilities(object):
             dresses_img.paste(foreground, (0, 0), foreground)
         
         # Get saeculum image
-        mask_series = (self.turnings_df['turning_begin_year'] <= year) & (self.turnings_df['turning_end_year'] >= year)
+        mask_series = (self.turnings_df.turning_year_begin <= year) & (self.turnings_df.turning_year_end >= year)
         saeculum_list = self.turnings_df[mask_series].index.tolist()
         if len(saeculum_list):
             saeculum_name = saeculum_list[0]
@@ -401,7 +266,7 @@ class StraussHoweUtilities(object):
         foreground.putdata(new_data_list)
         
         # Get saeculum image
-        mask_series = (self.turnings_df['turning_begin_year'] <= year) & (self.turnings_df['turning_end_year'] >= year)
+        mask_series = (self.turnings_df.turning_year_begin <= year) & (self.turnings_df.turning_year_end >= year)
         saeculum_list = self.turnings_df[mask_series].index.tolist()
         if len(saeculum_list):
             saeculum_name = saeculum_list[0]
@@ -416,20 +281,156 @@ class StraussHoweUtilities(object):
             else:
                 foreground.save(new_path, 'PNG')
     
+    def add_dalle_background(self, year, movie_folder=None):
+        if movie_folder is None:
+            movie_folder = self.temp_movie_folder
+        
+        # Get old image data
+        old_path = os.path.join(movie_folder, f'plot_{year}.png')
+        background = Image.open(old_path)
+        background = background.convert('RGBA')
+        old_data_list = background.getdata()
+        
+        # Get new image data
+        new_data_list = []
+        for old_tuple in old_data_list:
+            if (old_tuple[0] == 255) and (old_tuple[1] == 255) and (old_tuple[2] == 255):
+                new_data_list.append(self.white_tuple)
+            else:
+                new_data_list.append(old_tuple)
+        
+        # Replace old with new
+        background.putdata(new_data_list)
+        
+        # Get DALL·E image
+        file_path = os.path.join(self.s.data_folder, 'png', 'dall_e_cover.png')
+        dall_e_img = Image.open(file_path)
+        dall_e_img = dall_e_img.convert('RGBA')
+        
+        dall_e_img.paste(background, (0, 0), background)
+        
+        file_path = os.path.join(movie_folder, 'plot_{}_dall_e.png'.format(year))
+        dall_e_img.save(file_path, 'PNG')
+        
+        return file_path
+    
     def polar_to_cartesian(self, r, theta):
         radians = theta*(pi/180)
         
         return int(r*cos(radians)), int(r*sin(radians))
     
-    def add_spiral_labels(self, years_list, history_year_dict, i=0):
+    def add_spiral_labels(
+        self, years_list, history_year_dict, theta_offset=0, i=0, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
         i = i % 4
         for year in years_list:
             radius, theta = history_year_dict[year]
+            theta += theta_offset
             radius += 25*i
             radius -= 25/2
             x, y = self.polar_to_cartesian(radius, theta)
-            text_obj = plt.text(x, y, year, fontsize=10, color='gray',
-                                rotation=theta-90, rotation_mode='anchor')
+            text_obj = ax.text(
+                x, y, year, fontsize=10, color='gray',
+                rotation=theta-90, rotation_mode='anchor'
+            )
+
+    def min_max_norm(self, raw_list, verbose=False):
+        norm_list = []
+        min_value = min(raw_list)
+        max_value = max(raw_list)
+        
+        for value in raw_list:
+            normed_value = (value - min_value) / (max_value - min_value)
+            norm_list.append(normed_value)
+        
+        return norm_list
+    
+    def adjust_axis(self, ax=None, verbose=False):
+        if ax is None:
+            ax = plt.gca()
+        ax.axis('equal')
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+        for border in ['top', 'right', 'bottom', 'left']:
+            ax.spines[border].set_visible(False)
+    
+    def add_theta_labels(
+        self, divisor=64, years_list=None, history_year_dict=None,
+        bottom_year=None, ax=None, verbose=False
+    ):
+        if ax is None:
+            ax = plt.gca()
+        x_list = []
+        y_list = []
+        def append_lists(theta):
+            x, y = self.polar_to_cartesian(128, theta)
+            x_list.append(x)
+            y_list.append(y)
+            thetas_list.append(theta)
+        if history_year_dict is None:
+            addend = 360//divisor
+            theta = 0 - addend
+            thetas_list = []
+            while theta < (360 - addend):
+                theta += addend
+                append_lists(theta)
+            labels_list = thetas_list
+        else:
+            thetas_list = []
+            labels_list = []
+            theta_offset = 0
+            if (bottom_year is not None):
+                if (bottom_year in history_year_dict.keys()):
+                    theta_offset = 270 - history_year_dict[bottom_year][1]
+            if years_list is None:
+                for year, (_, theta) in history_year_dict.items():
+                    if isinstance(theta, (int, float)):
+                        append_lists(theta+theta_offset)
+                        labels_list.append(year)
+            else:
+                for year in years_list:
+                    _, theta = history_year_dict[year]
+                    if isinstance(theta, (int, float)):
+                        append_lists(theta+theta_offset)
+                        labels_list.append(year)
+        for x, y, theta, label in zip(
+            self.min_max_norm(x_list),
+            self.min_max_norm(y_list),
+            thetas_list,
+            labels_list
+        ):
+            if verbose:
+                print(x, y, theta, label)
+            if (theta % 90):
+                text_obj = ax.text(
+                    x, y, label, fontsize=10, color='gray', ha='center',
+                    va='center', transform=ax.transAxes
+                )
+            else:
+                text_obj = ax.text(
+                    x, y, label, fontsize=10, color='green', ha='center',
+                    va='center', transform=ax.transAxes, weight='bold'
+                )
+        self.adjust_axis(ax=ax)
+    
+    def add_patriarch_label(
+        self, patriarch_name, history_year_dict, bottom_year,
+        theta_offset=0, i=0, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
+        i = i % 4
+        radius, theta = history_year_dict[bottom_year]
+        theta += theta_offset
+        radius += 25*i
+        radius -= 25/2
+        x, y = self.polar_to_cartesian(radius, theta)
+        text_obj = ax.text(
+            x, y, patriarch_name, fontsize=8, color='gray',
+            ha='center', va='center'
+        )
     
     def archimedes_spiral(self, theta, theta_offset=0.0):
         """
@@ -511,7 +512,7 @@ class StraussHoweUtilities(object):
     
     def display_test_colors(self, test_list, saeculum_title, face_title, nearness_str='far from',
                             color_dict=mcolors.XKCD_COLORS, color_title='XKCD', face_point='Face'):
-        print(test_list)
+        print(f'test_list = "{test_list}"')
         name_list = [name for distance, name in test_list]
         colors_dict = {name: color for name, color in color_dict.items() if name in name_list}
         title_str = '{} {} Colors, {} the {} {}'.format(color_title, saeculum_title, nearness_str,
@@ -621,30 +622,6 @@ class StraussHoweUtilities(object):
         
         return point[0] + screen_size / 2, point[1] + screen_size / 2
     
-    def draw_spiral(self, a, b, img, step=0.1, loops=10):
-        """
-        Draw the Archimedean spiral defined by:
-        r = a + b*theta
-        Args:
-            a (real): First parameter
-            b (real): Second parameter
-            img (Image): Image to write spiral to.
-            step (real): How much theta should increment by. (default: 0.1)
-            loops (int): How many times theta should loop around. (default: 10)
-        """
-        draw = ImageDraw.Draw(img)
-        theta = 0.0
-        r = a
-        prev_pos = self.polar_to_cartesian(r, theta)
-        while theta < 2 * loops * pi:
-            theta += step / r
-            r = a + b*theta
-            # Draw pixels, but remember to convert to Cartesian:
-            pos = self.polar_to_cartesian(r, theta)
-            draw.line(self.translate_upper_left_to_center(prev_pos, img.size[0]) +
-                      self.translate_upper_left_to_center(pos, img.size[0]), fill=1)
-            prev_pos = pos
-    
     def exists(self, path):
         r = requests.head(path)
         
@@ -676,9 +653,9 @@ class StraussHoweUtilities(object):
                         'distance_from_wcgy_face', 'distance_from_wcbm_face', 'distance_from_wyrm_face']
         index_list = []
         for row_index, row_series in colors_df.iterrows():
-            green_value = row_series['Green']
-            blue_value = row_series['Blue']
-            red_value = row_series['Red']
+            green_value = row_series.Green
+            blue_value = row_series.Blue
+            red_value = row_series.Red
             row_tuple = (green_value, blue_value, red_value)
             row_dict = {}
             row_dict['color_title'] = color_title
@@ -746,9 +723,14 @@ class StraussHoweUtilities(object):
         return {name: tuple(mcolors.rgb_to_hsv(mcolors.to_rgb(color))) for name,
                 color in colors_dict.items()}
     
-    def get_one_arc(self, start_year, stop_year, history_year_dict, i=0):
-        xy_list = []
+    def get_one_arc(
+        self, start_year, stop_year, history_year_dict, theta_offset=0,
+        i=0, verbose=False
+    ):
         i = i % 4
+        if verbose:
+            if start_year in history_year_dict:
+                print(f'history_year_dict[start_year] = history_year_dict[{start_year}] = {history_year_dict[start_year]}')
         start_radius = history_year_dict[start_year][0]
         start_radius += 25*i
         stop_radius = history_year_dict[stop_year][0]
@@ -757,10 +739,16 @@ class StraussHoweUtilities(object):
         radius_array = np.linspace(start=start_radius, stop=stop_radius,
                                    num=increment_count)
         start_theta = history_year_dict[start_year][1]
+        if verbose:
+            print(f'start_theta = {start_theta}')
         stop_theta = history_year_dict[stop_year][1]
+        if verbose:
+            print(f'stop_theta = {stop_theta}')
         theta_array = np.linspace(start=start_theta, stop=stop_theta,
                                   num=increment_count)
+        xy_list = []
         for radius, theta in zip(radius_array, theta_array):
+            theta += theta_offset
             cartesian_tuple = self.polar_to_cartesian(radius, theta)
             if len(xy_list):
                 if (cartesian_tuple != xy_list[-1]):
@@ -772,7 +760,6 @@ class StraussHoweUtilities(object):
     
     def get_one_stopped_arc(self, start_year, stop_year, stopped_year,
                             history_year_dict, i=0):
-        xy_list = []
         i = i % 4
         if stop_year > stopped_year:
             stop_year = stopped_year
@@ -787,6 +774,7 @@ class StraussHoweUtilities(object):
         stop_theta = history_year_dict[stop_year][1]
         theta_array = np.linspace(start=start_theta, stop=stop_theta,
                                   num=increment_count)
+        xy_list = []
         for radius, theta in zip(radius_array, theta_array):
             cartesian_tuple = self.polar_to_cartesian(radius, theta)
             if len(xy_list):
@@ -832,15 +820,17 @@ class StraussHoweUtilities(object):
             f = io.StringIO(url_or_filepath_or_html)
             tables_df_list = pd.read_html(f)
         if verbose:
-            print(sorted([(i, df.shape) for (i, df) in enumerate(tables_df_list)],
-                         key=lambda x: x[1][0], reverse=True))
+            print(sorted(
+                [(i, df.shape) for (i, df) in enumerate(tables_df_list)],
+                key=lambda x: x[1][0], reverse=True
+            ))
         
         return tables_df_list
     
     def get_row_label(self, present_year, patriarch_name, row_series):
-        patriarch_age = present_year - int(row_series['year_of_birth'])
-        year_of_death = row_series['year_of_death']
-        generation_name = row_series['generation_name']
+        patriarch_age = present_year - int(row_series.year_of_birth)
+        year_of_death = row_series.year_of_death
+        generation_name = row_series.generation_name
         try:
             year_of_death = int(year_of_death)
         except:
@@ -876,7 +866,9 @@ class StraussHoweUtilities(object):
     
     def label_arc(self, start_year, stopped_year,
                   history_theta_dict, arc_label, history_year_dict, ideal_distance=13,
-                  i=0, label_color='black'):
+                  i=0, label_color='black', ax=None):
+        if ax is None:
+            ax = plt.gca()
         i = i % 4
         starting_year = int(((start_year + stopped_year) / 2) - (len(arc_label) / 2))
         starting_radius, starting_theta = history_year_dict[starting_year]
@@ -889,7 +881,7 @@ class StraussHoweUtilities(object):
         # Increment the theta so that it spaces the letters the same regardless of the radius
         theta_increment = theta_sign*(radians*180/pi)
         
-        # Figure out if you have to flip the characters upside-down and place them backwards
+        # Figure out if you have to flip the characters upside-down and place them in right-to-left order
         if (starting_theta%360) < 200:
             #logging.info('')
             #logging.info('Right-side up thetas:')
@@ -899,7 +891,7 @@ class StraussHoweUtilities(object):
             for c in arc_label[::int(-theta_sign)]:
                 #logging.info('c: "{}", radius: "{}", theta: "{}"'.format(c, radius, theta % 360))
                 x, y = self.polar_to_cartesian(radius, theta)
-                text_obj = plt.text(x, y, c, fontsize=12, color=label_color,
+                text_obj = ax.text(x, y, c, fontsize=12, color=label_color,
                                     rotation=theta-90, rotation_mode='anchor')
                 theta += theta_increment
                 if int(theta) in history_theta_dict:
@@ -919,7 +911,7 @@ class StraussHoweUtilities(object):
             for c in arc_label[::int(-theta_sign)]:
                 logging.info('c: "{}", radius: "{}", theta: "{}"'.format(c, radius, theta % 360))
                 x, y = self.polar_to_cartesian(radius, theta)
-                text_obj = plt.text(x, y, c, fontsize=12, color=label_color,
+                text_obj = ax.text(x, y, c, fontsize=12, color=label_color,
                                     rotation=theta+90, rotation_mode='anchor')
                 theta -= theta_increment
                 if int(theta) in history_theta_dict:
@@ -947,7 +939,11 @@ class StraussHoweUtilities(object):
         
         return img
     
-    def plot_colortable(self, colors_dict, title, sort_colors=True, emptycols=0):
+    def plot_colortable(
+        self, colors_dict, title, sort_colors=True, emptycols=0, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
         if len(colors_dict):
             cell_width = 212
             cell_height = 22
@@ -957,9 +953,10 @@ class StraussHoweUtilities(object):
             
             # Sort colors_dict by hue, saturation, value and name.
             if sort_colors is True:
-                by_hsv = sorted((tuple(mcolors.rgb_to_hsv(mcolors.to_rgb(color))),
-                                 name)
-                                for name, color in colors_dict.items())
+                by_hsv = sorted(
+                    (tuple(mcolors.rgb_to_hsv(mcolors.to_rgb(color))), name)
+                    for name, color in colors_dict.items()
+                )
                 names = [name for hsv, name in by_hsv]
             else:
                 names = list(colors_dict)
@@ -998,75 +995,141 @@ class StraussHoweUtilities(object):
                 ax.hlines(y, swatch_start_x, swatch_end_x,
                           color=colors_dict[name], linewidth=18)
     
-    def plot_patriarch(self, patriarch_name, history_year_dict):
+    def plot_year(
+        self, history_year_dict, bottom_year, ax=None, verbose=False
+    ):
+        if ax is None:
+            ax = plt.gca()
+        theta_offset = 0
+        if (bottom_year in history_year_dict.keys()):
+            theta_offset = 270 - history_year_dict[bottom_year][1]
+        
+        birth_series = self.patriline_df.year_of_birth
+        death_series = self.patriline_df.year_of_death
+        mask_series = (bottom_year >= birth_series)
+        patriarch_names_list = self.patriline_df[mask_series].index.tolist()
+        mask_series &= (bottom_year <= death_series) | death_series.isnull()
+        labels_list = self.patriline_df[mask_series].index.tolist()
+        for i, patriarch_name in enumerate(patriarch_names_list):
+            self.plot_patriarch(
+                patriarch_name, history_year_dict, bottom_year,
+                theta_offset, i=i, ax=ax,
+                add_label=bool(patriarch_name in labels_list)
+            )
+        text_obj = ax.text(
+            0.5, 0, bottom_year, fontsize=12, color='black',
+            ha='center', transform=ax.transAxes
+        )
+        self.adjust_axis(ax=ax)
+    
+    def plot_patriarch(
+        self, patriarch_name, history_year_dict, bottom_year,
+        theta_offset=0, i=0, ax=None, add_label=True
+    ):
+        if ax is None:
+            ax = plt.gca()
+        
         mask_series = (self.patriline_df.index == patriarch_name)
-        start_year = int(self.patriline_df[mask_series]['Year of Birth'].tolist()[0])
-        stop_year = self.patriline_df[mask_series]['Year of Death'].tolist()[0]
+        start_year = int(self.patriline_df[mask_series].year_of_birth.tolist()[0])
+        stop_year = self.patriline_df[mask_series].year_of_death.tolist()[0]
         try:
             stop_year = int(stop_year)
         except:
             stop_year = max(history_year_dict.keys())
-        xy_list = self.get_one_arc(start_year=start_year, stop_year=stop_year,
-                                   history_year_dict=history_year_dict, i=0)
-        PathCollection_obj = plt.plot([x[0] for x in xy_list], [y[1] for y in xy_list], alpha=0.5)
-        self.add_spiral_labels([start_year, stop_year], history_year_dict)
+        xy_list = self.get_one_arc(
+            start_year=start_year, stop_year=min(stop_year, bottom_year),
+            history_year_dict=history_year_dict, theta_offset=theta_offset, i=i
+        )
+        css4_color = self.patriline_df[mask_series].css4_color.squeeze()
+        PathCollection_obj = ax.plot(
+            [x[0] for x in xy_list], [y[1] for y in xy_list],
+            color=css4_color, alpha=0.5
+        )
+        if add_label:
+            self.add_patriarch_label(
+                patriarch_name=patriarch_name,
+                history_year_dict=history_year_dict, bottom_year=bottom_year,
+                theta_offset=theta_offset, i=i
+            )
     
-    def save_stopped_babbitt_plot(self, stopped_year, out_file_path, footer_str,
-                                  history_year_dict):
-        mask_series = (self.patriline_df['Year of Birth'] <= stopped_year)
+    def save_stopped_babbitt_plot_as_blender_script(
+        self, stopped_year, out_file_path, footer_str,
+        history_year_dict, py_file_header_str, verbose=False
+    ):
+        mask_series = (self.patriline_df.year_of_birth <= stopped_year)
         i = self.patriline_df[mask_series].shape[0]-1
+        out_file_path = os.path.abspath(out_file_path)
+        if verbose:
+            print(f'Saving to {out_file_path}')
+        Path(out_file_path).touch()
         with open(out_file_path, 'w') as output:
             size = output.write(py_file_header_str)
             for patriarch_name, row_series in self.patriline_df[mask_series].iterrows():
-                start_year = int(row_series['Year of Birth'])
-                stop_year = row_series['Year of Death']
+                start_year = int(row_series.year_of_birth)
+                stop_year = row_series.year_of_death
                 try:
                     stop_year = int(stop_year)
                 except:
                     stop_year = start_year + 80
                     if stop_year > max(history_year_dict.keys()):
                         stop_year = max(history_year_dict.keys())
-                xy_list = self.get_one_stopped_arc(start_year=start_year, stop_year=stop_year,
-                                                   stopped_year=stopped_year,
-                                                   history_year_dict=history_year_dict, i=i)
-                size = output.write("patriarch_coords_dict['{}'] = {}\n".format(patriarch_name,
-                                                                                str([(x,y,1) for (x, y) in xy_list])))
+                xy_list = self.get_one_stopped_arc(
+                    start_year=start_year, stop_year=stop_year,
+                    stopped_year=stopped_year,
+                    history_year_dict=history_year_dict, i=i
+                )
+                size = output.write("patriarch_coords_dict['{}'] = {}\n".format(
+                    patriarch_name, str([(x,y,1) for (x, y) in xy_list])
+                ))
                 i -= 1
             size = output.write(footer_str)
     
-    def show_babbitt_plot(self, history_theta_dict, history_year_dict):
+    def show_babbitt_plot(
+        self, history_theta_dict, history_year_dict, verbose=False, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
         fig = plt.figure(figsize=(13, 13))
         ax = fig.add_subplot(111, autoscale_on=False)
         ax.set_xlim(-1000, 1000)
         ax.set_ylim(-1000, 1000)
         i = self.patriline_df.shape[0]-1
         d = 5
-        previous_saeculum = self.patriline_df.head(1)['Saeculum Name'].tolist()[0]
+        previous_saeculum = self.patriline_df.head(1).saeculum_name.tolist()[0]
         for patriarch_name, row_series in self.patriline_df.iterrows():
-            start_year = int(row_series['Year of Birth'])
-            stop_year = row_series['Year of Death']
+            start_year = int(row_series.year_of_birth)
+            stop_year = row_series.year_of_death
             try:
                 stop_year = int(stop_year)
             except:
                 stop_year = start_year + 80
                 if stop_year > max(history_year_dict.keys()):
                     stop_year = max(history_year_dict.keys())
-            xy_list = self.get_one_arc(start_year=start_year, stop_year=stop_year,
-                                       history_year_dict=history_year_dict, i=i)
-            self.add_spiral_labels([start_year, stop_year], history_year_dict, i)
-            self.label_arc(start_year=start_year, stopped_year=stop_year,
-                           history_theta_dict=history_theta_dict, arc_label=patriarch_name,
-                           history_year_dict=history_year_dict, ideal_distance=13, i=i,
-                           label_color='black')
-            saeculum = row_series['Saeculum Name']
+            xy_list = self.get_one_arc(
+                start_year=start_year, stop_year=stop_year,
+                history_year_dict=history_year_dict, i=i
+            )
+            self.add_spiral_labels(
+                [start_year, stop_year], history_year_dict, i
+            )
+            self.label_arc(
+                start_year=start_year, stopped_year=stop_year,
+                history_theta_dict=history_theta_dict,
+                arc_label=patriarch_name, history_year_dict=history_year_dict,
+                ideal_distance=13, i=i, label_color='black'
+            )
+            saeculum = row_series.saeculum_name
             if saeculum != previous_saeculum:
                 previous_saeculum = saeculum
                 d = 5
-            #print(patriarch_name, i, d, saeculum)
+            if verbose:
+                print(f'patriarch_name, i, d, saeculum = "{patriarch_name, i, d, saeculum}"')
             cmap = self.saeculum_cmap_dict[saeculum]
             c = plt.get_cmap(cmap)(np.linspace(0, 1, 6))[d]
-            PathCollection_obj = plt.plot([x[0] for x in xy_list], [y[1] for y in xy_list],
-                                          alpha=0.75, label=patriarch_name, c=c)
+            PathCollection_obj = ax.plot(
+                [x[0] for x in xy_list], [y[1] for y in xy_list],
+                alpha=0.75, label=patriarch_name, c=c
+            )
             i -= 1
             d -= 1
         Legend_obj = ax.legend()
@@ -1146,7 +1209,7 @@ class StraussHoweUtilities(object):
         return jpg_image
     
     def show_turning_image(self, year):
-        mask_series = (self.turnings_df['turning_begin_year'] <= year) & (self.turnings_df['turning_end_year'] >= year)
+        mask_series = (self.turnings_df.turning_year_begin <= year) & (self.turnings_df.turning_year_end >= year)
         turning_name_list = self.turnings_df[mask_series].index.tolist()
         if len(turning_name_list):
             turning_name = turning_name_list[0]
@@ -1174,7 +1237,12 @@ class StraussHoweUtilities(object):
         
         return jpg_image
     
-    def show_stopped_babbitt_plot(self, history_theta_dict, stopped_year, history_year_dict):
+    def save_stopped_babbitt_plot_without_showing(
+        self, history_theta_dict, stopped_year, history_year_dict,
+        verbose=True, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
         
         # Turn interactive plotting off
         plt.ioff()
@@ -1184,45 +1252,51 @@ class StraussHoweUtilities(object):
         ax = fig.add_subplot(111, autoscale_on=False)
         ax.set_xlim(-1000, 1000)
         ax.set_ylim(-1000, 1000)
-        mask_series = (self.patriline_df['year_of_birth'] <= stopped_year)
+        mask_series = (self.patriline_df.year_of_birth <= stopped_year)
         i = self.patriline_df[mask_series].shape[0]-1
         d = 5
-        previous_saeculum = self.patriline_df[mask_series].head(1)['saeculum_name'].tolist()[0]
+        previous_saeculum = self.patriline_df[mask_series].head(1).saeculum_name.tolist()[0]
         for patriarch_name, row_series in self.patriline_df[mask_series].iterrows():
-            start_year = int(row_series['year_of_birth'])
-            stop_year = row_series['year_of_death']
+            start_year = int(row_series.year_of_birth)
+            stop_year = row_series.year_of_death
             try:
                 stop_year = int(stop_year)
             except:
                 stop_year = start_year + 80
                 if stop_year > max(history_year_dict.keys()):
                     stop_year = max(history_year_dict.keys())
-            xy_list = self.get_one_stopped_arc(start_year=start_year, stop_year=stop_year,
-                                               stopped_year=stopped_year,
-                                               history_year_dict=history_year_dict, i=i)
-            years_list = [year for year in [start_year,
-                                            stop_year] if year <= stopped_year]
+            xy_list = self.get_one_stopped_arc(
+                start_year=start_year, stop_year=stop_year,
+                stopped_year=stopped_year, history_year_dict=history_year_dict,
+                i=i
+            )
+            years_list = [start_year, stop_year]
+            years_list = [year for year in years_list if year <= stopped_year]
             self.add_spiral_labels(years_list, history_year_dict, i)
             if stop_year > stopped_year:
                 stop_year = stopped_year
-            text_color = row_series['xkcd_text_color']
-            self.label_arc(start_year=start_year, stopped_year=stop_year,
-                           history_theta_dict=history_theta_dict, arc_label=patriarch_name,
-                           history_year_dict=history_year_dict, ideal_distance=13, i=i,
-                           label_color=text_color)
-            saeculum = row_series['saeculum_name']
+            text_color = row_series.xkcd_text_color
+            self.label_arc(
+                start_year=start_year, stopped_year=stop_year,
+                history_theta_dict=history_theta_dict,
+                arc_label=patriarch_name,
+                history_year_dict=history_year_dict, ideal_distance=13,
+                i=i, label_color=text_color
+            )
+            saeculum = row_series.saeculum_name
             if saeculum != previous_saeculum:
                 previous_saeculum = saeculum
                 d = 5
-            #print(patriarch_name, i, d, saeculum)
+            if verbose:
+                print(f'patriarch_name, i, d, saeculum = "{patriarch_name, i, d, saeculum}"')
             cmap = self.saeculum_cmap_dict[saeculum]
             #c = plt.get_cmap(cmap)(np.linspace(0, 1, 6))[d]
-            c = row_series['xkcd_color']
+            c = row_series.xkcd_color
             label_str = self.get_row_label(stopped_year, patriarch_name, row_series)
-            PathCollection_obj = plt.plot([xy[0] for xy in xy_list],
-                                          [xy[1] for xy in xy_list],
-                                          alpha=0.75, label=label_str,
-                                          c=c, linewidth=9)
+            PathCollection_obj = ax.plot(
+                [xy[0] for xy in xy_list], [xy[1] for xy in xy_list],
+                alpha=0.75, label=label_str, c=c, linewidth=9
+            )
             i -= 1
             d -= 1
         
@@ -1236,6 +1310,8 @@ class StraussHoweUtilities(object):
         # Close it so it never gets displayed
         file_name = 'plot_{}.png'.format(stopped_year)
         file_path = os.path.join(self.bare_movie_folder, file_name)
+        if verbose:
+            print(f'Saving to {os.path.abspath(file_path)}')
         plt.savefig(file_path, format='png')
         plt.close(fig)
     
@@ -1254,17 +1330,25 @@ class StraussHoweUtilities(object):
                 multiple = MAX_HEIGHT / height
                 width *= multiple
                 height *= multiple
-            jpg_image = jpg_image.resize(size=(int(width), int(height)), resample=0, box=None)
+            jpg_image = jpg_image.resize(
+                size=(int(width), int(height)), resample=0, box=None
+            )
             width, height = jpg_image.size
         left = 0 - int(width/2)
         right = int(width/2)
         top = 0 - int(height/2)
         bottom = int(height/2)
-        AxesImage_obj = imshow(X=np.asarray(jpg_image), origin='upper', extent=(left, right, bottom, top))
+        AxesImage_obj = imshow(
+            X=np.asarray(jpg_image), origin='upper',
+            extent=(left, right, bottom, top)
+        )
         
         return jpg_image
     
-    def spirals(n_samples=100, noise=None, seed=None, mode='archimedes', n_loops=2, *args, **kwargs):
+    def spirals(
+        n_samples=100, noise=None, seed=None, mode='archimedes',
+        n_loops=2, *args, **kwargs
+    ):
         """
         Create spirals
         
@@ -1302,25 +1386,28 @@ class StraussHoweUtilities(object):
         
         if seed is not None:
             np.random.seed(seed)
-        linspace = np.linspace(0, 2 * n_loops * np.pi,
-                               n_samples // n_classes)
+        linspace = np.linspace(0, 2 * n_loops * np.pi, n_samples // n_classes)
         spir_x = np.empty(0, dtype=np.int32)
         spir_y = np.empty(0, dtype=np.int32)
         
         y = np.empty(0, dtype=np.int32)
         for label in range(n_classes):
-            (base_cos, base_sin) = _modes[mode](linspace, label * np.pi,
-                    *args, **kwargs)
+            (base_cos, base_sin) = _modes[mode](
+                linspace, label * np.pi, *args, **kwargs
+            )
             spir_x = np.append(spir_x, base_cos)
             spir_y = np.append(spir_y, base_sin)
-            y = np.append(y, label * np.ones(n_samples // n_classes,
-                          dtype=np.int32))
+            y = np.append(
+                y, label * np.ones(n_samples // n_classes, dtype=np.int32)
+            )
         
-        # Add more points if n_samples is not divisible by n_classes (unbalanced!)
+        # Add more points if n_samples is not divisible by n_classes
+        # (unbalanced!)
         extras = n_samples % n_classes
         if extras > 0:
-            (x_extra, y_extra) = _modes[mode](np.random.rand(extras) * 2 * np.pi,
-                                              *args, **kwargs)
+            (x_extra, y_extra) = _modes[mode](
+                np.random.rand(extras) * 2 * np.pi, *args, **kwargs
+            )
             spir_x = np.append(spir_x, x_extra)
             spir_y = np.append(spir_y, y_extra)
             y = np.append(y, np.zeros(extras, dtype=np.int32))
@@ -1337,8 +1424,8 @@ class StraussHoweUtilities(object):
         return Dataset(data=X[indices], target=y[indices])
     
     def get_generation_name(self, year_of_birth):
-        mask_series = (self.generations_df['birth_year_begin'] <= year_of_birth)
-        mask_series = mask_series & (self.generations_df['birth_year_end'] >= year_of_birth)
+        mask_series = (self.generations_df.birth_year_begin <= year_of_birth)
+        mask_series = mask_series & (self.generations_df.birth_year_end >= year_of_birth)
         generation_name_list = self.generations_df[mask_series].index.tolist()
         if len(generation_name_list):
             generation_name = generation_name_list[0]
@@ -1347,7 +1434,9 @@ class StraussHoweUtilities(object):
         
         return generation_name
     
-    def fit_year_curve(self, df=None, column_prefix='birth_year'):
+    def fit_year_curve(self, df=None, column_prefix='birth_year', ax=None):
+        if ax is None:
+            ax = plt.gca()
         if df is None:
             df = self.generations_df
         begin_column = '{}_begin'.format(column_prefix)
@@ -1367,7 +1456,7 @@ class StraussHoweUtilities(object):
         end_data = np.array(object=df[end_column].tolist())
         from scipy.optimize import curve_fit
         popt, pcov = curve_fit(func, begin_data, end_data)
-        line_2d_obj = plt.plot(begin_data, end_data, 'b-', label='data')
+        line_2d_obj = ax.plot(begin_data, end_data, 'b-', label='data')
 
         def get_end_year(begin_year):
             '''Get the end year given the begin year'''
@@ -1375,10 +1464,10 @@ class StraussHoweUtilities(object):
             return popt[0]*begin_year + popt[1]
 
         label_str = 'fit: end_year = %5.1f * begin_year + %5.1f' % tuple(popt)
-        line_2d_obj = plt.plot(begin_data, get_end_year(begin_data), 'r-', label=label_str)
-        plt.xlabel('Begin Year')
-        plt.ylabel('End Year')
-        legend_obj = plt.legend()
+        line_2d_obj = ax.plot(begin_data, get_end_year(begin_data), 'r-', label=label_str)
+        ax.xlabel('Begin Year')
+        ax.ylabel('End Year')
+        legend_obj = ax.legend()
         
         return popt, get_end_year
     
@@ -1505,7 +1594,12 @@ class StraussHoweUtilities(object):
 
         return column_similarities_df
     
-    def show_3d_plot(self, three_d_df, z_column='Red', x_column='Green', y_column='Blue'):
+    def show_3d_plot(
+        self, three_d_df, z_column='Red', x_column='Green',
+        y_column='Blue', ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
         fig = plt.figure(figsize=(18, 8))
         ax = fig.add_subplot(111, projection='3d', autoscale_on=True)
         xlabel_text = ax.set_xlabel(x_column)
@@ -1549,7 +1643,7 @@ class StraussHoweUtilities(object):
             waswere = 'were' if len(patriarch_names_list) > 1 else 'was'
             print(self.conjunctify_nouns(patriarch_names_list) + f' {waswere} alive during this year.')
         
-        # Get saecular information
+        # Get saecular Awakening information
         mask_series = (self.saecula_df.awakening_year_begin <= year)
         mask_series &= (self.saecula_df.awakening_year_end >= year)
         if self.saecula_df[mask_series].shape[0]:
@@ -1562,6 +1656,8 @@ class StraussHoweUtilities(object):
             else:
                 awakening_name = f"{saeculum_name} saeculum's {self.saecula_df[mask_series].awakening_name.squeeze()}"
                 print(f'This year was during the {awakening_name}.')
+        
+        # Get saecular Crisis information
         mask_series = (self.saecula_df.crisis_year_begin <= year) & (self.saecula_df.crisis_year_end >= year)
         if self.saecula_df[mask_series].shape[0]:
             saeculum_name = self.saecula_df[mask_series].index.array[0]
@@ -1588,12 +1684,452 @@ class StraussHoweUtilities(object):
             begin_turning_name = self.get_begin_turning_name(year)
             if begin_turning_name is not None:
                 print(f'This year was the beginning of the {begin_turning_name}.')
+        
+        # Get Turning notes
         mask_series = (self.turnings_df.turning_year_end > year) & (self.turnings_df.turning_year_begin <= year)
         if self.turnings_df[mask_series].shape[0]:
             turning_notes = self.turnings_df[mask_series].turning_notes.squeeze().strip()
-            print(turning_notes)
+            print(f'turning_notes = "{turning_notes}"')
+        
+        # Get presidential information
         mask_series = (self.us_presidents_df.year_reign_end >= year)
         mask_series &= (self.us_presidents_df.year_reign_begin <= year)
         if self.us_presidents_df[mask_series].shape[0]:
             president_name = self.us_presidents_df[mask_series].index.array[0]
             print(f'{president_name} was president during this year.')
+        
+        # Get Billboard Year-End number-one singles information
+        self.show_billboard_year_end_number_one_single(year)
+    
+    def show_number_one_single(self, nearest_issue_date):
+        if self.s.pickle_exists('billboard_df'):
+            df = self.s.load_object('billboard_df')
+            if 'issue_date' in df.columns:
+                row_series = sorted([rs for (i, rs) in df.iterrows()], key=lambda x: abs((x.issue_date - nearest_issue_date).days))[0]
+                song_name = row_series.song_name
+                artist_name = row_series.artist_name
+                print(f'The number-one single for this date was "{song_name}" by {artist_name}.')
+        else:
+            self.show_billboard_year_end_number_one_single(nearest_issue_date.year)
+    
+    def show_billboard_year_end_number_one_single(self, year):
+        if self.s.pickle_exists('Billboard_Year_End_number_one_singles_df'):
+            df = self.s.load_object('Billboard_Year_End_number_one_singles_df')
+            if 'Year' in df.columns:
+                mask_series = (df.Year == year)
+                if df[mask_series].shape[0] and ('song_name' in df.columns) and ('artist_name' in df.columns):
+                    song_name = df[mask_series].song_name.squeeze()
+                    artist_name = df[mask_series].artist_name.squeeze()
+                    print(f'The Billboard Year-End number-one single for that year was "{song_name}" by {artist_name}.')
+    
+    #################### Elliptical Functions ####################
+    
+    def elliptical_polar_to_cartesian(self, theta, vertical_radius, horizontal_radius=None, aspect_ratio=1.1193862644404413):
+        """
+        From https://math.stackexchange.com/questions/315386/ellipse-in-polar-coordinates
+        and https://mathworld.wolfram.com/Ellipse.html
+        """
+        if horizontal_radius is None:
+            horizontal_radius = vertical_radius * aspect_ratio
+        radians = theta*(pi/180)
+        x = sqrt(vertical_radius**2 - (vertical_radius*cos(radians))**2)*horizontal_radius/vertical_radius
+        y = sqrt(horizontal_radius**2 - (horizontal_radius*sin(radians))**2)*vertical_radius/horizontal_radius
+        
+        theta_prime = theta % 360
+        if theta_prime >= 270:
+            x = -x
+            y = -y
+        elif theta_prime >= 180:
+            x = -x
+            y = y
+        elif theta_prime >= 90:
+            x = x
+            y = y
+        else:
+            x = x
+            y = -y
+        
+        return int(x), int(y)
+    
+    def add_elliptical_spiral_labels(
+        self, years_list, history_year_dict, i=0,
+        aspect_ratio=1.1193862644404413, ax=None):
+        if ax is None:
+            ax = plt.gca()
+        i = i % 4
+        for year in years_list:
+            vertical_radius, theta = history_year_dict[year]
+            vertical_radius += 25*i
+            vertical_radius -= 25/2
+            horizontal_radius = vertical_radius * aspect_ratio
+            x, y = self.elliptical_polar_to_cartesian(
+                theta=theta, vertical_radius=vertical_radius,
+                horizontal_radius=horizontal_radius, aspect_ratio=aspect_ratio
+            )
+            text_obj = ax.text(x, y, year, fontsize=10, color='gray',
+                                rotation=theta-90, rotation_mode='anchor')
+    
+    def create_elliptical_xy_list(
+        self, history_radius_dict, aspect_ratio=1.1193862644404413
+    ):
+        xy_list = []
+        for vertical_radius in sorted(history_radius_dict.keys()):
+            year, theta = history_radius_dict[vertical_radius]
+            horizontal_radius = vertical_radius * aspect_ratio
+            cartesian_tuple = self.elliptical_polar_to_cartesian(
+                theta=theta, vertical_radius=vertical_radius,
+                horizontal_radius=horizontal_radius, aspect_ratio=aspect_ratio
+            )
+            if len(xy_list):
+                if (cartesian_tuple != xy_list[-1]):
+                    xy_list.append(cartesian_tuple)
+            else:
+                xy_list.append(cartesian_tuple)
+        
+        return xy_list
+    
+    def get_one_elliptical_arc(
+        self, start_year, stop_year, history_year_dict,
+        theta_offset=0, radius_offset=0,
+        i=0, aspect_ratio=1.1193862644404413, verbose=False
+    ):
+        i = i % 4
+        if verbose:
+            if start_year in history_year_dict:
+                print(f'history_year_dict[start_year] = history_year_dict[{start_year}] = {history_year_dict[start_year]}')
+        start_radius = history_year_dict[start_year][0]
+        start_radius += 25*i
+        stop_radius = history_year_dict[stop_year][0]
+        stop_radius += 25*i
+        increment_count = int(2*pi*start_radius)
+        radius_array = np.linspace(start=start_radius, stop=stop_radius,
+                                   num=increment_count)
+        start_theta = history_year_dict[start_year][1]
+        if verbose:
+            print(f'start_theta = {start_theta}')
+        stop_theta = history_year_dict[stop_year][1]
+        if verbose:
+            print(f'stop_theta = {stop_theta}')
+        theta_array = np.linspace(start=start_theta, stop=stop_theta,
+                                  num=increment_count)
+        xy_list = []
+        for vertical_radius, theta in zip(radius_array, theta_array):
+            vertical_radius += radius_offset
+            horizontal_radius = vertical_radius * aspect_ratio
+            theta += theta_offset
+            cartesian_tuple = self.elliptical_polar_to_cartesian(
+                theta=theta, vertical_radius=vertical_radius,
+                horizontal_radius=horizontal_radius, aspect_ratio=aspect_ratio
+            )
+            if len(xy_list):
+                if (cartesian_tuple != xy_list[-1]):
+                    xy_list.append(cartesian_tuple)
+            else:
+                xy_list.append(cartesian_tuple)
+        
+        return xy_list
+    
+    def label_ellipse(
+        self, start_year, stopped_year, history_theta_dict, elliptical_label,
+        history_year_dict, ideal_distance=13, i=0,
+        label_color='black', aspect_ratio=1.1193862644404413, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
+        i = i % 4
+        starting_year = int(((start_year + stopped_year) / 2) - (len(elliptical_label) / 2))
+        starting_radius, starting_theta = history_year_dict[starting_year]
+        next_radius, next_theta = history_year_dict[starting_year+1]
+        
+        # Tan(A) = Opposite/Adjacent
+        radians = atan(ideal_distance/starting_radius)
+        theta_sign = np.sign(next_theta-starting_theta)
+        
+        # Increment the theta so that it spaces the letters the same regardless of the vertical radius
+        theta_increment = theta_sign*(radians*180/pi)
+        
+        # Figure out if you have to flip the characters upside-down and place them in right-to-left order
+        if (starting_theta%360) < 200:
+            #logging.info('')
+            #logging.info('Right-side up thetas:')
+            theta = starting_theta
+            vertical_radius = starting_radius + 25*i
+            vertical_radius -= 25/2
+            for c in elliptical_label[::int(-theta_sign)]:
+                #logging.info('c: "{}", vertical_radius: "{}", theta: "{}"'.format(c, vertical_radius, theta % 360))
+                horizontal_radius = vertical_radius * aspect_ratio
+                x, y = self.elliptical_polar_to_cartesian(
+                    theta=theta, vertical_radius=vertical_radius,
+                    horizontal_radius=horizontal_radius,
+                    aspect_ratio=aspect_ratio
+                )
+                text_obj = ax.text(x, y, c, fontsize=12, color=label_color,
+                                    rotation=theta-90, rotation_mode='anchor')
+                theta += theta_increment
+                if int(theta) in history_theta_dict:
+                    vertical_radius = history_theta_dict[int(theta)][1]
+                    vertical_radius += 25*i
+                    vertical_radius -= 25/2
+        else:
+            logging.info('')
+            logging.info('Upside-down thetas:')
+            theta = starting_theta + theta_increment*len(elliptical_label)
+            if int(theta) in history_theta_dict:
+                vertical_radius = history_theta_dict[int(theta)][1]
+                vertical_radius += 25*i
+            else:
+                vertical_radius = starting_radius + 25*i
+            vertical_radius += 25/2
+            for c in elliptical_label[::int(-theta_sign)]:
+                logging.info('c: "{}", vertical_radius: "{}", theta: "{}"'.format(c, vertical_radius, theta % 360))
+                horizontal_radius = vertical_radius * aspect_ratio
+                x, y = self.elliptical_polar_to_cartesian(
+                    theta=theta, vertical_radius=vertical_radius,
+                    horizontal_radius=horizontal_radius,
+                    aspect_ratio=aspect_ratio
+                )
+                text_obj = ax.text(x, y, c, fontsize=12, color=label_color,
+                                    rotation=theta+90, rotation_mode='anchor')
+                theta -= theta_increment
+                if int(theta) in history_theta_dict:
+                    vertical_radius = history_theta_dict[int(theta)][1]
+                    vertical_radius += 25*i
+                    vertical_radius += 25/2
+    
+    def show_elliptical_babbitt_plot(
+        self, history_theta_dict, history_year_dict,
+        aspect_ratio=1.1193862644404413, ax=None, verbose=False
+    ):
+        if ax is None:
+            ax = plt.gca()
+        ax.set_xlim(-1000*aspect_ratio, 1000*aspect_ratio)
+        ax.set_ylim(-1000, 1000)
+        axis_tuple = ax.axis('equal')
+        i = self.patriline_df.shape[0]-1
+        d = 5
+        previous_saeculum = self.patriline_df.head(1).saeculum_name.tolist()[0]
+        for patriarch_name, row_series in self.patriline_df.iterrows():
+            start_year = int(row_series.year_of_birth)
+            stop_year = row_series.year_of_death
+            try:
+                stop_year = int(stop_year)
+            except:
+                stop_year = start_year + 80
+                if stop_year > max(history_year_dict.keys()):
+                    stop_year = max(history_year_dict.keys())
+            xy_list = self.get_one_elliptical_arc(
+                start_year=start_year, stop_year=stop_year,
+                history_year_dict=history_year_dict, i=i,
+                aspect_ratio=aspect_ratio
+            )
+            self.add_elliptical_spiral_labels(
+                [start_year, stop_year], history_year_dict, i,
+                aspect_ratio=aspect_ratio
+            )
+            self.label_ellipse(
+                start_year=start_year, stopped_year=stop_year,
+                history_theta_dict=history_theta_dict,
+                elliptical_label=patriarch_name,
+                history_year_dict=history_year_dict, ideal_distance=13,
+                i=i, label_color='black', aspect_ratio=aspect_ratio
+            )
+            saeculum = row_series.saeculum_name
+            if saeculum != previous_saeculum:
+                previous_saeculum = saeculum
+                d = 5
+            if verbose:
+                print(f'patriarch_name, i, d, saeculum = "{patriarch_name, i, d, saeculum}"')
+            cmap = self.saeculum_cmap_dict[saeculum]
+            c = plt.get_cmap(cmap)(np.linspace(0, 1, 6))[d]
+            x_list = [x[0] for x in xy_list]
+            y_list = [y[1] for y in xy_list]
+            PathCollection_obj = ax.plot(
+                x_list, y_list, alpha=0.75, label=patriarch_name, c=c
+            )
+            i -= 1
+            d -= 1
+        Legend_obj = ax.legend()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+    
+    def plot_elliptical_year(
+        self, history_year_dict, bottom_year,
+        aspect_ratio=1.1193862644404413, radius_offset=None,
+        ax=None, verbose=False
+    ):
+        if ax is None:
+            ax = plt.gca()
+        theta_offset = 0
+        if (bottom_year in history_year_dict.keys()):
+            theta_offset = 0 - history_year_dict[bottom_year][1]
+        
+        # Get the radius offset
+        max_year = max(history_year_dict.keys())
+        max_radius = history_year_dict[max_year][0]
+        self.set_invisible_ellipse(vertical_radius=max_radius, ax=ax)
+        if radius_offset is None:
+            radius_offset = max_radius - history_year_dict[bottom_year][0]
+        
+        # Get living patriachs dataset
+        birth_series = self.patriline_df.year_of_birth
+        death_series = self.patriline_df.year_of_death
+        mask_series = (bottom_year >= birth_series)
+        patriarch_names_list = self.patriline_df[mask_series].index.tolist()
+        mask_series &= (bottom_year <= death_series) | death_series.isnull()
+        labels_list = self.patriline_df[mask_series].index.tolist()
+        
+        # Add theta- and radius-adjusted patriarch arcs
+        for i, patriarch_name in enumerate(patriarch_names_list):
+            self.plot_elliptical_patriarch(
+                patriarch_name, history_year_dict, bottom_year,
+                aspect_ratio=aspect_ratio,
+                theta_offset=theta_offset, radius_offset=radius_offset,
+                i=i, ax=ax,
+                add_label=bool(patriarch_name in labels_list)
+            )
+        
+        # Label and adjust plot
+        text_obj = ax.text(
+            0.5, 0.0625, bottom_year, fontsize=12, color='black',
+            ha='center', transform=ax.transAxes
+        )
+        self.adjust_axis(ax=ax)
+    
+    def plot_elliptical_patriarch(
+        self, patriarch_name, history_year_dict, bottom_year,
+        aspect_ratio=1.1193862644404413,
+        theta_offset=0, radius_offset=0, i=0, ax=None, add_label=True
+    ):
+        if ax is None:
+            ax = plt.gca()
+        
+        mask_series = (self.patriline_df.index == patriarch_name)
+        start_year = int(self.patriline_df[mask_series].year_of_birth.tolist()[0])
+        stop_year = self.patriline_df[mask_series].year_of_death.tolist()[0]
+        try:
+            stop_year = int(stop_year)
+        except:
+            stop_year = max(history_year_dict.keys())
+        xy_list = self.get_one_elliptical_arc(
+            start_year=start_year, stop_year=min(stop_year, bottom_year),
+            history_year_dict=history_year_dict,
+            theta_offset=theta_offset, radius_offset=radius_offset, i=i,
+            aspect_ratio=aspect_ratio
+        )
+        css4_color = self.patriline_df[mask_series].css4_color.squeeze()
+        PathCollection_obj = ax.plot(
+            [x[0] for x in xy_list], [y[1] for y in xy_list],
+            color=css4_color, alpha=0.5
+        )
+        if add_label:
+            self.add_elliptical_patriarch_label(
+                patriarch_name=patriarch_name,
+                history_year_dict=history_year_dict, bottom_year=bottom_year,
+                aspect_ratio=aspect_ratio,
+                theta_offset=theta_offset, radius_offset=radius_offset, i=i
+            )
+    
+    def set_invisible_ellipse(
+        self, vertical_radius=700, aspect_ratio=1.1193862644404413,
+        ax=None, verbose=False
+    ):
+        if ax is None:
+            ax = plt.gca()
+        x_list = []
+        y_list = []
+        for theta in range(360):
+            horizontal_radius = vertical_radius * aspect_ratio
+            x, y = self.elliptical_polar_to_cartesian(
+                theta=theta, vertical_radius=vertical_radius,
+                horizontal_radius=horizontal_radius, aspect_ratio=aspect_ratio
+            )
+            x_list.append(x)
+            y_list.append(y)
+        PathCollection_obj = ax.plot(x_list, y_list, color='w', alpha=0.0)
+    
+    def add_elliptical_theta_labels(
+        self, starting_theta=270, years_list=None, history_year_dict=None,
+        bottom_year=None, aspect_ratio=1.1193862644404413, ax=None,
+        verbose=False
+    ):
+        if ax is None:
+            ax = plt.gca()
+        x_list = []
+        y_list = []
+        def append_lists(theta, vertical_radius=128):
+            horizontal_radius = vertical_radius * aspect_ratio
+            x, y = self.elliptical_polar_to_cartesian(
+                theta=theta, vertical_radius=vertical_radius,
+                horizontal_radius=horizontal_radius, aspect_ratio=aspect_ratio
+            )
+            x_list.append(x)
+            y_list.append(y)
+            thetas_list.append(theta)
+        if history_year_dict is None:
+            addend = 360//64
+            theta = 0 - addend
+            thetas_list = []
+            while theta < (360 - addend):
+                theta += addend
+                append_lists(theta)
+            labels_list = thetas_list
+        else:
+            thetas_list = []
+            labels_list = []
+            theta_offset = 0
+            if (bottom_year is not None):
+                if (bottom_year in history_year_dict.keys()):
+                    theta_offset = starting_theta - history_year_dict[bottom_year][1]
+            if years_list is None:
+                for year, (_, theta) in history_year_dict.items():
+                    if isinstance(theta, (int, float)):
+                        append_lists(theta+theta_offset)
+                        labels_list.append(year)
+            else:
+                for year in years_list:
+                    _, theta = history_year_dict[year]
+                    if isinstance(theta, (int, float)):
+                        append_lists(theta+theta_offset)
+                        labels_list.append(year)
+        for x, y, theta, label in zip(
+            self.min_max_norm(x_list),
+            self.min_max_norm(y_list),
+            thetas_list,
+            labels_list
+        ):
+            if verbose:
+                print(x, y, theta, label)
+            if (theta % 90):
+                text_obj = ax.text(
+                    x, y, label, fontsize=10, color='gray', ha='center',
+                    va='center', transform=ax.transAxes
+                )
+            else:
+                text_obj = ax.text(
+                    x, y, label, fontsize=10, color='green', ha='center',
+                    va='center', transform=ax.transAxes, weight='bold'
+                )
+        self.adjust_axis(ax=ax)
+    
+    def add_elliptical_patriarch_label(
+        self, patriarch_name, history_year_dict, bottom_year,
+        aspect_ratio=1.1193862644404413,
+        theta_offset=0, radius_offset=0, i=0, ax=None
+    ):
+        if ax is None:
+            ax = plt.gca()
+        i = i % 4
+        vertical_radius, theta = history_year_dict[bottom_year]
+        theta += theta_offset
+        vertical_radius += 25*i
+        vertical_radius -= 25/2
+        vertical_radius += radius_offset
+        horizontal_radius = vertical_radius * aspect_ratio
+        x, y = self.elliptical_polar_to_cartesian(
+            theta=theta, vertical_radius=vertical_radius,
+            horizontal_radius=horizontal_radius, aspect_ratio=aspect_ratio
+        )
+        text_obj = ax.text(
+            x, y, patriarch_name, fontsize=8, color='gray',
+            ha='center', va='center'
+        )

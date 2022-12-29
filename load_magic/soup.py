@@ -1,6 +1,10 @@
 
 #!/usr/bin/env python
 # Utility Functions to scrape web pages using bs4.
+# Use it something like this:
+#
+# %run ../load_magic/soup.py
+#
 # Dave Babbitt <dave.babbitt@gmail.com>
 # Author: Dave Babbitt, Data Scientist
 # coding: utf-8
