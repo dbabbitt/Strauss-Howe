@@ -1,0 +1,1097 @@
+
+#!/usr/bin/env python
+# Utility Functions to run Jupyter notebooks.
+# Dave Babbitt <dave.babbitt@gmail.com>
+# Author: Dave Babbitt, Data Scientist
+# coding: utf-8
+
+# Soli Deo gloria
+
+from bs4 import BeautifulSoup as bs
+from difflib import SequenceMatcher
+from pathlib import Path
+from typing import List, Optional
+from urllib.request import urlretrieve
+import csv
+import humanize
+import io
+import math
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import os.path as osp
+import pandas as pd
+import random
+import re
+import subprocess
+import sys
+import urllib
+try: import dill as pickle
+except:
+    try: import pickle5 as pickle
+    except: import pickle
+
+import warnings
+warnings.filterwarnings("ignore")
+
+class NotebookUtilities(object):
+    """
+    This class implements the core of the utility
+    functions needed to install and run GPTs and 
+    also what is common to running Jupyter notebooks.
+    
+    Examples
+    --------
+    
+    import sys
+    import os.path as osp
+    sys.path.insert(1, osp.abspath('../py'))
+    from notebook_utils import NotebookUtilities
+    
+    nu = NotebookUtilities(
+        data_folder_path=osp.abspath('../data'),
+        saves_folder_path=osp.abspath('../saves')
+    )
+    """
+    
+    def __init__(self, data_folder_path=None, saves_folder_path=None, verbose=False):
+        self.verbose = verbose
+        self.pip_command_str = f'{sys.executable} -m pip'
+        self.update_modules_list(verbose=verbose)
+        
+        # Create the data folder if it doesn't exist
+        if data_folder_path is None:
+            self.data_folder = '../data'
+        else:
+            self.data_folder = data_folder_path
+        os.makedirs(self.data_folder, exist_ok=True)
+        if verbose: print('data_folder: {}'.format(osp.abspath(self.data_folder)), flush=True)
+        
+        # Create the saves folder if it doesn't exist
+        if saves_folder_path is None:
+            self.saves_folder = '../saves'
+        else:
+            self.saves_folder = saves_folder_path
+        os.makedirs(self.saves_folder, exist_ok=True)
+        if verbose: print('saves_folder: {}'.format(osp.abspath(self.saves_folder)), flush=True)
+        
+        # Create the assumed directories
+        self.bin_folder = osp.join(self.data_folder, 'bin'); os.makedirs(self.bin_folder, exist_ok=True)
+        self.cache_folder = osp.join(self.data_folder, 'cache'); os.makedirs(self.cache_folder, exist_ok=True)
+        self.data_csv_folder = osp.join(self.data_folder, 'csv'); os.makedirs(name=self.data_csv_folder, exist_ok=True)
+        self.data_models_folder = osp.join(self.data_folder, 'models'); os.makedirs(name=self.data_models_folder, exist_ok=True)
+        self.db_folder = osp.join(self.data_folder, 'db'); os.makedirs(self.db_folder, exist_ok=True)
+        self.graphs_folder = osp.join(self.saves_folder, 'graphs'); os.makedirs(self.graphs_folder, exist_ok=True)
+        self.indices_folder = osp.join(self.saves_folder, 'indices'); os.makedirs(self.indices_folder, exist_ok=True)
+        self.saves_csv_folder = osp.join(self.saves_folder, 'csv'); os.makedirs(name=self.saves_csv_folder, exist_ok=True)
+        self.saves_mp3_folder = osp.join(self.saves_folder, 'mp3'); os.makedirs(name=self.saves_mp3_folder, exist_ok=True)
+        self.saves_pickle_folder = osp.join(self.saves_folder, 'pkl'); os.makedirs(name=self.saves_pickle_folder, exist_ok=True)
+        self.saves_text_folder = osp.join(self.saves_folder, 'txt'); os.makedirs(name=self.saves_text_folder, exist_ok=True)
+        self.saves_wav_folder = osp.join(self.saves_folder, 'wav'); os.makedirs(name=self.saves_wav_folder, exist_ok=True)
+        self.txt_folder = osp.join(self.data_folder, 'txt'); os.makedirs(self.txt_folder, exist_ok=True)
+        
+        # Ensure the Scripts folder is in PATH
+        self.anaconda_folder = osp.dirname(sys.executable)
+        self.scripts_folder = osp.join(self.anaconda_folder, 'Scripts')
+        if self.scripts_folder not in sys.path:
+            sys.path.insert(1, self.scripts_folder)
+
+        # Handy list of the different types of encodings
+        self.encoding_type = ['latin1', 'iso8859-1', 'utf-8'][2]
+        
+        # Determine URL from file path
+        self.url_regex = re.compile(r'\b(https?|file)://[-A-Z0-9+&@#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]', re.IGNORECASE)
+        self.filepath_regex = re.compile(r'\b[c-d]:\\(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F]\\)*(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F])', re.IGNORECASE)
+        
+        # Various aspect ratios
+        self.facebook_aspect_ratio = 1.91
+        self.twitter_aspect_ratio = 16/9
+
+    ### String Functions ###
+    
+    def similar(self, a: str, b: str) -> float:
+        """
+        Compute the similarity between two strings.
+
+        Parameters
+        ----------
+        a : str
+            The first string.
+        b : str
+            The second string.
+
+        Returns
+        -------
+        float
+            The similarity between the two strings, as a float between 0 and 1.
+        """
+
+        return SequenceMatcher(None, str(a), str(b)).ratio()
+
+    ### List Functions ###
+    
+    def conjunctify_nouns(self, noun_list, and_or='and', verbose=False):
+        if (noun_list is None): return ''
+        if (type(noun_list) != list): noun_list = list(noun_list)
+        if (len(noun_list) > 2):
+            last_noun_str = noun_list[-1]
+            but_last_nouns_str = ', '.join(noun_list[:-1])
+            list_str = f', {and_or} '.join([but_last_nouns_str, last_noun_str])
+        elif (len(noun_list) == 2): list_str = f' {and_or} '.join(noun_list)
+        elif (len(noun_list) == 1): list_str = noun_list[0]
+        else: list_str = ''
+        
+        return list_str
+
+    def check_4_doubles(self, item_list, verbose=False):
+        if verbose: t0 = time.time()
+        rows_list = []
+        n = len(item_list)
+        for i in range(n-1):
+            first_item = item_list[i]
+            max_similarity = 0.0
+            max_item = first_item
+            for j in range(i+1, n):
+                second_item = item_list[j]
+
+                # Assume the first item is never identical to the second item
+                this_similarity = self.similar(str(first_item), str(second_item))
+
+                if this_similarity > max_similarity:
+                    max_similarity = this_similarity
+                    max_item = second_item
+
+            # Get input row in dictionary format; key = col_name
+            row_dict = {}
+            row_dict['first_item'] = first_item
+            row_dict['second_item'] = max_item
+            row_dict['first_bytes'] = '-'.join(str(x) for x in bytearray(str(first_item),
+                                                                         encoding=self.encoding, errors="replace"))
+            row_dict['second_bytes'] = '-'.join(str(x) for x in bytearray(str(max_item),
+                                                                          encoding=self.encoding, errors="replace"))
+            row_dict['max_similarity'] = max_similarity
+
+            rows_list.append(row_dict)
+
+        column_list = ['first_item', 'second_item', 'first_bytes', 'second_bytes', 'max_similarity']
+        item_similarities_df = pd.DataFrame(rows_list, columns=column_list)
+        if verbose:
+            t1 = time.time()
+            print(t1-t0, time.ctime(t1))
+
+        return item_similarities_df
+
+    ### Storage Functions ###
+
+    def csv_exists(self, csv_name, folder_path=None, verbose=False):
+        if folder_path is None:
+            folder_path = self.saves_csv_folder
+        if csv_name.endswith('.csv'): csv_path = osp.join(folder_path, csv_name)
+        else: csv_path = osp.join(folder_path, f'{csv_name}.csv')
+        if verbose: print(osp.abspath(csv_path), flush=True)
+
+        return osp.isfile(csv_path)
+
+    def load_csv(self, csv_name=None, folder_path=None):
+        if folder_path is None:
+            csv_folder = self.data_csv_folder
+        else:
+            csv_folder = osp.join(folder_path, 'csv')
+        if csv_name is None:
+            csv_path = max([osp.join(csv_folder, f) for f in os.listdir(csv_folder)],
+                           key=osp.getmtime)
+        else:
+            if csv_name.endswith('.csv'):
+                csv_path = osp.join(csv_folder, csv_name)
+            else:
+                csv_path = osp.join(csv_folder, f'{csv_name}.csv')
+        data_frame = pd.read_csv(osp.abspath(csv_path), encoding=self.encoding_type)
+
+        return(data_frame)
+
+    def pickle_exists(self, pickle_name: str) -> bool:
+        """
+        Checks if a pickle file exists.
+
+        Parameters
+        ----------
+        pickle_name : str
+            The name of the pickle file.
+
+        Returns
+        -------
+        bool
+            True if the pickle file exists, False otherwise.
+        """
+        pickle_path = osp.join(self.saves_pickle_folder, '{}.pkl'.format(pickle_name))
+
+        return osp.isfile(pickle_path)
+
+    def load_dataframes(self, **kwargs):
+        frame_dict = {}
+        for frame_name in kwargs:
+            pickle_path = osp.join(self.saves_pickle_folder, '{}.pkl'.format(frame_name))
+            print('Attempting to load {}.'.format(osp.abspath(pickle_path)), flush=True)
+            if not osp.isfile(pickle_path):
+                csv_name = '{}.csv'.format(frame_name)
+                csv_path = osp.join(self.saves_csv_folder, csv_name)
+                print('No pickle exists - attempting to load {}.'.format(osp.abspath(csv_path)), flush=True)
+                if not osp.isfile(csv_path):
+                    csv_path = osp.join(self.data_csv_folder, csv_name)
+                    print('No csv exists - trying {}.'.format(osp.abspath(csv_path)), flush=True)
+                    if not osp.isfile(csv_path):
+                        print('No csv exists - just forget it.', flush=True)
+                        frame_dict[frame_name] = None
+                    else:
+                        frame_dict[frame_name] = self.load_csv(csv_name=frame_name)
+                else:
+                    frame_dict[frame_name] = self.load_csv(csv_name=frame_name, folder_path=self.saves_folder)
+            else:
+                frame_dict[frame_name] = self.load_object(frame_name)
+
+        return frame_dict
+
+    def load_object(self, obj_name: str, pickle_path: str = None, download_url: str = None, verbose: bool = False) -> object:
+        """
+        Load an object from a pickle file.
+
+        Parameters
+        ----------
+        obj_name : str
+            The name of the object to load.
+        pickle_path : str, optional
+            The path to the pickle file. Defaults to None.
+        download_url : str, optional
+            The URL to download the pickle file from. Defaults to None.
+        verbose : bool, optional
+            Whether to print status messages. Defaults to False.
+
+        Returns
+        -------
+        object
+            The loaded object.
+        """
+        if pickle_path is None:
+            pickle_path = osp.join(self.saves_pickle_folder, '{}.pkl'.format(obj_name))
+        if not osp.isfile(pickle_path):
+            if verbose: print('No pickle exists at {} - attempting to load as csv.'.format(osp.abspath(pickle_path)), flush=True)
+            csv_path = osp.join(self.saves_csv_folder, '{}.csv'.format(obj_name))
+            if not osp.isfile(csv_path):
+                if verbose: print('No csv exists at {} - attempting to download from URL.'.format(osp.abspath(csv_path)), flush=True)
+                object = pd.read_csv(download_url, low_memory=False,
+                                     encoding=self.encoding_type)
+            else:
+                object = pd.read_csv(csv_path, low_memory=False,
+                                     encoding=self.encoding_type)
+            if isinstance(object, pd.DataFrame):
+                self.attempt_to_pickle(object, pickle_path, raise_exception=False)
+            else:
+                with open(pickle_path, 'wb') as handle:
+
+                    # Protocol 4 is not handled in python 2
+                    if sys.version_info.major == 2:
+                        pickle.dump(object, handle, 2)
+                    elif sys.version_info.major == 3:
+                        pickle.dump(object, handle, pickle.HIGHEST_PROTOCOL)
+
+        else:
+            try:
+                object = pd.read_pickle(pickle_path)
+            except:
+                with open(pickle_path, 'rb') as handle:
+                    object = pickle.load(handle)
+
+        if verbose: print('Loaded object {} from {}'.format(obj_name, pickle_path), flush=True)
+
+        return(object)
+    
+    def save_dataframes(self, include_index=False, verbose=True, **kwargs):
+        for frame_name in kwargs:
+            if isinstance(kwargs[frame_name], pd.DataFrame):
+                csv_path = osp.join(self.saves_csv_folder, '{}.csv'.format(frame_name))
+                if verbose: print('Saving to {}'.format(osp.abspath(csv_path)), flush=True)
+                kwargs[frame_name].to_csv(csv_path, sep=',', encoding=self.encoding_type,
+                                          index=include_index)
+    
+    def store_objects(self, verbose: bool = True, **kwargs: dict) -> None:
+        """
+        Store objects to pickle files.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            Whether to print status messages. Defaults to True.
+        **kwargs : dict
+            The objects to store. The keys of the dictionary are the names of the objects, and the values are the objects themselves.
+
+        Returns
+        -------
+        None
+
+        """
+        for obj_name in kwargs:
+            # if hasattr(kwargs[obj_name], '__call__'):
+            #     raise RuntimeError('Functions cannot be pickled.')
+            pickle_path = osp.join(self.saves_pickle_folder, '{}.pkl'.format(obj_name))
+            if isinstance(kwargs[obj_name], pd.DataFrame):
+                self.attempt_to_pickle(kwargs[obj_name], pickle_path, raise_exception=False, verbose=verbose)
+            else:
+                if verbose: print('Pickling to {}'.format(osp.abspath(pickle_path)), flush=True)
+                with open(pickle_path, 'wb') as handle:
+
+                    # Protocol 4 is not handled in python 2
+                    if sys.version_info.major == 2:
+                        pickle.dump(kwargs[obj_name], handle, 2)
+
+                    # Pickle protocol must be <= 4
+                    elif sys.version_info.major == 3:
+                        pickle.dump(kwargs[obj_name], handle, min(4, pickle.HIGHEST_PROTOCOL))
+
+    def attempt_to_pickle(self, df: pd.DataFrame, pickle_path: str, raise_exception: bool = False, verbose: bool = True) -> None:
+        """
+        Attempts to pickle a DataFrame to a file.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            The DataFrame to pickle.
+        pickle_path : str
+            The path to the pickle file.
+        raise_exception : bool, optional
+            Whether to raise an exception if the pickle fails. Defaults to False.
+        verbose : bool, optional
+            Whether to print status messages. Defaults to True.
+
+        Returns
+        -------
+        None
+
+        """
+        try:
+            if verbose: print('Pickling to {}'.format(osp.abspath(pickle_path)), flush=True)
+
+            # Protocol 4 is not handled in python 2
+            if sys.version_info.major == 2: df.to_pickle(pickle_path, protocol=2)
+
+            # Pickle protocol must be <= 4
+            elif sys.version_info.major == 3: df.to_pickle(pickle_path, protocol=min(4, pickle.HIGHEST_PROTOCOL))
+
+        except Exception as e:
+            os.remove(pickle_path)
+            if verbose: print(e, ": Couldn't save {:,} cells as a pickle.".format(df.shape[0]*df.shape[1]), flush=True)
+            if raise_exception: raise
+    
+    ### Module Functions ###
+
+    def get_dir_tree(self, module_name, contains_str=None, not_contains_str=None, verbose=False):
+        """
+        Gets a list of all attributes in a given module.
+
+        Parameters:
+        -----------
+        module_name : str
+            The name of the module to get the directory list for.
+        contains_str : str, optional
+            If provided, only print attributes containing this substring (case-insensitive).
+        not_contains_str : str, optional
+            If provided, exclude printing attributes containing this substring (case-insensitive).
+        verbose : bool, optional
+            If True, print additional information during processing.
+
+        Returns:
+        --------
+        list[str]
+            A list of attributes in the module that match the filtering criteria.
+        """
+        
+        # Initialize sets for processed attributes and their suffixes
+        dirred_set = set([module_name])
+        suffix_set = set([module_name])
+        
+        # Initialize an unprocessed set of all attributes in the module_name module that don't start with an underscore
+        import importlib
+        module_obj = importlib.import_module(module_name)
+        undirred_set = set([f'module_obj.{fn}' for fn in dir(module_obj) if not fn.startswith('_')])
+        
+        # Continue processing until the unprocessed set is empty
+        while undirred_set:
+
+            # Pop the next function or submodule
+            fn = undirred_set.pop()
+
+            # Extract the suffix of the function or submodule
+            fn_suffix = fn.split('.')[-1]
+
+            # Check if the suffix has not been processed yet
+            if fn_suffix not in suffix_set:
+                
+                # Add it to processed and suffix sets
+                dirred_set.add(fn)
+                suffix_set.add(fn_suffix)
+                
+                try:
+                    
+                    # Evaluate the 'dir()' function for the attribute and update the unprocessed set with its function or submodule
+                    dir_list = eval(f'dir({fn})')
+                    
+                    # Add all of the submodules of the function or submodule to undirred_set if they haven't been processed yet
+                    undirred_set.update([f'{fn}.{fn1}' for fn1 in dir_list if not fn1.startswith('_')])
+                
+                # If there is an error getting the dir() of the function or submodule, just continue to the next iteration
+                except: continue
+        
+        # Apply filtering criteria if provided
+        if (not bool(contains_str)) and bool(not_contains_str):
+            dirred_set = [fn for fn in dirred_set if (not_contains_str not in fn.lower())]
+        elif bool(contains_str) and (not bool(not_contains_str)):
+            dirred_set = [fn for fn in dirred_set if (contains_str in fn.lower())]
+        elif bool(contains_str) and bool(not_contains_str):
+            dirred_set = [fn for fn in dirred_set if (contains_str in fn.lower()) and (not_contains_str not in fn.lower())]
+        
+        # Remove the importlib object variable name
+        dirred_set = set([fn.replace('module_obj', module_name) for fn in dirred_set])
+
+        return sorted(dirred_set)
+    
+    def update_modules_list(self, modules_list: Optional[List[str]] = None, verbose: bool = False) -> None:
+        """
+        Updates the list of modules that are installed.
+
+        Parameters
+        ----------
+        modules_list : Optional[List[str]], optional
+            The list of modules to update. If None, the list of installed modules will be used. Defaults to None.
+        verbose : bool, optional
+            Whether to print status messages. Defaults to False.
+
+        Returns
+        -------
+        None
+        """
+
+        if modules_list is None: self.modules_list = [
+            o.decode().split(' ')[0] for o in subprocess.check_output(f'{self.pip_command_str} list'.split(' ')).splitlines()[2:]
+            ]
+        else: self.modules_list = modules_list
+
+        if verbose: print('Updated modules list to {}'.format(self.modules_list), flush=True)
+    
+    def ensure_module_installed(self, module_name: str, upgrade: bool = False, verbose: bool = True) -> None:
+        """
+        Checks if a module is installed and installs it if it is not.
+
+        Parameters
+        ----------
+        module_name : str
+            The name of the module to check for.
+        upgrade : bool, optional
+            Whether to upgrade the module if it is already installed. Defaults to False.
+        verbose : bool, optional
+            Whether to print status messages. Defaults to True.
+
+        Returns
+        -------
+        None
+        """
+
+        if module_name not in self.modules_list:
+            command_str = f'{self.pip_command_str} install {module_name}'
+            if upgrade: command_str += ' --upgrade'
+            if verbose: print(command_str, flush=True)
+            else: command_str += ' --quiet'
+            output_str = subprocess.check_output(command_str.split(' '))
+            if verbose:
+                for line_str in output_str.splitlines(): print(line_str.decode(), flush=True)
+            self.update_modules_list(verbose=verbose)
+    
+    ### URL Functions ###
+    
+    def get_filename_from_url(self, url, verbose=False):
+        import urllib
+        file_name = urllib.parse.urlparse(url).path.split('/')[-1]
+        
+        return file_name
+    
+    def download_file(self, url, download_dir=None, exist_ok=False, verbose=False):
+        '''Download a file from the internet'''
+        file_name = self.get_filename_from_url(url, verbose=verbose)
+        if download_dir is None:
+            download_dir = osp.join(self.data_folder, 'downloads')
+        os.makedirs(download_dir, exist_ok=True)
+        file_path = osp.join(download_dir, file_name)
+        if exist_ok or (not osp.isfile(file_path)):
+            import urllib
+            urllib.request.urlretrieve(url, file_path)
+
+    def get_page_soup(self, page_url_or_filepath, verbose=True):
+        match_obj = self.url_regex.search(page_url_or_filepath)
+        if match_obj:
+            with urllib.request.urlopen(page_url_or_filepath) as response: page_html = response.read()
+        else:
+            with open(page_url_or_filepath, 'r', encoding='utf-8') as f: page_html = f.read()
+        page_soup = bs(page_html, 'html.parser')
+
+        return page_soup
+    
+    def get_wiki_tables(self, tables_url_or_filepath, verbose=True):
+        table_dfs_list = []
+        try:
+            page_soup = self.get_page_soup(tables_url_or_filepath, verbose=verbose)
+            table_soups_list = page_soup.find_all('table', attrs={'class': 'wikitable'})
+            table_dfs_list = []
+            for table_soup in table_soups_list: table_dfs_list += self.get_page_tables(str(table_soup), verbose=False)
+            if verbose: print(sorted([(i, df.shape) for (i, df) in enumerate(table_dfs_list)], key=lambda x: x[1][0]*x[1][1], reverse=True))
+        except Exception as e:
+            if verbose: print(str(e).strip())
+            table_dfs_list = self.get_page_tables(tables_url_or_filepath, verbose=verbose)
+
+        return table_dfs_list
+
+    def get_page_tables(self, tables_url_or_filepath, verbose=True):
+        '''
+        import sys
+        sys.path.insert(1, '../py')
+        from notebook_utils import NotebookUtilities
+        import os
+        nu = NotebookUtilities(data_folder_path=os.path.abspath('../data'))
+        tables_url = 'https://en.wikipedia.org/wiki/Provinces_of_Afghanistan'
+        page_tables_list = nu.get_page_tables(tables_url)
+        '''
+        if self.url_regex.fullmatch(tables_url_or_filepath) or self.filepath_regex.fullmatch(tables_url_or_filepath):
+            tables_df_list = pd.read_html(tables_url_or_filepath)
+        else:
+            f = io.StringIO(tables_url_or_filepath)
+            tables_df_list = pd.read_html(f)
+        if verbose:
+            print(sorted([(i, df.shape) for (i, df) in enumerate(tables_df_list)],
+                         key=lambda x: x[1][0]*x[1][1], reverse=True))
+
+        return tables_df_list
+    
+    ### Pandas Functions ###
+    
+    def get_row_dictionary(self, value_obj, row_dict={}, key_prefix=''):
+        '''
+        This function takes a value_obj (either a dictionary, list or scalar value) and creates a flattened dictionary from it, where
+        keys are made up of the keys/indices of nested dictionaries and lists. The keys are constructed with a key_prefix
+        (which is updated as the function traverses the value_obj) to ensure uniqueness. The flattened dictionary is stored in the
+        row_dict argument, which is updated at each step of the function.
+
+        Parameters
+        ----------
+        value_obj : dict, list, scalar value
+            The object to be flattened into a dictionary.
+        row_dict : dict, optional
+            The dictionary to store the flattened object.
+        key_prefix : str, optional
+            The prefix for constructing the keys in the row_dict.
+
+        Returns
+        ----------
+        row_dict : dict
+            The flattened dictionary representation of the value_obj.
+        '''
+        
+        # Check if the value is a dictionary
+        if type(value_obj) == dict:
+            
+            # Iterate through the dictionary 
+            for k, v, in value_obj.items():
+                
+                # Recursively call get_row_dictionary() with the dictionary key as part of the prefix
+                row_dict = get_row_dictionary(
+                    v, row_dict=row_dict, key_prefix=f'{key_prefix}_{k}'
+                )
+                
+        # Check if the value is a list
+        elif type(value_obj) == list:
+            
+            # Get the minimum number of digits in the list length
+            list_length = len(value_obj)
+            digits_count = min(len(str(list_length)), 2)
+            
+            # Iterate through the list
+            for i, v in enumerate(value_obj):
+                
+                # Add leading zeros to the index
+                if (i == 0) and (list_length == 1):
+                    i = ''
+                else:
+                    i = str(i).zfill(digits_count)
+                
+                # Recursively call get_row_dictionary() with the list index as part of the prefix
+                row_dict = get_row_dictionary(
+                    v, row_dict=row_dict, key_prefix=f'{key_prefix}{i}'
+                )
+                
+        # If value is neither a dictionary nor a list
+        else:
+            
+            # Add the value to the row dictionary
+            if key_prefix.startswith('_') and (key_prefix[1:] not in row_dict):
+                key_prefix = key_prefix[1:]
+            row_dict[key_prefix] = value_obj
+        
+        return row_dict
+    
+    def get_column_descriptions(self, df, column_list=None, verbose=False):
+        
+        if column_list is None:
+            column_list = df.columns
+        g = df.columns.to_series().groupby(df.dtypes).groups
+        rows_list = []
+        for dtype, dtype_column_list in g.items():
+            for column_name in dtype_column_list:
+                if column_name in column_list:
+                    mask_series = df[column_name].isnull()
+                    
+                    # Get input row in dictionary format; key = col_name
+                    row_dict = {}
+                    row_dict['column_name'] = column_name
+                    row_dict['dtype'] = str(dtype)
+                    row_dict['count_blanks'] = df[column_name].isnull().sum()
+                    
+                    # Count how many unique numbers there are
+                    try:
+                        row_dict['count_uniques'] = len(df[column_name].unique())
+                    except Exception:
+                        row_dict['count_uniques'] = math.nan
+                    
+                    # Count how many zeroes the column has
+                    try:
+                        row_dict['count_zeroes'] = int((df[column_name] == 0).sum())
+                    except Exception:
+                        row_dict['count_zeroes'] = math.nan
+                    
+                    # Check to see if the column has any dates
+                    date_series = pd.to_datetime(df[column_name], errors='coerce')
+                    null_series = date_series[~date_series.notnull()]
+                    row_dict['has_dates'] = (null_series.shape[0] < date_series.shape[0])
+                    
+                    # Show the minimum value in the column
+                    try:
+                        row_dict['min_value'] = df[~mask_series][column_name].min()
+                    except Exception:
+                        row_dict['min_value'] = math.nan
+                    
+                    # Show the maximum value in the column
+                    try:
+                        row_dict['max_value'] = df[~mask_series][column_name].max()
+                    except Exception:
+                        row_dict['max_value'] = math.nan
+                    
+                    # Show whether the column contains only integers
+                    try:
+                        row_dict['only_integers'] = (df[column_name].apply(lambda x: float(x).is_integer())).all()
+                    except Exception:
+                        row_dict['only_integers'] = float('nan')
+    
+                    rows_list.append(row_dict)
+    
+        columns_list = ['column_name', 'dtype', 'count_blanks', 'count_uniques', 'count_zeroes', 'has_dates',
+                        'min_value', 'max_value', 'only_integers']
+        blank_ranking_df = pd.DataFrame(rows_list, columns=columns_list)
+        
+        return(blank_ranking_df)
+    
+    ### 3D Point Functions ###
+    
+    def get_coordinates(self, second_point, first_point=None):
+        """
+        Get the coordinates of two 3D points.
+    
+        Parameters
+        ----------
+        second_point : str
+            The coordinates of the second point as a string.
+        first_point : str, optional
+            The coordinates of the first point as a string. If not provided, the default values (0, 0, 0) will be used.
+    
+        Returns
+        -------
+        tuple of float
+            The coordinates of the two points.
+    
+        """
+        if first_point is None:
+            x1 = 0.0  # The x-coordinate of the first point
+            y1 = 0.0  # The y-coordinate of the first point
+            z1 = 0.0  # The z-coordinate of the first point
+        else:
+            location_tuple = eval(first_point)
+            x1 = location_tuple[0]  # The x-coordinate of the first point
+            y1 = location_tuple[1]  # The y-coordinate of the first point
+            z1 = location_tuple[2]  # The z-coordinate of the first point
+        location_tuple = eval(second_point)
+        x2 = location_tuple[0]  # The x-coordinate of the second point
+        y2 = location_tuple[1]  # The y-coordinate of the second point
+        z2 = location_tuple[2]  # The z-coordinate of the second point
+    
+        return x1, x2, y1, y2, z1, z2
+    
+    def get_euclidean_distance(self, second_point, first_point=None):
+        """
+        Calculates the Euclidean distance between two 3D points.
+    
+        Returns:
+            float: The Euclidean distance between the two points.
+        """
+        x1, x2, y1, y2, z1, z2 = self.get_coordinates(second_point, first_point=first_point)
+    
+        return math.sqrt((x1 - x2)**2 + (y1 - y2)**2 + (z1 - z2)**2)
+    
+    def get_absolute_position(self, second_point, first_point=None):
+        """
+        Calculates the absolute position of a point relative to another point.
+    
+        Parameters
+        ----------
+        second_point : tuple
+            The coordinates of the second point.
+        first_point : tuple, optional
+            The coordinates of the first point. If not specified,
+            the origin is retrieved from get_coordinates.
+    
+        Returns
+        -------
+        tuple
+            The absolute coordinates of the second point.
+        """
+        x1, x2, y1, y2, z1, z2 = self.get_coordinates(second_point, first_point=first_point)
+    
+        return (round(x1 + x2, 1), round(y1 + y2, 1), round(z1 + z2, 1))
+    
+    ### Sub-sampling Functions ###
+    
+    def get_minority_combinations(self, sample_df, groupby_columns):
+        """
+        Get the minority combinations of a DataFrame.
+        
+        Args:
+            sample_df: A Pandas DataFrame.
+            groupby_columns: A list of column names to group by.
+        
+        Returns:
+            A Pandas DataFrame containing a single sample row of each of the four smallest groups.
+        """
+        df = pd.DataFrame([], columns=sample_df.columns)
+        for bool_tuple in sample_df.groupby(groupby_columns).size().sort_values().index.tolist()[:4]:
+            
+            # Filter the name in the column to the corresponding value of the tuple
+            mask_series = True
+            for cn, cv in zip(groupby_columns, bool_tuple): mask_series &= (sample_df[cn] == cv)
+            
+            # Append a random single record from the filtered data frame
+            df = pd.concat([df, sample_df[mask_series].sample(1)], axis='index')
+        
+        return df
+    
+    def get_random_subdictionary(self, super_dict, n=5):
+        keys = list(super_dict.keys())
+        import random
+        random_keys = random.sample(keys, n)
+        sub_dict = {}
+        for key in random_keys: sub_dict[key] = super_dict[key]
+            
+        return sub_dict
+    
+    ### Plotting Functions ###
+    
+    def get_color_cycler(self, n):
+        """
+        color_cycler = self.get_color_cycler(len(possible_cause_list))
+        for possible_cause, face_color_dict in zip(possible_cause_list, color_cycler()):
+            face_color = face_color_dict['color']
+        """
+        color_cycler = None
+        from cycler import cycler
+        import numpy as np
+        if n < 9:
+            color_cycler = cycler('color', plt.cm.Accent(np.linspace(0, 1, n)))
+        elif n < 11:
+            color_cycler = cycler('color', plt.cm.tab10(np.linspace(0, 1, n)))
+        elif n < 13:
+            color_cycler = cycler('color', plt.cm.Paired(np.linspace(0, 1, n)))
+        else:
+            color_cycler = cycler('color', plt.cm.tab20(np.linspace(0, 1, n)))
+        
+        return color_cycler
+    
+    def first_order_linear_scatterplot(self, df, xname, yname,
+                                       xlabel_str='Overall Capitalism (explanatory variable)',
+                                       ylabel_str='World Bank Gini % (response variable)',
+                                       x_adj='capitalist', y_adj='unequal',
+                                       title='"Wealth inequality is huge in the capitalist societies"',
+                                       idx_reference='United States', annot_reference='most evil',
+                                       aspect_ratio=None,
+                                       least_x_xytext=(40, -10), most_x_xytext=(-150, 55),
+                                       least_y_xytext=(-200, -10), most_y_xytext=(45, 0),
+                                       reference_xytext=(-75, 25), color_list=None):
+        """
+        Create a first-order (linear) scatter plot assuming the data frame
+        has an index labeled with strings.
+        
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            The data frame to be plotted.
+        xname : str
+            The name of the x-axis variable.
+        yname : str
+            The name of the y-axis variable.
+        xlabel_str : str, optional
+            The label for the x-axis. Defaults to 'Overall Capitalism (explanatory variable)'.
+        ylabel_str : str, optional
+            The label for the y-axis. Defaults to 'World Bank Gini % (response variable)'.
+        x_adj : str, optional
+            The adjective to use for the x-axis variable in the annotations. Default is 'capitalist'.
+        y_adj : str, optional
+            The adjective to use for the y-axis variable in the annotations. Default is 'unequal'.
+        title : str, optional
+            The title of the plot. Defaults to '"Wealth inequality is huge in the capitalist societies"'.
+        idx_reference : str, optional
+            The index of the data point to be used as the reference point for the annotations. Default is 'United States'.
+        annot_reference : str, optional
+            The reference text to be used for the annotation of the reference point. Default is 'most evil'.
+        aspect_ratio : float, optional
+            The aspect ratio of the plot. Default is the Facebook aspect ratio (1.91).
+        least_x_xytext : tuple[float, float], optional
+            The xytext position for the annotation of the least x-value data point. Default is (40, -10).
+        most_x_xytext : tuple[float, float], optional
+            The xytext position for the annotation of the most x-value data point. Default is (-150, 55).
+        least_y_xytext : tuple[float, float], optional
+            The xytext position for the annotation of the least y-value data point. Default is (-200, -10).
+        most_y_xytext : tuple[float, float], optional
+            The xytext position for the annotation of the most y-value data point. Default is (45, 0).
+        reference_xytext : tuple[float, float], optional
+            The xytext position for the annotation of the reference point. Default is (-75, 25).
+        color_list : list[str], optional
+            The list of colors to be used for the scatter plot. Default is None, which will use a default color scheme.
+    
+        Returns
+        -------
+        figure: matplotlib.figure.Figure
+            The figure object for the generated scatter plot.
+        """
+    
+        if aspect_ratio is None: aspect_ratio = self.facebook_aspect_ratio
+        fig_width = 18
+        fig_height = fig_width / aspect_ratio
+        fig = plt.figure(figsize=(fig_width, fig_height))
+        ax = fig.add_subplot(111, autoscale_on=True)
+        line_kws = dict(color='k', zorder=1, alpha=.25)
+    
+        if color_list is None: scatter_kws = dict(s=30, lw=.5, edgecolors='k', zorder=2)
+        else: scatter_kws = dict(s=30, lw=.5, edgecolors='k', zorder=2, color=color_list)
+    
+        import seaborn as sns
+        merge_axes_subplot = sns.regplot(x=xname, y=yname, scatter=True, data=df, ax=ax,
+                                         scatter_kws=scatter_kws, line_kws=line_kws)
+    
+        if not xlabel_str.endswith(' (explanatory variable)'): xlabel_str = f'{xlabel_str} (explanatory variable)'
+        xlabel_text = plt.xlabel(xlabel_str)
+    
+        if not ylabel_str.endswith(' (response variable)'): ylabel_str = f'{ylabel_str} (response variable)'
+        ylabel_text = plt.ylabel(ylabel_str)
+    
+        kwargs = dict(textcoords='offset points', ha='left', va='bottom',
+                      bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5),
+                      arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0'))
+        
+        xdata = df[xname].values
+        least_x = xdata.min()
+        most_x = xdata.max()
+        
+        ydata = df[yname].values
+        most_y = ydata.max()
+        least_y = ydata.min()
+        
+        least_x_tried = most_x_tried = least_y_tried = most_y_tried = False
+    
+        for label, x, y in zip(df.index, xdata, ydata):
+            if (x == least_x) and not least_x_tried:
+                annotation = plt.annotate('{} (least {})'.format(label, x_adj),
+                                          xy=(x, y), xytext=least_x_xytext, **kwargs)
+                least_x_tried = True
+            elif (x == most_x) and not most_x_tried:
+                annotation = plt.annotate('{} (most {})'.format(label, x_adj),
+                                          xy=(x, y), xytext=most_x_xytext, **kwargs)
+                most_x_tried = True
+            elif (y == least_y) and not least_y_tried:
+                annotation = plt.annotate('{} (least {})'.format(label, y_adj),
+                                          xy=(x, y), xytext=least_y_xytext, **kwargs)
+                least_y_tried = True
+            elif (y == most_y) and not most_y_tried:
+                annotation = plt.annotate('{} (most {})'.format(label, y_adj),
+                                          xy=(x, y), xytext=most_y_xytext, **kwargs)
+                most_y_tried = True
+            elif (label == idx_reference):
+                annotation = plt.annotate('{} ({})'.format(label, annot_reference),
+                                          xy=(x, y), xytext=reference_xytext, **kwargs)
+    
+        title_obj = fig.suptitle(t=title, x=0.5, y=0.91)
+        
+        # Get r squared value
+        inf_nan_mask = self.get_inf_nan_mask(xdata.tolist(), ydata.tolist())
+        from scipy.stats import pearsonr
+        pearsonr_tuple = pearsonr(xdata[inf_nan_mask], ydata[inf_nan_mask])
+        pearson_r = pearsonr_tuple[0]
+        pearsonr_statement = str('%.2f' % pearson_r)
+        coefficient_of_determination_statement = str('%.2f' % pearson_r**2)
+        p_value = pearsonr_tuple[1]
+    
+        if p_value < 0.0001: pvalue_statement = '<0.0001'
+        else: pvalue_statement = '=' + str('%.4f' % p_value)
+    
+        s_str = r'$r^2=' + coefficient_of_determination_statement + ',\ p' + pvalue_statement + '$'
+        text_tuple = ax.text(0.75, 0.9, s_str, alpha=0.5, transform=ax.transAxes, fontsize='x-large')
+        
+        return fig
+    
+    def plot_line_with_error_bars(self, df, xname, xlabel, xtick_text_fn, yname, ylabel, ytick_text_fn, title):
+        
+        # Drop rows with NaN values, group by patient ranking, and calculate mean and standard deviation
+        groupby_list = [xname]
+        columns_list = [xname, yname]
+        aggs_list = ['mean', 'std']
+        df = df.dropna(subset=columns_list).groupby(groupby_list)[yname].agg(aggs_list).reset_index()
+        
+        # Create the figure and subplot
+        fig, ax = plt.subplots(figsize=(18, 9))
+        
+        # Plot the line with error bars
+        ax.errorbar(
+            x=df[xname],
+            y=df['mean'],
+            yerr=df['std'],
+            label=ylabel,
+            fmt='-o',  # Line style with markers
+        )
+        
+        # Set plot title and labels
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        
+        # Humanize x tick labels
+        xticklabels_list = []
+        for text_obj in ax.get_xticklabels():
+            text_obj.set_text(xtick_text_fn(text_obj))
+            xticklabels_list.append(text_obj)
+        ax.set_xticklabels(xticklabels_list)
+        
+        # Humanize y tick labels
+        yticklabels_list = []
+        for text_obj in ax.get_yticklabels():
+            text_obj.set_text(ytick_text_fn(text_obj))
+            yticklabels_list.append(text_obj)
+        ax.set_yticklabels(yticklabels_list);
+    
+    def plot_histogram(self, df, xname, xlabel, xtick_text_fn, title, ax=None):
+        
+        # Create the figure and subplot
+        if ax is None: fig, ax = plt.subplots(figsize=(18, 9))
+        
+        # Plot the histogram with centered bars
+        df[xname].hist(ax=ax, bins=100, align='mid', edgecolor='black')
+        
+        # Set the title and labels
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel('Count of Instances in Bin')
+        
+        # Humanize x tick labels
+        xticklabels_list = []
+        for text_obj in ax.get_xticklabels():
+            text_obj.set_text(xtick_text_fn(text_obj))
+            xticklabels_list.append(text_obj)
+        ax.set_xticklabels(xticklabels_list)
+        
+        # Humanize y tick labels
+        yticklabels_list = []
+        for text_obj in ax.get_yticklabels():
+            text_obj.set_text(
+                humanize.intword(int(text_obj.get_position()[1]))
+            )
+            yticklabels_list.append(text_obj)
+        ax.set_yticklabels(yticklabels_list)
+        
+        # Turn the grid off
+        plt.grid(False);
+
+    def plot_inauguration_age(self, inauguration_df, groupby_column_name, xname, leader_designation, label_infix, label_suffix, info_df, title_prefix):
+
+        # Configure the color dictionary
+        color_cycler = self.get_color_cycler(info_df[groupby_column_name].unique().shape[0])
+        face_color_dict = {}
+        for groupby_column, fc_dict in zip(info_df[groupby_column_name].unique(), color_cycler()):
+            face_color_dict[groupby_column] = fc_dict['color']
+
+        # Plot and annotate the figure
+        figwidth = 18
+        fig, ax = plt.subplots(figsize=(figwidth, figwidth/self.twitter_aspect_ratio))
+        used_list = []
+        import textwrap
+        for groupby_column, df in inauguration_df.sort_values('office_rank').groupby(groupby_column_name):
+            if groupby_column[0] in ['A', 'U']: ana = 'an'
+            else: ana = 'a'
+            label = f'{leader_designation.title()} {label_infix} {ana} {groupby_column} {label_suffix}'.strip()
+
+            # Convert the array to a 2-D array with a single row
+            reshape_tuple = (1, -1)
+            color = face_color_dict[groupby_column].reshape(reshape_tuple)
+
+            # Plot and annotate all points from the index
+            for leader_name, row_series in df.iterrows():
+                if groupby_column not in used_list:
+                    used_list.append(groupby_column)
+                    df.plot(x=xname, y='age_at_inauguration', kind='scatter', ax=ax, label=label, color=color)
+                else:
+                    df.plot(x=xname, y='age_at_inauguration', kind='scatter', ax=ax, color=color)
+                plt.annotate(
+                    textwrap.fill(leader_name, width=10), (row_series[xname], row_series.age_at_inauguration), textcoords='offset points', xytext=(0, -4),
+                    ha='center', va='top', fontsize=6
+                )
+
+        # Get the background shading width
+        left, right = ax.get_xlim()
+        bottom, top = ax.get_ylim()
+        height = top - bottom
+        min_shading_width = 9999
+        min_turning_name = ''
+        wrap_width = info_df.turning_name.map(lambda x: len(x)).min()
+        for row_index, row_series in info_df.iterrows():
+            turning_year_begin = max(row_series.turning_year_begin, left)
+            turning_year_end = min(row_series.turning_year_end, right)
+            width = turning_year_end - turning_year_begin
+            if (width > 0) and (width < min_shading_width):
+                min_shading_width = width
+                min_turning_name = row_series.turning_name
+                wrap_width = len(min_turning_name)
+
+        # Add the turning names as background shading
+        from matplotlib.patches import Rectangle
+        for row_index, row_series in info_df.iterrows():
+            turning_year_begin = max(row_series.turning_year_begin, left)
+            turning_year_end = min(row_series.turning_year_end, right)
+            width = turning_year_end - turning_year_begin
+            if (width > 0):
+                groupby_column = row_series[groupby_column_name]
+                turning_name = row_series.turning_name
+                rect = Rectangle(
+                    (turning_year_begin, bottom), width, height, color=face_color_dict[groupby_column],
+                    fill=True, edgecolor=None, alpha=0.1
+                )
+                ax.add_patch(rect)
+                plt.annotate(
+                    textwrap.fill(turning_name, width=wrap_width), (turning_year_begin+(width/2), top), textcoords='offset points', xytext=(0, -6),
+                    ha='center', fontsize=7, va='top', rotation=-90
+                )
+
+        # Set legend
+        legend_obj = ax.legend(loc='best')
+
+        # Set labels
+        ax.set_xlabel('Year of Inauguration')
+        ax.set_ylabel('Age at Inauguration')
+        text_obj = ax.set_title(f'{title_prefix} Inauguration Age vs Year')

@@ -165,7 +165,7 @@ def get_color_cycler(n):
     
     return color_cycler
 
-def ball_and_chain(ax, index, values, c):
+def ball_and_chain(ax, index, values, c, label=None):
     """
     colormap = r()
     cmap = mpl.cm.get_cmap(colormap)
@@ -173,7 +173,10 @@ def ball_and_chain(ax, index, values, c):
     ball_and_chain(ax, index, values, c=cmap(norm(values)))
     """
     ax.plot(index, values, c='k', zorder=1, alpha=.25)
-    ax.scatter(index, values, s=30, lw=.5, c=c, edgecolors='k', zorder=2)
+    if label is None:
+        ax.scatter(index, values, s=30, lw=.5, c=c, edgecolors='k', zorder=2)
+    else:
+        ax.scatter(index, values, s=30, lw=.5, c=c, edgecolors='k', zorder=2, label=label)
 
 def get_inf_nan_mask(x_list, y_list):
     x_mask = np.logical_and(np.logical_not(np.isinf(x_list)), np.logical_not(np.isnan(x_list)))

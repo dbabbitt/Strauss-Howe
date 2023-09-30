@@ -55,29 +55,76 @@ def get_module_version(python_module):
 
 
 
-def get_dir_tree(module_name, max_levels=2, contains_str=None):
-    if max_levels < 1:
-        return None
-    base_eval_str = f"['{module_name}.{{}}'.format(fn) for fn in dir({module_name}) if not fn.startswith('_')]"
-    if contains_str is None:
-        eval_str = base_eval_str
-    else:
-        eval_str = f"['{module_name}.{{}}'.format(fn) for fn in dir({module_name}) if '{contains_str.lower()}' in fn.lower()]"
-    try:
-        dir_list = eval(eval_str)
-        if len(dir_list):
-            print()
-            print(module_name)
-            print(dir_list)
-    except Exception as e:
-        print(f'The evaluated list {eval_str} gets this error: {str(e).strip()}')
-    try:
-        base_dir_list = eval(base_eval_str)
-        if len(base_dir_list):
-            for base_module_name in base_dir_list:
-                get_dir_tree(base_module_name, max_levels=max_levels-1, contains_str=contains_str)
-    except:
-        return None
+
+def get_dir_tree(module_name, contains_str=None, not_contains_str=None, verbose=False):
+    """
+    Gets a list of all attributes in a given module.
+    
+    Parameters:
+    -----------
+    module_name : str
+        The name of the module to get the directory list for.
+    contains_str : str, optional
+        If provided, only print attributes containing this substring (case-insensitive).
+    not_contains_str : str, optional
+        If provided, exclude printing attributes containing this substring (case-insensitive).
+    verbose : bool, optional
+        If True, print additional information during processing.
+    
+    Returns:
+    --------
+    list[str]
+        A list of attributes in the module that match the filtering criteria.
+    """
+
+    # Initialize sets for processed attributes and their suffixes
+    dirred_set = set([module_name])
+    suffix_set = set([module_name])
+
+    # Initialize an unprocessed set of all attributes in the module_name module that don't start with an underscore
+    import importlib
+    module_obj = importlib.import_module(module_name)
+    undirred_set = set([f'module_obj.{fn}' for fn in dir(module_obj) if not fn.startswith('_')])
+
+    # Continue processing until the unprocessed set is empty
+    while undirred_set:
+
+        # Pop the next function or submodule
+        fn = undirred_set.pop()
+
+        # Extract the suffix of the function or submodule
+        fn_suffix = fn.split('.')[-1]
+
+        # Check if the suffix has not been processed yet
+        if fn_suffix not in suffix_set:
+            
+            # Add it to processed and suffix sets
+            dirred_set.add(fn)
+            suffix_set.add(fn_suffix)
+
+            try:
+                
+                # Evaluate the 'dir()' function for the attribute and update the unprocessed set with its function or submodule
+                dir_list = eval(f'dir({fn})')
+
+                # Add all of the submodules of the function or submodule to undirred_set if they haven't been processed yet
+                undirred_set.update([f'{fn}.{fn1}' for fn1 in dir_list if not fn1.startswith('_')])
+
+            # If there is an error getting the dir() of the function or submodule, just continue to the next iteration
+            except: continue
+            
+    # Apply filtering criteria if provided
+    if (not bool(contains_str)) and bool(not_contains_str):
+        dirred_set = [fn for fn in dirred_set if (not_contains_str not in fn.lower())]
+    elif bool(contains_str) and (not bool(not_contains_str)):
+        dirred_set = [fn for fn in dirred_set if (contains_str in fn.lower())]
+    elif bool(contains_str) and bool(not_contains_str):
+        dirred_set = [fn for fn in dirred_set if (contains_str in fn.lower()) and (not_contains_str not in fn.lower())]
+    
+    # Remove the importlib object variable name
+    dirred_set = set([fn.replace('module_obj', module_name) for fn in dirred_set])
+    
+    return dirred_set
 
 
 
