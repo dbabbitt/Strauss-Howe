@@ -306,12 +306,31 @@ class NotebookUtilities(object):
         return(object)
     
     def save_dataframes(self, include_index=False, verbose=True, **kwargs):
+        """
+        Saves dataframes to CSV files.
+
+        Args:
+            include_index: Whether to include the index in the CSV files.
+            verbose: Whether to print information about the saved files.
+            **kwargs: A dictionary of dataframes to save. The keys of the dictionary
+                      are the names of the CSV files to save the dataframes to.
+
+        Returns:
+            None
+        """
+
+        # Iterate over the dataframes in the kwargs dictionary and save them to CSV files
         for frame_name in kwargs:
             if isinstance(kwargs[frame_name], pd.DataFrame):
+                
+                # Generate the path to the CSV file
                 csv_path = osp.join(self.saves_csv_folder, '{}.csv'.format(frame_name))
+
+                # Print a message about the saved file if verbose is True
                 if verbose: print('Saving to {}'.format(osp.abspath(csv_path)), flush=True)
-                kwargs[frame_name].to_csv(csv_path, sep=',', encoding=self.encoding_type,
-                                          index=include_index)
+
+                # Save the dataframe to a CSV file
+                kwargs[frame_name].to_csv(csv_path, sep=',', encoding=self.encoding_type, index=include_index)
     
     def store_objects(self, verbose: bool = True, **kwargs: dict) -> None:
         """
@@ -507,44 +526,141 @@ class NotebookUtilities(object):
     ### URL Functions ###
     
     def get_filename_from_url(self, url, verbose=False):
+        """
+        Extracts the filename from a given URL.
+
+        Parameters:
+        -----------
+        url : str
+            The URL from which to extract the filename.
+        verbose : bool, optional
+            If True, print additional information (default is False).
+
+        Returns:
+        --------
+        str
+            The extracted filename from the URL.
+        """
+
+        # Import the urllib module for URL parsing
         import urllib
+
+        # Parse the URL and extract the filename from the path
         file_name = urllib.parse.urlparse(url).path.split('/')[-1]
         
+        # Print verbose information if verbose flag is True
+        if verbose: print(f"Extracted filename from '{url}': '{file_name}'")
+
         return file_name
     
     def download_file(self, url, download_dir=None, exist_ok=False, verbose=False):
-        '''Download a file from the internet'''
+        """
+        Downloads a file from the internet.
+
+        Args:
+            url: The URL of the file to download.
+            download_dir: The directory to download the file to. If None, the file
+                          will be downloaded to the `downloads` subdirectory of the data folder.
+            exist_ok: If True, the function will not raise an error if the file
+                      already exists.
+            verbose: If True, the function will print progress information to the
+                     console.
+
+        Returns:
+            The path to the downloaded file.
+        """
+
+        # Get the file name from the URL
         file_name = self.get_filename_from_url(url, verbose=verbose)
-        if download_dir is None:
-            download_dir = osp.join(self.data_folder, 'downloads')
+
+        # If the download directory is not specified, use the downloads subdirectory
+        if download_dir is None: download_dir = osp.join(self.data_folder, 'downloads')
+
+        # Create the download directory if it does not exist
         os.makedirs(download_dir, exist_ok=True)
+
+        # Compute the path to the downloaded file
         file_path = osp.join(download_dir, file_name)
+
+        # If the file does not exist or if exist_ok is True, download the file
         if exist_ok or (not osp.isfile(file_path)):
             import urllib
             urllib.request.urlretrieve(url, file_path)
 
+        return file_path
+
     def get_page_soup(self, page_url_or_filepath, verbose=True):
+        """
+        Gets the BeautifulSoup soup object for a given page URL or filepath.
+
+        Args:
+            page_url_or_filepath (str): The URL or filepath of the page to get the soup object for.
+            verbose (bool, optional): Whether to print verbose output. Defaults to True.
+
+        Returns:
+            BeautifulSoup: The BeautifulSoup soup object for the given page.
+        """
+
+        # Check if the page URL or filepath is a URL
         match_obj = self.url_regex.search(page_url_or_filepath)
         if match_obj:
+
+            # If the page URL or filepath is a URL, open it using urllib.request.urlopen()
             with urllib.request.urlopen(page_url_or_filepath) as response: page_html = response.read()
+
         else:
+
+            # If the page URL or filepath is not a URL, open it using open()
             with open(page_url_or_filepath, 'r', encoding='utf-8') as f: page_html = f.read()
+
+        # Parse the page HTML using BeautifulSoup
         page_soup = bs(page_html, 'html.parser')
 
+        # If verbose output is enabled, print the page URL or filepath
+        if verbose: print(f'Getting soup object for: {page_url_or_filepath}')
+
+        # Return the page soup object
         return page_soup
     
     def get_wiki_tables(self, tables_url_or_filepath, verbose=True):
+        """
+        Gets a list of DataFrames from Wikipedia tables.
+
+        Args:
+            tables_url_or_filepath: The URL or filepath to the Wikipedia page containing the tables.
+            verbose: Whether to print verbose output.
+
+        Returns:
+            A list of DataFrames containing the data from the Wikipedia tables.
+
+        Raises:
+            Exception: If there is an error getting the Wikipedia page or the tables from the page.
+        """
         table_dfs_list = []
         try:
+
+            # Get the BeautifulSoup object for the Wikipedia page
             page_soup = self.get_page_soup(tables_url_or_filepath, verbose=verbose)
+
+            # Find all the tables on the Wikipedia page
             table_soups_list = page_soup.find_all('table', attrs={'class': 'wikitable'})
+
+            # Recursively get the DataFrames for all the tables on the Wikipedia page
             table_dfs_list = []
             for table_soup in table_soups_list: table_dfs_list += self.get_page_tables(str(table_soup), verbose=False)
-            if verbose: print(sorted([(i, df.shape) for (i, df) in enumerate(table_dfs_list)], key=lambda x: x[1][0]*x[1][1], reverse=True))
-        except Exception as e:
-            if verbose: print(str(e).strip())
-            table_dfs_list = self.get_page_tables(tables_url_or_filepath, verbose=verbose)
 
+            # If verbose is True, print a sorted list of the tables by their number of rows and columns
+            if verbose: print(sorted([(i, df.shape) for (i, df) in enumerate(table_dfs_list)], key=lambda x: x[1][0]*x[1][1], reverse=True))
+
+        except Exception as e:
+
+            # If there is an error, print the error message
+            if verbose: print(str(e).strip())
+
+            # Recursively get the DataFrames for the tables on the Wikipedia page again, but with verbose=False
+            table_dfs_list = self.get_page_tables(tables_url_or_filepath, verbose=False)
+
+        # Return the list of DataFrames
         return table_dfs_list
 
     def get_page_tables(self, tables_url_or_filepath, verbose=True):
@@ -1019,7 +1135,10 @@ class NotebookUtilities(object):
         # Turn the grid off
         plt.grid(False);
 
-    def plot_inauguration_age(self, inauguration_df, groupby_column_name, xname, leader_designation, label_infix, label_suffix, info_df, title_prefix):
+    def plot_inauguration_age(
+        self, inauguration_df, groupby_column_name, xname, leader_designation, label_infix, label_suffix, info_df, title_prefix, inaugruation_verb='Inauguration', legend_tuple=None,
+        verbose=False
+    ):
 
         # Configure the color dictionary
         color_cycler = self.get_color_cycler(info_df[groupby_column_name].unique().shape[0])
@@ -1046,17 +1165,21 @@ class NotebookUtilities(object):
                 if groupby_column not in used_list:
                     used_list.append(groupby_column)
                     df.plot(x=xname, y='age_at_inauguration', kind='scatter', ax=ax, label=label, color=color)
-                else:
-                    df.plot(x=xname, y='age_at_inauguration', kind='scatter', ax=ax, color=color)
+                else: df.plot(x=xname, y='age_at_inauguration', kind='scatter', ax=ax, color=color)
                 plt.annotate(
                     textwrap.fill(leader_name, width=10), (row_series[xname], row_series.age_at_inauguration), textcoords='offset points', xytext=(0, -4),
                     ha='center', va='top', fontsize=6
                 )
 
-        # Get the background shading width
-        left, right = ax.get_xlim()
+        # Add 5 years to the height
+        bottom, top = ax.get_ylim()
+        height_tuple = (bottom, top+5)
+        ax.set_ylim(height_tuple)
         bottom, top = ax.get_ylim()
         height = top - bottom
+
+        # Get the background shading width
+        left, right = ax.get_xlim()
         min_shading_width = 9999
         min_turning_name = ''
         wrap_width = info_df.turning_name.map(lambda x: len(x)).min()
@@ -1087,11 +1210,25 @@ class NotebookUtilities(object):
                     textwrap.fill(turning_name, width=wrap_width), (turning_year_begin+(width/2), top), textcoords='offset points', xytext=(0, -6),
                     ha='center', fontsize=7, va='top', rotation=-90
                 )
-
+        
         # Set legend
-        legend_obj = ax.legend(loc='best')
-
+        if legend_tuple is None: legend_tuple = (0.02, 0.76)
+        legend_obj = ax.legend(loc=legend_tuple)
+        if verbose:
+            
+            # Get the bounding box of the legend relative to the anchor point
+            bbox_to_anchor = legend_obj.get_bbox_to_anchor()
+            
+            # Print the size and position of the bounding box
+            print(bbox_to_anchor.width, bbox_to_anchor.height, bbox_to_anchor.xmin, bbox_to_anchor.ymin, bbox_to_anchor.xmax, bbox_to_anchor.ymax)
+            
+            # Get the bounding box of the legend
+            bounding_box = legend_obj.get_tightbbox()
+            
+            # Print the size and position of the bounding box
+            print(bounding_box.width, bounding_box.height, bounding_box.xmin, bounding_box.ymin, bounding_box.xmax, bounding_box.ymax)
+        
         # Set labels
-        ax.set_xlabel('Year of Inauguration')
-        ax.set_ylabel('Age at Inauguration')
-        text_obj = ax.set_title(f'{title_prefix} Inauguration Age vs Year')
+        ax.set_xlabel(f'Year of {inaugruation_verb}')
+        ax.set_ylabel(f'Age at {inaugruation_verb}')
+        text_obj = ax.set_title(f'{title_prefix} {inaugruation_verb} Age vs Year')
