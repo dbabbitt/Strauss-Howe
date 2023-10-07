@@ -128,6 +128,21 @@ class NotebookUtilities(object):
 
         return SequenceMatcher(None, str(a), str(b)).ratio()
 
+    def get_first_year_element(self, x):
+        stripped_list = re.split(r'( |/|–|\\u2009|-|\[)', str(x), 0)
+        stripped_list = [re.sub(r'\D+', '', x) for x in stripped_list]
+        stripped_list = [x for x in stripped_list if (len(x) >= 3) and (len(x) <= 4)]
+        try:
+            numeric_list = [x.isnumeric() for x in stripped_list]
+            idx = numeric_list.index(True, 0)
+            first_numeric = int(stripped_list[idx])
+        except Exception as e:
+            # print(f'Error processing stripped_list ({stripped_list}), numeric_list ({numeric_list}): {str(e).strip()}')
+            if stripped_list: first_numeric = int(stripped_list[0])
+            else: first_numeric = np.nan
+
+        return first_numeric
+
     ### List Functions ###
     
     def conjunctify_nouns(self, noun_list, and_or='and', verbose=False):
@@ -180,6 +195,30 @@ class NotebookUtilities(object):
             print(t1-t0, time.ctime(t1))
 
         return item_similarities_df
+
+    def get_jitter_list(self, ages_list):
+        jitter_list = []
+        for splits_list in get_splits_list(ages_list):
+            if len(splits_list) > 1:
+                jitter_list.extend(pd.cut(np.array([min(splits_list)-0.99, max(splits_list)+0.99]), len(splits_list)-1, retbins=True)[1])
+            else:
+                jitter_list.extend(splits_list)
+
+        return jitter_list
+
+    def get_splits_list(self, ages_list):
+        splits_list = []
+        current_list = []
+        previous_age = ages_list[0] - 1
+        for age in ages_list:
+            if age - previous_age > 1:
+                splits_list.append(current_list)
+                current_list = []
+            current_list.append(age)
+            previous_age = age
+        splits_list.append(current_list)
+
+        return splits_list
 
     ### Storage Functions ###
 
@@ -330,7 +369,8 @@ class NotebookUtilities(object):
                 if verbose: print('Saving to {}'.format(osp.abspath(csv_path)), flush=True)
 
                 # Save the dataframe to a CSV file
-                kwargs[frame_name].to_csv(csv_path, sep=',', encoding=self.encoding_type, index=include_index)
+                kwargs[frame_name].to_csv(csv_path, sep=',', encoding=self.encoding_type,
+                                          index=include_index)
     
     def store_objects(self, verbose: bool = True, **kwargs: dict) -> None:
         """
@@ -523,7 +563,7 @@ class NotebookUtilities(object):
                 for line_str in output_str.splitlines(): print(line_str.decode(), flush=True)
             self.update_modules_list(verbose=verbose)
     
-    ### URL Functions ###
+    ### URL and Soup Functions ###
     
     def get_filename_from_url(self, url, verbose=False):
         """
@@ -683,6 +723,26 @@ class NotebookUtilities(object):
                          key=lambda x: x[1][0]*x[1][1], reverse=True))
 
         return tables_df_list
+
+    def get_style_column(self, tag_obj, verbose=False):
+        if verbose: display(tag_obj)
+        tag_obj = get_td_parent(tag_obj, verbose=verbose)
+        if verbose: display(tag_obj)
+        from bs4.element import NavigableString
+        while (type(tag_obj) == NavigableString) or not tag_obj.has_attr('style'):
+            tag_obj = tag_obj.previous_sibling
+            if verbose: display(tag_obj)
+        if verbose: display(tag_obj.text.strip())
+
+        return tag_obj
+
+    def get_td_parent(self, tag_obj, verbose=False):
+        if verbose: display(tag_obj)
+        while (tag_obj.name != 'td'):
+            tag_obj = tag_obj.parent
+            if verbose: display(tag_obj)
+
+        return tag_obj
     
     ### Pandas Functions ###
     
