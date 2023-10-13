@@ -382,7 +382,7 @@ class ScrapingUtilities(object):
     
     
     
-    def similar(self, a, b):
+    def compute_similarity(self, a, b):
         
         return SequenceMatcher(None, str(a), str(b)).ratio()
     

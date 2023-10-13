@@ -94,7 +94,7 @@ class Storage(object):
         
         return os.path.isfile(pickle_path)
 
-    def load_dataframes(self, **kwargs):
+    def load_data_frames(self, **kwargs):
         frame_dict = {}
         for frame_name in kwargs:
             pickle_path = os.path.join(self.saves_pickle_folder, '{}.pkl'.format(frame_name))
@@ -152,7 +152,7 @@ class Storage(object):
         
         return(object)
 
-    def save_dataframes(self, include_index=False, verbose=True, **kwargs):
+    def save_data_frames(self, include_index=False, verbose=True, **kwargs):
         for frame_name in kwargs:
             if isinstance(kwargs[frame_name], pd.DataFrame):
                 csv_path = os.path.join(self.saves_csv_folder, '{}.csv'.format(frame_name))

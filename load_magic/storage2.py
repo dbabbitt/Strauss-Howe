@@ -32,7 +32,7 @@ def load_csv(csv_name=None, folder_path=None):
     
     return(data_frame)
 
-def load_dataframes(**kwargs):
+def load_data_frames(**kwargs):
     frame_dict = {}
     for frame_name in kwargs:
         pickle_path = saves_folder + 'pickle/' + frame_name + '.pickle'
@@ -81,7 +81,7 @@ def load_object(obj_name, download_url=None):
     
     return(object)
 
-def save_dataframes(include_index=False, **kwargs):
+def save_data_frames(include_index=False, **kwargs):
     csv_folder = saves_folder + 'csv/'
     for frame_name in kwargs:
         if isinstance(kwargs[frame_name], pd.DataFrame):

@@ -8,7 +8,7 @@
 # Soli Deo gloria
 
 from bs4 import BeautifulSoup as bs
-from difflib import SequenceMatcher
+from datetime import timedelta
 from pathlib import Path
 from typing import List, Optional
 from urllib.request import urlretrieve
@@ -101,7 +101,9 @@ class NotebookUtilities(object):
         
         # Determine URL from file path
         self.url_regex = re.compile(r'\b(https?|file)://[-A-Z0-9+&@#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]', re.IGNORECASE)
-        self.filepath_regex = re.compile(r'\b[c-d]:\\(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F]\\)*(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F])', re.IGNORECASE)
+        self.filepath_regex = re.compile(
+            r'\b[c-d]:\\(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F]\\)*(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F])', re.IGNORECASE
+        )
         
         # Various aspect ratios
         self.facebook_aspect_ratio = 1.91
@@ -109,7 +111,7 @@ class NotebookUtilities(object):
 
     ### String Functions ###
     
-    def similar(self, a: str, b: str) -> float:
+    def compute_similarity(self, a: str, b: str) -> float:
         """
         Compute the similarity between two strings.
 
@@ -125,6 +127,7 @@ class NotebookUtilities(object):
         float
             The similarity between the two strings, as a float between 0 and 1.
         """
+        from difflib import SequenceMatcher
 
         return SequenceMatcher(None, str(a), str(b)).ratio()
 
@@ -146,8 +149,31 @@ class NotebookUtilities(object):
     ### List Functions ###
     
     def conjunctify_nouns(self, noun_list, and_or='and', verbose=False):
+        """
+        Concatenates a list of nouns into a grammatically correct string with specified conjunctions.
+        
+        Parameters:
+            noun_list (list or str): A list of nouns to be concatenated.
+            and_or (str, optional): The conjunction used to join the nouns. Default is 'and'.
+            verbose (bool, optional): If True, prints verbose output. Default is False.
+        
+        Returns:
+            str: A string containing the concatenated nouns with appropriate conjunctions.
+        
+        Example:
+            noun_list = ['apples', 'oranges', 'bananas']
+            conjunction = 'and'
+            result = conjunctify_nouns(noun_list, and_or=conjunction)
+            print(result)
+            Output: 'apples, oranges, and bananas'
+        """
+        
+        # Handle special cases where noun_list is None or not a list
         if (noun_list is None): return ''
         if (type(noun_list) != list): noun_list = list(noun_list)
+        
+        # If there are more than two nouns in the list, join the last two nouns with `and_or`
+        # Otherwise, join all of the nouns with `and_or`
         if (len(noun_list) > 2):
             last_noun_str = noun_list[-1]
             but_last_nouns_str = ', '.join(noun_list[:-1])
@@ -156,7 +182,12 @@ class NotebookUtilities(object):
         elif (len(noun_list) == 1): list_str = noun_list[0]
         else: list_str = ''
         
+        # Print verbose output if requested
+        if verbose: print(f'Conjunctified noun list: {list_str}')
+        
+        # Return the conjuncted noun list
         return list_str
+
 
     def check_4_doubles(self, item_list, verbose=False):
         if verbose: t0 = time.time()
@@ -170,7 +201,7 @@ class NotebookUtilities(object):
                 second_item = item_list[j]
 
                 # Assume the first item is never identical to the second item
-                this_similarity = self.similar(str(first_item), str(second_item))
+                this_similarity = self.compute_similarity(str(first_item), str(second_item))
 
                 if this_similarity > max_similarity:
                     max_similarity = this_similarity
@@ -220,6 +251,85 @@ class NotebookUtilities(object):
 
         return splits_list
 
+    ### File Functions ###
+    
+    def get_file_path(self, func):
+        """
+        Returns the relative or absolute file path where the function is stored.
+
+        Args:
+            func: A Python function.
+
+        Returns:
+            A string representing the relative or absolute file path where the function is stored.
+
+        Example:
+            def my_function(): pass
+            file_path = nu.get_file_path(my_function)
+            print(os.path.abspath(file_path))
+        """
+        import inspect
+        file_path = inspect.getfile(func)
+
+        # If the function is defined in a Jupyter notebook, return the absolute file path
+        if file_path.startswith('<stdin>'): return os.path.abspath(file_path)
+
+        # Otherwise, return the relative file path
+        else: return os.path.relpath(file_path)
+    
+    def show_duplicated_util_fns_search_string(self, util_path=None, github_folder=None):
+        """
+        Search for duplicate utility function definitions in Jupyter notebooks within a specified GitHub repository folder.
+        The function identifies rogue utility function definitions in Jupyter notebooks and prints a regular expression
+        pattern to search for instances of these definitions. The intention is to replace these calls with the
+        corresponding `nu.` equivalent and remove the duplicates.
+
+        Parameters:
+            util_path (str, optional): The path to the utilities file to check for existing utility function definitions.
+                                       Defaults to `../py/notebook_utils.py`.
+            github_folder (str, optional): The path of the root folder of the GitHub repository containing the notebooks.
+                                           Defaults to the parent directory of the current working directory.
+
+        Returns:
+            None: The function prints the regular expression pattern to identify rogue utility function definitions.
+        """
+
+        # Get a list of rogue functions already in utilities file
+        if util_path is None: util_path = '../py/notebook_utils.py'
+        utils_regex = re.compile(r'def ([a-z0-9_]+)\(')
+        with open(util_path, 'r', encoding='utf-8') as f:
+            lines_list = f.readlines()
+            utils_set = set()
+            for line in lines_list:
+                match_obj = utils_regex.search(line)
+                if match_obj:
+                    scraping_util = match_obj.group(1)
+                    utils_set.add(scraping_util)
+
+        # Make a set of rogue util functions
+        fn_regex = re.compile(r'\s+"def ([a-z0-9_]+)\(')
+        black_list = ['.ipynb_checkpoints', '$Recycle.Bin']
+        rows_list = []
+        if github_folder is None: github_folder = osp.dirname(osp.abspath(osp.curdir))
+        rogue_fns_set = set()
+        for sub_directory, directories_list, files_list in os.walk(github_folder):
+            if all(map(lambda x: x not in sub_directory, black_list)):
+                for file_name in files_list:
+                    if file_name.endswith('.ipynb'):
+                        file_path = osp.join(sub_directory, file_name)
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            lines_list = f.readlines()
+                            for line in lines_list:
+                                match_obj = fn_regex.search(line)
+                                if match_obj:
+                                    fn = match_obj.group(1)
+                                    if fn in utils_set: rogue_fns_set.add(fn)
+        
+        if rogue_fns_set:
+            print(f'Search for *.ipynb; file masks in the {github_folder} folder for this pattern:')
+            print('\\s+"def (' + '|'.join(rogue_fns_set) + ')\(')
+            print('Replace each of the calls to these definitions with calls the the nu. equivalent (and delete the definitions).')
+
     ### Storage Functions ###
 
     def csv_exists(self, csv_name, folder_path=None, verbose=False):
@@ -266,7 +376,7 @@ class NotebookUtilities(object):
 
         return osp.isfile(pickle_path)
 
-    def load_dataframes(self, **kwargs):
+    def load_data_frames(self, **kwargs):
         frame_dict = {}
         for frame_name in kwargs:
             pickle_path = osp.join(self.saves_pickle_folder, '{}.pkl'.format(frame_name))
@@ -344,21 +454,21 @@ class NotebookUtilities(object):
 
         return(object)
     
-    def save_dataframes(self, include_index=False, verbose=True, **kwargs):
+    def save_data_frames(self, include_index=False, verbose=True, **kwargs):
         """
-        Saves dataframes to CSV files.
+        Saves data frames to CSV files.
 
         Args:
             include_index: Whether to include the index in the CSV files.
             verbose: Whether to print information about the saved files.
-            **kwargs: A dictionary of dataframes to save. The keys of the dictionary
-                      are the names of the CSV files to save the dataframes to.
+            **kwargs: A dictionary of data frames to save. The keys of the dictionary
+                      are the names of the CSV files to save the data frames to.
 
         Returns:
             None
         """
 
-        # Iterate over the dataframes in the kwargs dictionary and save them to CSV files
+        # Iterate over the data frames in the kwargs dictionary and save them to CSV files
         for frame_name in kwargs:
             if isinstance(kwargs[frame_name], pd.DataFrame):
                 
@@ -368,7 +478,7 @@ class NotebookUtilities(object):
                 # Print a message about the saved file if verbose is True
                 if verbose: print('Saving to {}'.format(osp.abspath(csv_path)), flush=True)
 
-                # Save the dataframe to a CSV file
+                # Save the data frame to a CSV file
                 kwargs[frame_name].to_csv(csv_path, sep=',', encoding=self.encoding_type,
                                           index=include_index)
     
@@ -1163,37 +1273,76 @@ class NotebookUtilities(object):
             yticklabels_list.append(text_obj)
         ax.set_yticklabels(yticklabels_list);
     
-    def plot_histogram(self, df, xname, xlabel, xtick_text_fn, title, ax=None):
+    def plot_histogram(self, df, xname, xlabel, xtick_text_fn, title, ylabel=None, xticks_are_temporal=False, ax=None, color=None, bins=100):
+        """
+        Plots a histogram of a DataFrame column.
+        
+        Args:
+            df: A Pandas DataFrame.
+            xname: The name of the column to plot the histogram of.
+            xlabel: The label for the x-axis.
+            xtick_text_fn: A function that takes a text object as input and returns a new
+            text object to be used as the tick label.
+            title: The title of the plot.
+            ylabel: The label for the y-axis.
+            ax: A matplotlib axis object. If None, a new figure and axis will be created.
+        
+        Returns:
+            A matplotlib axis object.
+        """
         
         # Create the figure and subplot
         if ax is None: fig, ax = plt.subplots(figsize=(18, 9))
         
         # Plot the histogram with centered bars
-        df[xname].hist(ax=ax, bins=100, align='mid', edgecolor='black')
+        df[xname].hist(ax=ax, bins=bins, align='mid', edgecolor='black', color=color)
         
-        # Set the title and labels
+        # Set the grid, title and labels
+        plt.grid(False)
         ax.set_title(title)
         ax.set_xlabel(xlabel)
-        ax.set_ylabel('Count of Instances in Bin')
+        if ylabel is None: ylabel = 'Count of Instances in Bin'
+        ax.set_ylabel(ylabel)
+
+        if xticks_are_temporal:
+        
+            # Set the minor x-axis tick labels to every 30 seconds
+            thirty_seconds = 1_000 * 30
+            minor_ticks = np.arange(0, df[xname].max() + thirty_seconds, thirty_seconds)
+            ax.set_xticks(minor_ticks, minor=True)
+            
+            # Set the major x-axis tick labels to every 5 minutes
+            if (len(minor_ticks) > 84):
+                five_minutes = 1_000 * 60 * 5
+                major_ticks = np.arange(0, df[xname].max() + five_minutes, five_minutes)
+                ax.set_xticks(major_ticks)
+            
+            # Set the major x-axis tick labels to every 60 seconds
+            else:
+                sixty_seconds = 1_000 * 60
+                major_ticks = np.arange(0, df[xname].max() + sixty_seconds, sixty_seconds)
+                ax.set_xticks(major_ticks)
         
         # Humanize x tick labels
         xticklabels_list = []
         for text_obj in ax.get_xticklabels():
+            
+            # Call the xtick text function to convert numerical values into minutes and seconds format
             text_obj.set_text(xtick_text_fn(text_obj))
+            
             xticklabels_list.append(text_obj)
-        ax.set_xticklabels(xticklabels_list)
+        # print(len(xticklabels_list))
+        if (len(xticklabels_list) > 17): ax.set_xticklabels(xticklabels_list, rotation=90)
+        else: ax.set_xticklabels(xticklabels_list)
         
         # Humanize y tick labels
         yticklabels_list = []
         for text_obj in ax.get_yticklabels():
-            text_obj.set_text(
-                humanize.intword(int(text_obj.get_position()[1]))
-            )
+            text_obj.set_text(humanize.intword(int(text_obj.get_position()[1])))
             yticklabels_list.append(text_obj)
         ax.set_yticklabels(yticklabels_list)
         
-        # Turn the grid off
-        plt.grid(False);
+        return ax
 
     def plot_inauguration_age(
         self, inauguration_df, groupby_column_name, xname, leader_designation, label_infix, label_suffix, info_df, title_prefix, inaugruation_verb='Inauguration', legend_tuple=None,
