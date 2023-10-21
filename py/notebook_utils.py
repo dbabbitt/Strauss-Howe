@@ -9,6 +9,7 @@
 
 from bs4 import BeautifulSoup as bs
 from datetime import timedelta
+from pandas import DataFrame
 from pathlib import Path
 from pysan.elements import get_alphabet
 from typing import List, Optional
@@ -253,7 +254,7 @@ class NotebookUtilities(object):
             rows_list.append(row_dict)
 
         column_list = ['first_item', 'second_item', 'first_bytes', 'second_bytes', 'max_similarity']
-        item_similarities_df = pd.DataFrame(rows_list, columns=column_list)
+        item_similarities_df = DataFrame(rows_list, columns=column_list)
         if verbose:
             t1 = time.time()
             print(t1-t0, time.ctime(t1))
@@ -431,7 +432,7 @@ class NotebookUtilities(object):
     ### File Functions ###
     
     
-    def get_file_path(self, func):
+    def get_function_file_path(self, func):
         """
         Returns the relative or absolute file path where the function is stored.
 
@@ -443,7 +444,7 @@ class NotebookUtilities(object):
 
         Example:
             def my_function(): pass
-            file_path = nu.get_file_path(my_function)
+            file_path = nu.get_function_file_path(my_function)
             print(os.path.abspath(file_path))
         """
         import inspect
@@ -543,6 +544,36 @@ class NotebookUtilities(object):
             print(f'Search for *.ipynb; file masks in the {github_folder} folder for this pattern:')
             print('\\s+"def (' + '|'.join(rogue_fns_list) + ')\(')
             print('Replace each of the calls to these definitions with calls the the nu. equivalent (and delete the definitions).')
+
+    def list_dfs_in_folder(self, pickle_folder=None):
+        if pickle_folder is None: pickle_folder = self.saves_pickle_folder
+        pickles_list = [file_name.split('.')[0] for file_name in os.listdir(pickle_folder) if (file_name.split('.')[1] in ['pkl', 'pickle'])]
+        dfs_list = [pickle_name for pickle_name in pickles_list if pickle_name.endswith('_df')]
+        
+        return dfs_list
+
+    def open_path_in_notepad(self, path_str, home_key='USERPROFILE', text_editor_path=r'C:\Program Files\Notepad++\notepad++.exe'):
+
+        # Get the absolute path to the file
+        if ('~' in path_str): path_str = path_str.replace('~', dict(os.environ)[home_key])
+        absolute_path = os.path.abspath(path_str)
+
+        # Open the absolute path to the file in Notepad
+        # !"{text_editor_path}" "{absolute_path}"
+        import subprocess
+        subprocess.run([text_editor_path, absolute_path])
+
+    def show_dupl_fn_defs_search_string(self, util_path=None, github_folder=None):
+        if util_path is None: util_path = '../py/notebook_utils.py'
+        if github_folder is None: github_folder = osp.dirname(osp.abspath(osp.curdir))
+        df = DataFrame([{'function_name': k, 'definition_count': v} for k, v in self.get_notebook_functions_dictionary().items()])
+        mask_series = (df.definition_count > 1)
+        duplicate_fns_list = df[mask_series].function_name.tolist()
+
+        if duplicate_fns_list:
+            print(f'Search for *.ipynb; file masks in the {github_folder} folder for this pattern:')
+            print('\\s+"def (' + '|'.join(duplicate_fns_list) + ')\(')
+            print(f'Consolidate these duplicate definitions and add the refactored one to {util_path} (and delete the definitions).')
 
     ### Storage Functions ###
 
@@ -646,7 +677,7 @@ class NotebookUtilities(object):
             else:
                 object = pd.read_csv(csv_path, low_memory=False,
                                      encoding=self.encoding_type)
-            if isinstance(object, pd.DataFrame):
+            if isinstance(object, DataFrame):
                 self.attempt_to_pickle(object, pickle_path, raise_exception=False)
             else:
                 with open(pickle_path, 'wb') as handle:
@@ -684,7 +715,7 @@ class NotebookUtilities(object):
 
         # Iterate over the data frames in the kwargs dictionary and save them to CSV files
         for frame_name in kwargs:
-            if isinstance(kwargs[frame_name], pd.DataFrame):
+            if isinstance(kwargs[frame_name], DataFrame):
                 
                 # Generate the path to the CSV file
                 csv_path = osp.join(self.saves_csv_folder, '{}.csv'.format(frame_name))
@@ -716,7 +747,7 @@ class NotebookUtilities(object):
             # if hasattr(kwargs[obj_name], '__call__'):
             #     raise RuntimeError('Functions cannot be pickled.')
             pickle_path = osp.join(self.saves_pickle_folder, '{}.pkl'.format(obj_name))
-            if isinstance(kwargs[obj_name], pd.DataFrame):
+            if isinstance(kwargs[obj_name], DataFrame):
                 self.attempt_to_pickle(kwargs[obj_name], pickle_path, raise_exception=False, verbose=verbose)
             else:
                 if verbose: print('Pickling to {}'.format(osp.abspath(pickle_path)), flush=True)
@@ -730,13 +761,13 @@ class NotebookUtilities(object):
                     elif sys.version_info.major == 3:
                         pickle.dump(kwargs[obj_name], handle, min(4, pickle.HIGHEST_PROTOCOL))
 
-    def attempt_to_pickle(self, df: pd.DataFrame, pickle_path: str, raise_exception: bool = False, verbose: bool = True) -> None:
+    def attempt_to_pickle(self, df: DataFrame, pickle_path: str, raise_exception: bool = False, verbose: bool = True) -> None:
         """
         Attempts to pickle a DataFrame to a file.
 
         Parameters
         ----------
-        df : pd.DataFrame
+        df : DataFrame
             The DataFrame to pickle.
         pickle_path : str
             The path to the pickle file.
@@ -1190,7 +1221,7 @@ class NotebookUtilities(object):
     
         columns_list = ['column_name', 'dtype', 'count_blanks', 'count_uniques', 'count_zeroes', 'has_dates',
                         'min_value', 'max_value', 'only_integers']
-        blank_ranking_df = pd.DataFrame(rows_list, columns=columns_list)
+        blank_ranking_df = DataFrame(rows_list, columns=columns_list)
         
         return(blank_ranking_df)
     
@@ -1228,7 +1259,7 @@ class NotebookUtilities(object):
             row_dict = {cn: describable_df[cn].mode().tolist()[0] for cn in columns_list}
             
             # Convert the row dictionary to a data frame to match the df structure
-            row_df = pd.DataFrame([row_dict], index=['mode'])
+            row_df = DataFrame([row_dict], index=['mode'])
             
             # Append the row data frame to the df data frame
             df = pd.concat([df, row_df], axis='index', ignore_index=False)
@@ -1239,7 +1270,7 @@ class NotebookUtilities(object):
             row_dict = {cn: describable_df[cn].median() for cn in columns_list}
             
             # Convert the row dictionary to a data frame to match the df structure
-            row_df = pd.DataFrame([row_dict], index=['median'])
+            row_df = DataFrame([row_dict], index=['median'])
             
             # Append the row data frame to the df data frame
             df = pd.concat([df, row_df], axis='index', ignore_index=False)
@@ -1347,7 +1378,7 @@ class NotebookUtilities(object):
         Returns:
             A Pandas DataFrame containing a single sample row of each of the four smallest groups.
         """
-        df = pd.DataFrame([], columns=sample_df.columns)
+        df = DataFrame([], columns=sample_df.columns)
         for bool_tuple in sample_df.groupby(groupby_columns).size().sort_values().index.tolist()[:4]:
             
             # Filter the name in the column to the corresponding value of the tuple

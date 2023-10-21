@@ -104,6 +104,12 @@ class StraussHoweUtilities(object):
                                  'magenta', 'yellow', 'cyan']
         self.white_tuple = (255, 255, 255, 0)
         self.black_tuple = (0, 0, 0, 255)
+        self.kryg_face_set_list = self.get_face_set_list(['black', 'red', 'yellow', 'green'])
+        self.krmb_face_set_list = self.get_face_set_list(['black', 'red', 'magenta', 'blue'])
+        self.kbcg_face_set_list = self.get_face_set_list(['black', 'blue', 'cyan', 'green'])
+        self.wcgy_face_set_list = self.get_face_set_list(['white', 'cyan', 'green', 'yellow'])
+        self.wcbm_face_set_list = self.get_face_set_list(['white', 'cyan', 'blue', 'magenta'])
+        self.wyrm_face_set_list = self.get_face_set_list(['white', 'yellow', 'red', 'magenta'])
         
         # Diagram values
         self.now_year = datetime.now().year
@@ -510,9 +516,11 @@ class StraussHoweUtilities(object):
         
         return xy_list
     
-    def display_test_colors(self, test_list, saeculum_title, face_title, nearness_str='far from',
-                            color_dict=mcolors.XKCD_COLORS, color_title='XKCD', face_point='Face'):
-        print(f'test_list = "{test_list}"')
+    def display_test_colors(
+        self, test_list, saeculum_title, face_title, nearness_str='far from', color_dict=mcolors.XKCD_COLORS,
+        color_title='XKCD', face_point='Face', verbose=True
+    ):
+        if verbose: print(f'test_list = "{test_list}"')
         name_list = [name for distance, name in test_list]
         colors_dict = {name: color for name, color in color_dict.items() if name in name_list}
         title_str = '{} {} Colors, {} the {} {}'.format(color_title, saeculum_title, nearness_str,
@@ -690,17 +698,17 @@ class StraussHoweUtilities(object):
                 face_set = set([corners_list[0][0].split('_')[2],
                                 corners_list[1][0].split('_')[2],
                                 corners_list[2][0].split('_')[2]])
-                if face_set in kryg_face_set_list:
+                if face_set in self.kryg_face_set_list:
                     face_dictionary[row_index] = 'black-red-yellow-green'
-                elif face_set in krmb_face_set_list:
+                elif face_set in self.krmb_face_set_list:
                     face_dictionary[row_index] = 'black-red-magenta-blue'
-                elif face_set in kbcg_face_set_list:
+                elif face_set in self.kbcg_face_set_list:
                     face_dictionary[row_index] = 'black-blue-cyan-green'
-                elif face_set in wcgy_face_set_list:
+                elif face_set in self.wcgy_face_set_list:
                     face_dictionary[row_index] = 'white-cyan-green-yellow'
-                elif face_set in wcbm_face_set_list:
+                elif face_set in self.wcbm_face_set_list:
                     face_dictionary[row_index] = 'white-cyan-blue-magenta'
-                elif face_set in wyrm_face_set_list:
+                elif face_set in self.wyrm_face_set_list:
                     face_dictionary[row_index] = 'white-yellow-red-magenta'
                 else:
                     face_dictionary[row_index] = '-'.join(list(face_set))
@@ -942,8 +950,6 @@ class StraussHoweUtilities(object):
     def plot_colortable(
         self, colors_dict, title, sort_colors=True, emptycols=0, ax=None
     ):
-        if ax is None:
-            ax = plt.gca()
         if len(colors_dict):
             cell_width = 212
             cell_height = 22
@@ -969,7 +975,15 @@ class StraussHoweUtilities(object):
             height = cell_height * nrows + margin + topmargin
             dpi = 72
             
-            fig, ax = plt.subplots(figsize=(width / dpi, height / dpi), dpi=dpi)
+            # Create the figure and subplot
+            if ax is None: fig, ax = plt.subplots(1, 1, figsize=(width / dpi, height / dpi), dpi=dpi)
+            else:
+                
+                # Set the figsize and dpi
+                fig = ax.get_figure()
+                fig.set_size_inches(width / dpi, height / dpi)
+                fig.set_dpi(dpi)
+            
             fig.subplots_adjust(margin/width, margin/height,
                                 (width-margin)/width, (height-topmargin)/height)
             ax.set_xlim(0, cell_width * 4)
@@ -1136,28 +1150,42 @@ class StraussHoweUtilities(object):
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
     
-    def show_color_proximity(self, distance_df=None, color_dict=mcolors.XKCD_COLORS,
-                             color_title='XKCD', color_str='Red',
-                             saeculum_title='Reformation', nearness_str='close to'):
+    def get_color_proximity(
+        self, distance_df=None, color_dict=None, color_title='XKCD', color_str='Red'
+    ):
+        if color_dict is None: color_dict = mcolors.XKCD_COLORS
         if distance_df is None:
-            colors_dict = {name: mcolors.to_rgb(color) for name,
-                           color in mcolors.XKCD_COLORS.items()}
-            xkcd_colors_df = self.colors_dict_to_dataframe(colors_dict)
-            distance_df = self.get_distance_dataframe(xkcd_colors_df, color_title='XKCD')
+            colors_dict = {name: mcolors.to_rgb(color) for name, color in color_dict.items()}
+            colors_df = self.colors_dict_to_dataframe(colors_dict)
+            distance_df = self.get_distance_dataframe(colors_df, color_title=color_title)
         distance_dict = {}
         for name, color in color_dict.items():
             mask_series = (distance_df.index == name)
-            column_name = 'distance_from_{}'.format(color_str.lower())
+            column_name = f'distance_from_{color_str.lower()}'
             distance_list = distance_df[mask_series][column_name].tolist()
-            if len(distance_list) == 1:
-                distance_dict[name] = distance_list[0]
-        color_tuple_list = sorted((distance, name) for name,
-                                  distance in distance_dict.items())
+            if len(distance_list) == 1: distance_dict[name] = distance_list[0]
+        color_tuple_list = sorted((distance, name) for name, distance in distance_dict.items())
         test_list = color_tuple_list[:32]
-        self.display_test_colors(test_list=test_list, saeculum_title=saeculum_title,
-                                 face_title=color_str, nearness_str=nearness_str,
-                                 color_dict=color_dict, color_title=color_title,
-                                 face_point='Corner')
+        
+        return test_list
+    
+    def show_color_proximity(
+        self, distance_df=None, color_dict=None, color_title='XKCD', color_str='Red',
+        saeculum_title='Reformation', nearness_str='close to', verbose=True
+    ):
+        if color_dict is None: color_dict = mcolors.XKCD_COLORS
+        if distance_df is None:
+            colors_dict = {name: mcolors.to_rgb(color) for name, color in color_dict.items()}
+            colors_df = self.colors_dict_to_dataframe(colors_dict)
+            distance_df = self.get_distance_dataframe(colors_df, color_title=color_title)
+        test_list = self.get_color_proximity(
+            distance_df=distance_df, color_dict=color_dict, color_title=color_title, color_str=color_str
+        )
+        self.display_test_colors(
+            test_list=test_list, saeculum_title=saeculum_title, face_title=color_str,
+            nearness_str=nearness_str, color_dict=color_dict, color_title=color_title, face_point='Corner',
+            verbose=verbose
+        )
     
     def show_face_proximity(self, distance_df):
         for row_index, row_series in distance_df.iterrows():
@@ -1168,17 +1196,17 @@ class StraussHoweUtilities(object):
                 corners_list = tuple_list[:3]
                 face_set = set([corners_list[0][0].split('_')[2], corners_list[1][0].split('_')[2],
                                 corners_list[2][0].split('_')[2]])
-                if face_set in kryg_face_set_list:
+                if face_set in self.kryg_face_set_list:
                     print('{} is nearest the black-red-yellow-green face'.format(row_index))
-                elif face_set in krmb_face_set_list:
+                elif face_set in self.krmb_face_set_list:
                     print('{} is nearest the black-red-magenta-blue face'.format(row_index))
-                elif face_set in kbcg_face_set_list:
+                elif face_set in self.kbcg_face_set_list:
                     print('{} is nearest the black-blue-cyan-green face'.format(row_index))
-                elif face_set in wcgy_face_set_list:
+                elif face_set in self.wcgy_face_set_list:
                     print('{} is nearest the white-cyan-green-yellow face'.format(row_index))
-                elif face_set in wcbm_face_set_list:
+                elif face_set in self.wcbm_face_set_list:
                     print('{} is nearest the white-cyan-blue-magenta face'.format(row_index))
-                elif face_set in wyrm_face_set_list:
+                elif face_set in self.wyrm_face_set_list:
                     print('{} is nearest the white-yellow-red-magenta face'.format(row_index))
                 else:
                     print('{} is nearest the {} face'.format(row_index, '-'.join(list(face_set))))
@@ -1596,12 +1624,19 @@ class StraussHoweUtilities(object):
     
     def show_3d_plot(
         self, three_d_df, z_column='Red', x_column='Green',
-        y_column='Blue', ax=None
+        y_column='Blue', pane_color='white', ax=None, verbose=False
     ):
-        if ax is None:
-            ax = plt.gca()
-        fig = plt.figure(figsize=(18, 8))
-        ax = fig.add_subplot(111, projection='3d', autoscale_on=True)
+        
+        # Create the figure and subplot
+        if ax is None: ax = plt.figure(figsize=(18, 8)).add_subplot(projection='3d')
+
+        # Change the 2 walls of the 3d plot to black
+        if verbose: print([f'ax.xaxis.{fn}' for fn in dir(ax.xaxis) if 'color' in fn])
+        ax.set_axisbelow(True)
+        ax.xaxis.set_pane_color(pane_color)
+        ax.yaxis.set_pane_color(pane_color)
+        ax.zaxis.set_pane_color(pane_color)
+        
         xlabel_text = ax.set_xlabel(x_column)
         ylabel_text = ax.set_ylabel(y_column)
         zlabel_text = ax.set_zlabel(z_column)
