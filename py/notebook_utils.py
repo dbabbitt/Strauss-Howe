@@ -10,6 +10,7 @@
 from bs4 import BeautifulSoup as bs
 from datetime import timedelta
 from pathlib import Path
+from pysan.elements import get_alphabet
 from typing import List, Optional
 from urllib.request import urlretrieve
 import csv
@@ -146,7 +147,29 @@ class NotebookUtilities(object):
 
         return first_numeric
 
+    def format_timedelta(self, timedelta):
+        """
+        Formats a timedelta object to a string in the
+        format '0 sec', '30 sec', '1 min', '1:30', '2 min', etc.
+        
+        Args:
+          timedelta: A timedelta object.
+        
+        Returns:
+          A string in the format '0 sec', '30 sec', '1 min',
+          '1:30', '2 min', etc.
+        """
+        seconds = timedelta.total_seconds()
+        minutes = int(seconds // 60)
+        seconds = int(seconds % 60)
+        
+        if minutes == 0: return f'{seconds} sec'
+        elif seconds > 0: return f'{minutes}:{seconds:02}'
+        else: return f'{minutes} min'
+    
+    
     ### List Functions ###
+    
     
     def conjunctify_nouns(self, noun_list, and_or='and', verbose=False):
         """
@@ -190,6 +213,16 @@ class NotebookUtilities(object):
 
 
     def check_4_doubles(self, item_list, verbose=False):
+        """
+        Check for similar items in the given list.
+
+        Parameters:
+            item_list (list): List of items to be compared.
+            verbose (bool, optional): If True, print the execution time. Default is False.
+
+        Returns:
+            pandas.DataFrame: DataFrame containing similar item pairs and their similarities.
+        """
         if verbose: t0 = time.time()
         rows_list = []
         n = len(item_list)
@@ -251,7 +284,152 @@ class NotebookUtilities(object):
 
         return splits_list
 
+    
+    def convert_strings_to_integers(self, sequence, alphabet_list=None):
+        """
+        Converts a sequence of strings to a sequence of integers.
+        
+        Args:
+            sequence: A sequence of strings.
+            alphabet_list: A list of the unique elements of sequence.
+        
+        Returns:
+            A sequence of integers.
+            A string to integer map as dictionary.
+        """
+        if alphabet_list is None: alphabet_list = list(get_alphabet(sequence))
+        
+        # Create a dictionary to map strings to integers
+        string_to_integer_map = {}
+    
+        # Create a new integer array with the same length as sequence but with no elements in it
+        new_sequence = np.zeros_like(sequence, dtype=int)
+        
+        for i, string in enumerate(sequence):
+            if string not in string_to_integer_map: string_to_integer_map[string] = alphabet_list.index(string)
+            new_sequence[i] = string_to_integer_map[string]
+        
+        return new_sequence.astype(int), string_to_integer_map
+    
+    
+    def count_ngrams(self, actions_list, highlighted_ngrams):
+        """
+        Counts how many times a given sequence of elements occurs in a list.
+        
+        Args:
+            actions_list: A list of elements.
+            highlighted_ngrams: A sequence of elements to count.
+        
+        Returns:
+            The number of times the given sequence of elements occurs in the list.
+        """
+        count = 0
+        for i in range(len(actions_list) - len(highlighted_ngrams) + 1):
+            if (actions_list[i:i + len(highlighted_ngrams)] == highlighted_ngrams): count += 1
+            
+        return count
+    
+    
+    def get_sequences_by_count(self, tg_dict, count=4):
+        """
+        Get sequences from the input dictionary based on a specific sequence length.
+
+        Parameters:
+            tg_dict (dict): Dictionary containing sequences.
+            count (int, optional): Desired length of sequences to filter. Default is 4.
+
+        Returns:
+            list: List of sequences with the specified length.
+        
+        Raises:
+            AssertionError: If no sequences of the specified length are found in the dictionary.
+        """
+        
+        # Count the lengths of sequences in the dictionary to convert the sequence lengths list
+        # into a pandas series to get the value counts of unique sequence lengths
+        value_counts = pd.Series([len(actions_list) for actions_list in tg_dict.values()]).value_counts()
+        
+        # Filter value counts to show only counts of count to get the desired sequence length of exactly count sequences from the dictionary
+        value_counts_list = value_counts[value_counts == count].index.tolist()
+        assert value_counts_list, f"You don't have exactly {count} sequences of the same length in the dictionary"
+        sequences = [
+            actions_list for actions_list in tg_dict.values() if (len(actions_list) == value_counts_list[0])
+        ]
+    
+        return sequences
+    
+    
+    def get_shape(self, list_of_lists):
+        """
+        Returns the shape of a list of lists, assuming the sublists are all of the same length.
+        
+        Args:
+            list_of_lists: A list of lists.
+        
+        Returns:
+            A tuple representing the shape of the list of lists.
+        """
+        
+        # Check if the list of lists is empty.
+        if not list_of_lists: return ()
+        
+        # Get the length of the first sublist.
+        num_cols = len(list_of_lists[0])
+        
+        # Check if all of the sublists are the same length.
+        for sublist in list_of_lists:
+            if len(sublist) != num_cols: raise ValueError('All of the sublists must be the same length.')
+        
+        # Return a tuple representing the shape of the list of lists.
+        return (len(list_of_lists), num_cols)
+    
+    
+    def split_row_indexes_list(self, splitting_indexes_list, large_indexes_list):
+        split_list = []
+        current_list = []
+        for i in range(len(splittin_indexes_list)):
+            current_idx = splittin_indexes_list[i]
+            if current_idx not in large_indexes_list:
+                current_list.append(current_idx)
+            else:
+                if current_list:
+                    split_list.append(current_list)
+                split_list.append([current_idx])
+                current_list = []
+        if current_list:
+            split_list.append(current_list)
+        
+        return split_list
+    
+    
+    def replace_consecutive_elements(self, actions_list, element):
+        """
+        Replaces consecutive elements in a list with a count of how many there are in a row.
+        
+        Args:
+            list1: A list of elements.
+            element: The element to replace consecutive occurrences of.
+        
+        Returns:
+            A list with the consecutive elements replaced with a count of how many there are in a row.
+        """
+        result = []
+        count = 0
+        for i in range(len(actions_list)):
+            if (actions_list[i] == element): count += 1
+            else:
+                if (count > 0): result.append(f'{element} x{str(count)}')
+                result.append(actions_list[i])
+                count = 0
+        
+        # Handle the last element
+        if (count > 0): result.append(f'{element} x{str(count)}')
+        
+        return(result)
+    
+    
     ### File Functions ###
+    
     
     def get_file_path(self, func):
         """
@@ -276,6 +454,57 @@ class NotebookUtilities(object):
 
         # Otherwise, return the relative file path
         else: return os.path.relpath(file_path)
+    
+    
+    def get_notebook_functions_dictionary(self, github_folder=None):
+        """
+        Gets a dictionary of all functions defined within notebooks in the github folder,
+        with the key being the function name,
+        and the value being the count of how many times the function has been defined.
+
+        Parameters:
+            github_folder (str, optional): The path of the root folder of the GitHub repository containing the notebooks.
+                                           Defaults to the parent directory of the current working directory.
+
+        Returns:
+            dict: The dictionary of function definitions with the count of their occurances.
+        """
+        fn_regex = re.compile(r'\s+"def ([a-z0-9_]+)\(')
+        black_list = ['.ipynb_checkpoints', '$Recycle.Bin']
+        if github_folder is None: github_folder = osp.dirname(osp.abspath(osp.curdir))
+        rogue_fns_dict = {}
+        for sub_directory, directories_list, files_list in os.walk(github_folder):
+            if all(map(lambda x: x not in sub_directory, black_list)):
+                for file_name in files_list:
+                    if file_name.endswith('.ipynb') and not ('Attic' in file_name):
+                        file_path = osp.join(sub_directory, file_name)
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            lines_list = f.readlines()
+                            for line in lines_list:
+                                match_obj = fn_regex.search(line)
+                                if match_obj:
+                                    fn = match_obj.group(1)
+                                    rogue_fns_dict[fn] = rogue_fns_dict.get(fn, 0) + 1
+        
+        return rogue_fns_dict
+    
+    
+    def get_notebook_functions_set(self, github_folder=None):
+        """
+        Gets a set of all functions defined within notebooks in the github folder.
+
+        Parameters:
+            github_folder (str, optional): The path of the root folder of the GitHub repository containing the notebooks.
+                                           Defaults to the parent directory of the current working directory.
+
+        Returns:
+            set: The set of function definitions.
+        """
+        if github_folder is None: github_folder = osp.dirname(osp.abspath(osp.curdir))
+        rogue_fns_set = set([k for k in self.get_notebook_functions_dictionary(github_folder=github_folder).keys()])
+        
+        return rogue_fns_set
+    
     
     def show_duplicated_util_fns_search_string(self, util_path=None, github_folder=None):
         """
@@ -307,27 +536,12 @@ class NotebookUtilities(object):
                     utils_set.add(scraping_util)
 
         # Make a set of rogue util functions
-        fn_regex = re.compile(r'\s+"def ([a-z0-9_]+)\(')
-        black_list = ['.ipynb_checkpoints', '$Recycle.Bin']
-        rows_list = []
         if github_folder is None: github_folder = osp.dirname(osp.abspath(osp.curdir))
-        rogue_fns_set = set()
-        for sub_directory, directories_list, files_list in os.walk(github_folder):
-            if all(map(lambda x: x not in sub_directory, black_list)):
-                for file_name in files_list:
-                    if file_name.endswith('.ipynb'):
-                        file_path = osp.join(sub_directory, file_name)
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            lines_list = f.readlines()
-                            for line in lines_list:
-                                match_obj = fn_regex.search(line)
-                                if match_obj:
-                                    fn = match_obj.group(1)
-                                    if fn in utils_set: rogue_fns_set.add(fn)
+        rogue_fns_list = [fn for fn in self.get_notebook_functions_dictionary(github_folder=github_folder).keys() if fn in utils_set]
         
-        if rogue_fns_set:
+        if rogue_fns_list:
             print(f'Search for *.ipynb; file masks in the {github_folder} folder for this pattern:')
-            print('\\s+"def (' + '|'.join(rogue_fns_set) + ')\(')
+            print('\\s+"def (' + '|'.join(rogue_fns_list) + ')\(')
             print('Replace each of the calls to these definitions with calls the the nu. equivalent (and delete the definitions).')
 
     ### Storage Functions ###
@@ -814,7 +1028,7 @@ class NotebookUtilities(object):
         return table_dfs_list
 
     def get_page_tables(self, tables_url_or_filepath, verbose=True):
-        '''
+        """
         import sys
         sys.path.insert(1, '../py')
         from notebook_utils import NotebookUtilities
@@ -822,7 +1036,7 @@ class NotebookUtilities(object):
         nu = NotebookUtilities(data_folder_path=os.path.abspath('../data'))
         tables_url = 'https://en.wikipedia.org/wiki/Provinces_of_Afghanistan'
         page_tables_list = nu.get_page_tables(tables_url)
-        '''
+        """
         if self.url_regex.fullmatch(tables_url_or_filepath) or self.filepath_regex.fullmatch(tables_url_or_filepath):
             tables_df_list = pd.read_html(tables_url_or_filepath)
         else:
@@ -857,7 +1071,7 @@ class NotebookUtilities(object):
     ### Pandas Functions ###
     
     def get_row_dictionary(self, value_obj, row_dict={}, key_prefix=''):
-        '''
+        """
         This function takes a value_obj (either a dictionary, list or scalar value) and creates a flattened dictionary from it, where
         keys are made up of the keys/indices of nested dictionaries and lists. The keys are constructed with a key_prefix
         (which is updated as the function traverses the value_obj) to ensure uniqueness. The flattened dictionary is stored in the
@@ -876,7 +1090,7 @@ class NotebookUtilities(object):
         ----------
         row_dict : dict
             The flattened dictionary representation of the value_obj.
-        '''
+        """
         
         # Check if the value is a dictionary
         if type(value_obj) == dict:
@@ -980,6 +1194,79 @@ class NotebookUtilities(object):
         
         return(blank_ranking_df)
     
+    def get_inf_nan_mask(self, x_list, y_list):
+        """
+        Returns a mask indicating which elements of x_list and y_list are not inf or nan.
+        
+        Args:
+        x_list: A list of numbers.
+        y_list: A list of numbers.
+        
+        Returns:
+        A numpy array of booleans, where True indicates that the corresponding element
+        of x_list and y_list is not inf or nan.
+        """
+        
+        import numpy as np
+        
+        # Check if the input lists are empty.
+        if not x_list or not y_list: return np.array([], dtype=bool)
+        
+        # Create masks indicating which elements of x_list and y_list are not inf or nan.
+        x_mask = np.logical_and(np.logical_not(np.isinf(x_list)), np.logical_not(np.isnan(x_list)))
+        y_mask = np.logical_and(np.logical_not(np.isinf(y_list)), np.logical_not(np.isnan(y_list)))
+        
+        # Return a mask indicating which elements of both x_list and y_list are not inf or nan.
+        return np.logical_and(x_mask, y_mask)
+
+    def get_statistics(self, describable_df, columns_list):
+        df = describable_df[columns_list].describe().rename(index={'std': 'SD'})
+        
+        if ('mode' not in df.index):
+            
+            # Create the mode row dictionary
+            row_dict = {cn: describable_df[cn].mode().tolist()[0] for cn in columns_list}
+            
+            # Convert the row dictionary to a data frame to match the df structure
+            row_df = pd.DataFrame([row_dict], index=['mode'])
+            
+            # Append the row data frame to the df data frame
+            df = pd.concat([df, row_df], axis='index', ignore_index=False)
+        
+        if ('median' not in df.index):
+            
+            # Create the median row dictionary
+            row_dict = {cn: describable_df[cn].median() for cn in columns_list}
+            
+            # Convert the row dictionary to a data frame to match the df structure
+            row_df = pd.DataFrame([row_dict], index=['median'])
+            
+            # Append the row data frame to the df data frame
+            df = pd.concat([df, row_df], axis='index', ignore_index=False)
+        
+        index_list = ['mean', 'mode', 'median', 'SD', 'min', '25%', '50%', '75%', 'max']
+        mask_series = df.index.isin(index_list)
+        
+        return df[mask_series].reindex(index_list)
+    
+    def show_time_statistics(self, describable_df, columns_list):
+        df = self.get_statistics(describable_df, columns_list).applymap(lambda x: self.format_timedelta(timedelta(milliseconds=int(x))), na_action='ignore').T
+        df.SD = df.SD.map(lambda x: '±' + str(x))
+        display(df)
+    
+    def modalize_columns(self, df, columns_list, new_column):
+        mask_series = (df[columns_list].apply(pd.Series.nunique, axis='columns') == 1)
+        df.loc[~mask_series, new_column] = np.nan
+        f = lambda srs: srs[srs.first_valid_index()]
+        df.loc[mask_series, new_column] = df[mask_series][columns_list].apply(f, axis='columns')
+    
+        return df
+    
+    def convert_to_df(self, row_index, row_series, verbose=True):
+        if verbose and (type(row_index) != int): print(type(row_index))
+        df = DataFrame(data=row_series.to_dict(), index=[row_index])
+        
+        return df
     ### 3D Point Functions ###
     
     def get_coordinates(self, second_point, first_point=None):
@@ -1074,7 +1361,6 @@ class NotebookUtilities(object):
     
     def get_random_subdictionary(self, super_dict, n=5):
         keys = list(super_dict.keys())
-        import random
         random_keys = random.sample(keys, n)
         sub_dict = {}
         for key in random_keys: sub_dict[key] = super_dict[key]
@@ -1441,3 +1727,217 @@ class NotebookUtilities(object):
         ax.set_xlabel(f'Year of {inaugruation_verb}')
         ax.set_ylabel(f'Age at {inaugruation_verb}')
         text_obj = ax.set_title(f'{title_prefix} {inaugruation_verb} Age vs Year')
+    
+    def plot_grouped_box_and_whiskers(self, transformable_df, x_column_name, y_column_name, x_label, y_label, transformer_name='min', is_y_temporal=True):    
+        import seaborn as sns
+        
+        # Get the transformed data frame
+        if transformer_name is None: transformed_df = transformable_df
+        else:
+            groupby_columns = ['session_uuid', 'scene_index']
+            transformed_df = transformable_df.groupby(groupby_columns).filter(
+                lambda df: not df[y_column_name].isnull().any()
+            ).groupby(groupby_columns).transform(transformer_name).reset_index(drop=False).sort_values(y_column_name)
+        
+        # Create a figure and subplots
+        fig, ax = plt.subplots(1, 1, figsize=(9, 9))
+        
+        # Create a box plot of the y column grouped by the x column
+        sns.boxplot(
+            x=x_column_name,
+            y=y_column_name,
+            showmeans=True,
+            data=transformed_df,
+            ax=ax
+        )
+        
+        # Rotate the x-axis labels to prevent overlapping
+        plt.xticks(rotation=45)
+        
+        # Label the x- and y-axis
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+        
+        # Humanize y tick labels
+        if is_y_temporal:
+            yticklabels_list = []
+            for text_obj in ax.get_yticklabels():
+                text_obj.set_text(
+                    humanize.precisedelta(timedelta(milliseconds=text_obj.get_position()[1])).replace(', ', ',\n').replace(' and ', ' and\n')
+                )
+                yticklabels_list.append(text_obj)
+            ax.set_yticklabels(yticklabels_list);
+        
+        plt.show()
+    
+    def plot_sequence(self, sequence, highlighted_ngrams=[], color_dict=None, suptitle=None, verbose=False):
+        """
+        Creates a standard sequence plot where each element corresponds to a position on the y-axis.
+        The optional highlighted_ngrams parameter can be one or more n-grams to be outlined in a red box.
+        
+        Args:
+            sequence: A list of strings or integers representing the sequence to plot.
+            highlighted_ngrams: A list of n-grams to be outlined in a red box.
+            color_dict: An optional dictionary whose keys are the alphabet list and whose values are
+                        a single color format string to allow consistent visualization between calls.
+            suptitle: An optional title for the plot.
+            verbose: A boolean indicating whether to print verbose output.
+        
+        Returns:
+            A matplotlib figure object.
+        """
+    
+        # Convert the sequence to a NumPy array
+        np_sequence = np.array(sequence)
+        
+        # Get the unique characters in the sequence and potentially use them to set up the color dictionary
+        if highlighted_ngrams and (type(highlighted_ngrams[0]) is list): alphabet_list = list(get_alphabet(sequence+[el for sublist in highlighted_ngrams for el in sublist]))
+        else: alphabet_list = list(get_alphabet(sequence+highlighted_ngrams))
+        if color_dict is None: color_dict = {a: None for a in alphabet_list}
+        
+        # Get the length of the alphabet
+        alphabet_len = len(alphabet_list)
+        
+        # Convert the sequence to integers
+        int_sequence, _ = self.convert_strings_to_integers(np_sequence)
+        
+        # Create a string-to-integer map
+        if highlighted_ngrams and (type(highlighted_ngrams[0]) is list):
+            _, string_to_integer_map = self.convert_strings_to_integers(sequence+[el for sublist in highlighted_ngrams for el in sublist])
+        else: _, string_to_integer_map = self.convert_strings_to_integers(sequence+highlighted_ngrams)
+        
+        # If the sequence is not already in integer format, convert it
+        if (np_sequence.dtype.str not in ['<U21', '<U11']): int_sequence = np_sequence
+        
+        # Create a figure
+        fig = plt.figure(figsize=[len(sequence)*0.3, alphabet_len * 0.3])
+        
+        # Force the xticks to land on integers only
+        xtick_locations = range(len(sequence))
+        xtick_labels = [n+1 for n in xtick_locations]
+        plt.xticks(ticks=xtick_locations, labels=xtick_labels, minor=False)
+        
+        # Extend the edges of the plot
+        plt.xlim([-0.5, len(sequence)-0.5])
+        
+        # Iterate over the alphabet and plot the points for each character
+        for i, value in enumerate(alphabet_list):
+            
+            # Print verbose output if requested
+            if verbose: print(i, value)
+            
+            # Get the positions of the current character in the sequence
+            points = np.where(np_sequence == value, i, np.nan)
+            
+            # Print verbose output if requested
+            if verbose: print(range(len(np_sequence)))
+            if verbose: print(points)
+            
+            # Plot the points
+            plt.scatter(x=range(len(np_sequence)), y=points, marker='s', label=value, s=35, color=color_dict[value])
+            if verbose:
+                color_cycle = plt.rcParams['axes.prop_cycle']
+                print('\nPrinting the colors in the color cycle:')
+                for color in color_cycle: print(color)
+                print()
+        
+        # Set the yticks
+        plt.yticks(range(alphabet_len), [value for value in alphabet_list])
+        
+        # Set the y limits
+        plt.ylim(-1, alphabet_len)
+        
+        # Highlight any of the n-grams given
+        if highlighted_ngrams != []:
+            
+            # Print verbose output if requested
+            if verbose: display(highlighted_ngrams)
+            
+            def highlight_ngram(ngram):
+                
+                # Print verbose output if requested
+                if verbose: display(ngram)
+                
+                # Get the length of the n-gram
+                n = len(ngram)
+                
+                # Find all matches of the n-gram in the sequence
+                match_positions = []
+                for x in range(len(int_sequence) - n + 1):
+                    this_ngram = list(int_sequence[x:x + n])
+                    
+                    # Print verbose output if requested
+                    if verbose: print(str(this_ngram), str(ngram))
+                    
+                    if str(this_ngram) == str(ngram): match_positions.append(x)
+                
+                # Draw a red box around each match
+                for position in match_positions:
+                    bot = min(ngram) - 0.5
+                    top = max(ngram) + 0.5
+                    left = position - 0.25
+                    right = left + n - 0.5
+                    
+                    line_width = 1
+                    plt.plot([left,right], [bot,bot], color='red', linewidth=line_width)
+                    plt.plot([left,right], [top,top], color='red', linewidth=line_width)
+                    plt.plot([left,left], [bot,top], color='red', linewidth=line_width)
+                    plt.plot([right,right], [bot,top], color='red', linewidth=line_width)
+    
+            # check if only one n-gram has been supplied
+            if type(highlighted_ngrams[0]) is str: highlight_ngram([string_to_integer_map[x] for x in highlighted_ngrams])
+            elif type(highlighted_ngrams[0]) is int: highlight_ngram(highlighted_ngrams)
+    
+            # multiple n-gram's found
+            else:
+                for ngram in highlighted_ngrams:
+                    if type(ngram[0]) is str: highlight_ngram([string_to_integer_map[x] for x in ngram])
+        
+        if suptitle is not None: fig.suptitle(suptitle, y=1.2)
+        
+        return fig
+    
+    def plot_sequences(self, sequences, gap=True):
+        """
+        Creates a scatter-style sequence plot for a collection of sequences.
+        """
+        max_sequence_length = max([len(s) for s in sequences])
+        plt.figure(figsize=[max_sequence_length*0.3,0.3 * len(sequences)])
+        
+        for y, sequence in enumerate(sequences):
+            np_sequence = np.array(sequence)
+            alphabet_len = len(get_alphabet(sequence))
+            
+            plt.gca().set_prop_cycle(None)
+            unique_values = get_alphabet(sequence)
+            for i, value in enumerate(unique_values):
+                
+                if gap:
+                    points = np.where(np_sequence == value, y + 1, np.nan)
+                    plt.scatter(x=range(len(np_sequence)), y=points, marker='s', label=value, s=100)
+                else:
+                    points = np.where(np_sequence == value, 1, np.nan)
+                    plt.bar(range(len(points)), points, bottom=[y for x in range(len(points))], width=1, align='edge', label=value)
+        
+        if gap:
+            plt.ylim(0.4, len(sequences) + 0.6)
+            plt.xlim(-0.6, max_sequence_length - 0.4)
+        else:
+            plt.ylim(0, len(sequences))
+            plt.xlim(0, max_sequence_length)
+        
+        # Force the xticks to land on integers only (assume all sequences are of equal length)
+        xtick_locations = range(len(sequences[0]))
+        xtick_labels = [n+1 for n in xtick_locations]
+        plt.xticks(ticks=xtick_locations, labels=xtick_labels, minor=False)
+        
+        handles, labels = plt.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        plt.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.0, 1.1), loc='upper left')
+        plt.tick_params(
+            axis='y',
+            which='both',
+            left=False,
+            labelleft=False)
+        
+        return plt
