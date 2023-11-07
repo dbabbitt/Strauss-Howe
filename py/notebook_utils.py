@@ -143,11 +143,31 @@ class NotebookUtilities(object):
 
         return first_numeric
     
+    def format_timedelta(self, time_delta):
+        """
+        Formats a time delta object to a string in the
+        format '0 sec', '30 sec', '1 min', '1:30', '2 min', etc.
+        
+        Args:
+          time_delta: A time delta object.
+        
+        Returns:
+          A string in the format '0 sec', '30 sec', '1 min',
+          '1:30', '2 min', etc.
+        """
+        seconds = time_delta.total_seconds()
+        minutes = int(seconds // 60)
+        seconds = int(seconds % 60)
+        
+        if minutes == 0: return f'{seconds} sec'
+        elif seconds > 0: return f'{minutes}:{seconds:02}'
+        else: return f'{minutes} min'
+    
     
     ### List Functions ###
     
     
-    def conjunctify_nouns(self, noun_list, and_or='and', verbose=False):
+    def conjunctify_nouns(self, noun_list=None, and_or='and', verbose=False):
         """
         Concatenates a list of nouns into a grammatically correct string with specified conjunctions.
         
@@ -472,6 +492,32 @@ class NotebookUtilities(object):
         
         # Return the split list
         return split_list
+    
+    
+    def replace_consecutive_elements(self, actions_list, element):
+        """
+        Replaces consecutive elements in a list with a count of how many there are in a row.
+        
+        Args:
+            list1: A list of elements.
+            element: The element to replace consecutive occurrences of.
+        
+        Returns:
+            A list with the consecutive elements replaced with a count of how many there are in a row.
+        """
+        result = []
+        count = 0
+        for i in range(len(actions_list)):
+            if (actions_list[i] == element): count += 1
+            else:
+                if (count > 0): result.append(f'{element} x{str(count)}')
+                result.append(actions_list[i])
+                count = 0
+        
+        # Handle the last element
+        if (count > 0): result.append(f'{element} x{str(count)}')
+        
+        return(result)
     
     
     ### File Functions ###
@@ -1079,11 +1125,12 @@ class NotebookUtilities(object):
         tables_url = 'https://en.wikipedia.org/wiki/Provinces_of_Afghanistan'
         page_tables_list = nu.get_page_tables(tables_url)
         """
+        if self.filepath_regex.fullmatch(tables_url_or_filepath): assert osp.isfile(tables_url_or_filepath), f"{tables_url_or_filepath} doesn't exist"
         if self.url_regex.fullmatch(tables_url_or_filepath) or self.filepath_regex.fullmatch(tables_url_or_filepath):
             tables_df_list = read_html(tables_url_or_filepath)
         else:
-            import io
-            f = io.StringIO(tables_url_or_filepath)
+            from io import StringIO
+            f = StringIO(tables_url_or_filepath)
             tables_df_list = read_html(f)
         if verbose:
             print(sorted([(i, df.shape) for (i, df) in enumerate(tables_df_list)],
@@ -1312,6 +1359,41 @@ class NotebookUtilities(object):
         # Return a mask indicating which elements of both x_list and y_list are not inf or nan.
         return np.logical_and(x_mask, y_mask)
 
+    def get_statistics(self, describable_df, columns_list):
+        df = describable_df[columns_list].describe().rename(index={'std': 'SD'})
+        
+        if ('mode' not in df.index):
+            
+            # Create the mode row dictionary
+            row_dict = {cn: describable_df[cn].mode().tolist()[0] for cn in columns_list}
+            
+            # Convert the row dictionary to a data frame to match the df structure
+            row_df = DataFrame([row_dict], index=['mode'])
+            
+            # Append the row data frame to the df data frame
+            df = concat([df, row_df], axis='index', ignore_index=False)
+        
+        if ('median' not in df.index):
+            
+            # Create the median row dictionary
+            row_dict = {cn: describable_df[cn].median() for cn in columns_list}
+            
+            # Convert the row dictionary to a data frame to match the df structure
+            row_df = DataFrame([row_dict], index=['median'])
+            
+            # Append the row data frame to the df data frame
+            df = concat([df, row_df], axis='index', ignore_index=False)
+        
+        index_list = ['mean', 'mode', 'median', 'SD', 'min', '25%', '50%', '75%', 'max']
+        mask_series = df.index.isin(index_list)
+        
+        return df[mask_series].reindex(index_list)
+    
+    def show_time_statistics(self, describable_df, columns_list):
+        df = self.get_statistics(describable_df, columns_list).applymap(lambda x: self.format_timedelta(timedelta(milliseconds=int(x))), na_action='ignore').T
+        df.SD = df.SD.map(lambda x: '±' + str(x))
+        display(df)
+    
     def modalize_columns(self, df, columns_list, new_column):
         mask_series = (df[columns_list].apply(Series.nunique, axis='columns') == 1)
         df.loc[~mask_series, new_column] = np.nan
@@ -1458,7 +1540,7 @@ class NotebookUtilities(object):
     
     def get_color_cycler(self, n):
         """
-        color_cycler = self.get_color_cycler(len(possible_cause_list))
+        color_cycler = nu.get_color_cycler(len(possible_cause_list))
         for possible_cause, face_color_dict in zip(possible_cause_list, color_cycler()):
             face_color = face_color_dict['color']
         """
@@ -1856,7 +1938,7 @@ class NotebookUtilities(object):
         
         plt.show()
     
-    def plot_sequence(self, sequence, highlighted_ngrams=[], color_dict=None, suptitle=None, verbose=False):
+    def plot_sequence(self, sequence, highlighted_ngrams=[], color_dict=None, suptitle=None, first_element='SESSION_START', last_element='SESSION_END', verbose=False):
         """
         Creates a standard sequence plot where each element corresponds to a position on the y-axis.
         The optional highlighted_ngrams parameter can be one or more n-grams to be outlined in a red box.
@@ -1877,8 +1959,12 @@ class NotebookUtilities(object):
         np_sequence = np.array(sequence)
         
         # Get the unique characters in the sequence and potentially use them to set up the color dictionary
-        if highlighted_ngrams and (type(highlighted_ngrams[0]) is list): alphabet_list = list(get_alphabet(sequence+[el for sublist in highlighted_ngrams for el in sublist]))
-        else: alphabet_list = list(get_alphabet(sequence+highlighted_ngrams))
+        if highlighted_ngrams and (type(highlighted_ngrams[0]) is list): alphabet_list = sorted(get_alphabet(sequence+[el for sublist in highlighted_ngrams for el in sublist]))
+        else: alphabet_list = sorted(get_alphabet(sequence+highlighted_ngrams))
+        if last_element in alphabet_list:
+            alphabet_list.remove(last_element)
+            alphabet_list.append(last_element)
+        if first_element in alphabet_list: alphabet_list.insert(0, alphabet_list.pop(alphabet_list.index(first_element)))
         if color_dict is None: color_dict = {a: None for a in alphabet_list}
         
         # Get the length of the alphabet
