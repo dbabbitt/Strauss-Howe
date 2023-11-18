@@ -312,11 +312,11 @@ def get_modules_dataframe():
 
 def get_all_files_containing(root_dir=r'../', contains_str='test', black_list=['.git']):
     file_path_list = []
-    if type(root_dir) == list:
+    if isinstance(root_dir, list):
         root_dir_list = root_dir
     else:
         root_dir_list = [root_dir]
-    if type(contains_str) == list:
+    if isinstance(contains_str, list):
         contains_list = contains_str
     else:
         contains_list = [contains_str]

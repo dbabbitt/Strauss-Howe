@@ -9,15 +9,15 @@ import subprocess
 
 def print_all_files_ending_starting_with(root_dir=r'D:\Documents\GitHub', ends_with='.yml', starts_with='install_config_',
                                          black_list=['$RECYCLE.BIN', '$Recycle.Bin']):
-    if type(root_dir) == list:
+    if isinstance(root_dir, list):
         root_dir_list = root_dir
     else:
         root_dir_list = [root_dir]
-    if type(ends_with) == list:
+    if isinstance(ends_with, list):
         endswith_list = ends_with
     else:
         endswith_list = [ends_with]
-    if type(starts_with) == list:
+    if isinstance(starts_with, list):
         startswith_list = starts_with
     else:
         startswith_list = [starts_with]
@@ -40,11 +40,11 @@ def print_all_files_ending_starting_with(root_dir=r'D:\Documents\GitHub', ends_w
 
 def print_all_files_starting_with(root_dir=r'D:\Vagrant_Projects\local-vagrant', starts_with='host',
                                   black_list=['$RECYCLE.BIN', '$Recycle.Bin']):
-    if type(root_dir) == list:
+    if isinstance(root_dir, list):
         root_dir_list = root_dir
     else:
         root_dir_list = [root_dir]
-    if type(starts_with) == list:
+    if isinstance(starts_with, list):
         startswith_list = starts_with
     else:
         startswith_list = [starts_with]
@@ -63,11 +63,11 @@ def print_all_files_starting_with(root_dir=r'D:\Vagrant_Projects\local-vagrant',
 
 
 def print_all_files_ending_with(root_dir=r'D:\\', ends_with='.box', black_list=['$RECYCLE.BIN', '$Recycle.Bin']):
-    if type(root_dir) == list:
+    if isinstance(root_dir, list):
         root_dir_list = root_dir
     else:
         root_dir_list = [root_dir]
-    if type(ends_with) == list:
+    if isinstance(ends_with, list):
         endswith_list = ends_with
     else:
         endswith_list = [ends_with]
