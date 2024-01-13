@@ -7,11 +7,13 @@
 
 # Soli Deo gloria
 
+from bs4 import BeautifulSoup as bs
 from datetime import timedelta
 from os import listdir as listdir, makedirs as makedirs, path as osp
 from pandas import DataFrame, Series, concat, read_csv, read_html
 from typing import List, Optional
 import humanize
+import math
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -20,14 +22,13 @@ import re
 import subprocess
 import sys
 import urllib
+import warnings
 try: import dill as pickle
 except:
     try: import pickle5 as pickle
     except: import pickle
 
-import warnings
 warnings.filterwarnings('ignore')
-
 class NotebookUtilities(object):
     """
     This class implements the core of the utility
@@ -47,7 +48,6 @@ class NotebookUtilities(object):
     """
     
     def __init__(self, data_folder_path=None, saves_folder_path=None, verbose=False):
-        self.verbose = verbose
         self.pip_command_str = f'{sys.executable} -m pip'
         # self.update_modules_list(verbose=verbose)
         
@@ -55,18 +55,14 @@ class NotebookUtilities(object):
         self.github_folder = osp.dirname(osp.abspath(osp.curdir))
         
         # Create the data folder if it doesn't exist
-        if data_folder_path is None:
-            self.data_folder = '../data'
-        else:
-            self.data_folder = data_folder_path
+        if data_folder_path is None: self.data_folder = '../data'
+        else: self.data_folder = data_folder_path
         makedirs(self.data_folder, exist_ok=True)
         if verbose: print('data_folder: {}'.format(osp.abspath(self.data_folder)), flush=True)
         
         # Create the saves folder if it doesn't exist
-        if saves_folder_path is None:
-            self.saves_folder = '../saves'
-        else:
-            self.saves_folder = saves_folder_path
+        if saves_folder_path is None: self.saves_folder = '../saves'
+        else: self.saves_folder = saves_folder_path
         makedirs(self.saves_folder, exist_ok=True)
         if verbose: print('saves_folder: {}'.format(osp.abspath(self.saves_folder)), flush=True)
         
@@ -87,19 +83,37 @@ class NotebookUtilities(object):
         self.graphs_folder = osp.join(self.saves_folder, 'graphs'); makedirs(self.graphs_folder, exist_ok=True)
         self.indices_folder = osp.join(self.saves_folder, 'indices'); makedirs(self.indices_folder, exist_ok=True)
         
+        # Various model paths
+        self.lora_path = osp.abspath(osp.join(self.bin_folder, 'gpt4all-lora-quantized.bin'))
+        self.gpt4all_model_path = osp.abspath(osp.join(self.bin_folder, 'gpt4all-lora-q-converted.bin'))
+        self.ggjt_model_path = osp.abspath(osp.join(
+            self.cache_folder, 'models--LLukas22--gpt4all-lora-quantized-ggjt', 'snapshots', '2e7367a8557085b8267e1f3b27c209e272b8fe6c',
+            'ggjt-model.bin'
+        ))
+        
         # Ensure the Scripts folder is in PATH
         self.anaconda_folder = osp.dirname(sys.executable)
         self.scripts_folder = osp.join(self.anaconda_folder, 'Scripts')
-        if self.scripts_folder not in sys.path:
-            sys.path.insert(1, self.scripts_folder)
+        if self.scripts_folder not in sys.path: sys.path.insert(1, self.scripts_folder)
 
         # Handy list of the different types of encodings
-        self.encoding_type = ['latin1', 'iso8859-1', 'utf-8'][2]
+        self.encoding_types_list = ['utf-8', 'latin1', 'iso8859-1']
+        self.encoding_type = self.encoding_types_list[0]
+        self.encoding_errors_list = ['ignore', 'replace', 'xmlcharrefreplace']
+        self.encoding_error = self.encoding_errors_list[2]
+        self.decoding_types_list = [
+            'ascii', 'cp037', 'cp437', 'cp863', 'utf_32', 'utf_32_be', 'utf_32_le', 'utf_16',
+            'utf_16_be', 'utf_16_le', 'utf_7', 'utf_8', 'utf_8_sig', 'latin1', 'iso8859-1'
+        ]
+        self.decoding_type = self.decoding_types_list[11]
+        self.decoding_errors_list = self.encoding_errors_list.copy()
+        self.decoding_error = self.decoding_errors_list[2]
         
         # Determine URL from file path
         self.url_regex = re.compile(r'\b(https?|file)://[-A-Z0-9+&@#/%?=~_|$!:,.;]*[A-Z0-9+&@#/%=~_|$]', re.IGNORECASE)
         self.filepath_regex = re.compile(
-            r'\b[c-d]:\\(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F]\\)*(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F])', re.IGNORECASE
+            r'\b[c-d]:\\(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F]\\)*(?:[^\\/:*?"<>|\x00-\x1F]{0,254}[^.\\/:*?"<>|\x00-\x1F])',
+            re.IGNORECASE
         )
         
         # Various aspect ratios
@@ -145,7 +159,7 @@ class NotebookUtilities(object):
         """
         
         # Split the input string using various separators
-        stripped_list = re.split(r'( |/|–|\\u2009|-|\[)', str(x), 0)
+        stripped_list = re.split(r'( |/|\x96|\u2009|-|\[)', str(x), 0)
         
         # Remove non-numeric characters from each element in the stripped list
         stripped_list = [re.sub(r'\D+', '', x) for x in stripped_list]
@@ -462,10 +476,12 @@ class NotebookUtilities(object):
             row_dict = {}
             row_dict['first_item'] = first_item
             row_dict['second_item'] = max_item
-            row_dict['first_bytes'] = '-'.join(str(x) for x in bytearray(str(first_item),
-                                                                         encoding=self.encoding_type, errors='replace'))
-            row_dict['second_bytes'] = '-'.join(str(x) for x in bytearray(str(max_item),
-                                                                          encoding=self.encoding_type, errors='replace'))
+            row_dict['first_bytes'] = '-'.join(str(x) for x in bytearray(
+                str(first_item), encoding=self.encoding_type, errors='replace'
+            ))
+            row_dict['second_bytes'] = '-'.join(str(x) for x in bytearray(
+                str(max_item), encoding=self.encoding_type, errors='replace'
+            ))
             row_dict['max_similarity'] = max_similarity
 
             rows_list.append(row_dict)
@@ -537,7 +553,7 @@ class NotebookUtilities(object):
         column_list = ['left_item', 'right_item', 'max_similarity']
         
         # Create a data frame from the list of rows, rename columns if necessary
-        name_similarities_df = pd.DataFrame(rows_list, columns=column_list).rename(columns=rename_dict)
+        name_similarities_df = DataFrame(rows_list, columns=column_list).rename(columns=rename_dict)
         
         # Print the time taken for the computation if verbose is True
         if verbose:
@@ -653,7 +669,8 @@ class NotebookUtilities(object):
         return turbulence
     
     
-    def replace_consecutive_elements(self, actions_list, element):
+    @staticmethod
+    def replace_consecutive_elements(actions_list, element):
         """
         Replaces consecutive elements in a list with a count of how many there are in a row.
         
@@ -769,7 +786,7 @@ class NotebookUtilities(object):
             The function uses subprocess to run the specified text editor with the provided file path.
         
         Example:
-            nu.open_path_in_notepad('C:/example.txt')
+            nu.open_path_in_notepad(r'C:\example.txt')
         """
         
         # Expand '~' to the home directory in the file path
@@ -784,10 +801,13 @@ class NotebookUtilities(object):
 
         # Open the absolute path to the file in Notepad or the specified text editor
         # !"{text_editor_path}" "{absolute_path}"
-        import subprocess
-        try: subprocess.run([text_editor_path, absolute_path])
-        except FileNotFoundError as e: subprocess.run(['explorer.exe', osp.dirname(absolute_path)])
-
+        cmd = [text_editor_path, absolute_path]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+        if (proc.returncode != 0):
+            if verbose: print('Open attempt failed: ' + err.decode('utf8'))
+            subprocess.run(['explorer.exe', osp.dirname(absolute_path)])
+    
     
     @staticmethod
     def get_top_level_folder_paths(folder_path, verbose=False):
@@ -936,8 +956,8 @@ class NotebookUtilities(object):
         
         # Return the list of DataFrame pickle file names
         return dfs_list
-    
-    
+            
+
     def show_dupl_fn_defs_search_string(self, util_path=None, github_folder=None):
         """
         Identifies and reports duplicate function definitions in Jupyter notebooks and suggests how to consolidate them.
@@ -1046,7 +1066,7 @@ class NotebookUtilities(object):
             os.remove(pickle_path)
             if verbose: print(e, ": Couldn't save {:,} cells as a pickle.".format(df.shape[0]*df.shape[1]), flush=True)
             if raise_exception: raise
-
+    
     
     def csv_exists(self, csv_name, folder_path=None, verbose=False):
         """
@@ -1452,8 +1472,8 @@ class NotebookUtilities(object):
     @staticmethod
     def get_style_column(tag_obj, verbose=False):
         """
-        Extracts the style column from a given BeautifulSoup tag object and returns
-        the style column tag object.
+        Extracts the style column from a given Wikipedia infobox BeautifulSoup'd
+        tag object and returns the style column tag object.
     
         Parameters:
             tag_obj (bs4.element.Tag): The BeautifulSoup tag object to extract the style column from.
@@ -1543,12 +1563,14 @@ class NotebookUtilities(object):
         return file_path
 
     
-    def get_page_soup(self, page_url_or_filepath, verbose=False):
+    def get_page_soup(self, page_url_or_filepath, driver=None, verbose=False):
         """
         Gets the BeautifulSoup soup object for a given page URL or filepath.
 
         Parameters:
             page_url_or_filepath (str): The URL or filepath of the page to get the soup object for.
+            driver (selenium.webdriver, optional): Whether to get the page source from the Selenium
+                webpage. Defaults to None.
             verbose (bool, optional): Whether to print verbose output. Defaults to True.
 
         Returns:
@@ -1557,9 +1579,9 @@ class NotebookUtilities(object):
             
         # Check if the page URL or filepath is a URL
         if self.url_regex.fullmatch(page_url_or_filepath):
-
-            # If the page URL or filepath is a URL, open it using urllib.request.urlopen()
-            with urllib.request.urlopen(page_url_or_filepath) as response: page_html = response.read()
+            if driver is None:
+                with urllib.request.urlopen(page_url_or_filepath) as response: page_html = response.read()
+            else: page_html = driver.page_source
         
         # If the page URL or filepath is not a URL, ensure it exists and open it using open()
         elif self.filepath_regex.fullmatch(page_url_or_filepath):
@@ -1570,7 +1592,6 @@ class NotebookUtilities(object):
         else: page_html = page_url_or_filepath
 
         # Parse the page HTML using BeautifulSoup
-        from bs4 import BeautifulSoup as bs
         page_soup = bs(page_html, 'html.parser')
 
         # If verbose output is enabled, print the page URL or filepath
@@ -1679,6 +1700,61 @@ class NotebookUtilities(object):
 
         # Return the list of DataFrames
         return table_dfs_list
+    
+    
+    def get_wiki_infobox_data_frame(self, page_titles_list, verbose=True):
+        """
+        Gets a DataFrame of the key/value pairs from the infobox of a Wikipedia biographical entry.
+
+        Parameters:
+            page_titles_list: A list of titles of the Wikipedia pages containing the infoboxes.
+            verbose: Whether to print verbose output.
+
+        Returns:
+            A DataFrame containing the data from the Wikipedia infobox.
+        
+        Note:
+            It is assumed that the infobox contains no headers which would prefix any duplicate labels
+        """
+        import wikipedia
+        ascii_regex = re.compile('[^a-z0-9]+')
+        rows_list = []
+        def clean_text(parent_soup, verbose=False):
+            texts_list = []
+            for child_soup in parent_soup.children:
+                if '{' not in child_soup.text: texts_list.append(child_soup.text.strip())
+            parent_text = ' '.join(texts_list)
+            for this, with_that in zip([' )', ' ]', '( ', '[ '], [')', ']', '(', '[']):
+                parent_text = parent_text.replace(this, with_that)
+            parent_text = re.sub(r'[\s\u200b\xa0]+', ' ', parent_text).strip()
+            
+            return parent_text
+        if verbose:
+            from tqdm import tqdm_notebook as tqdm
+            page_titles_list = tqdm(page_titles_list)
+        for page_title in page_titles_list:
+            row_dict = {'page_title': page_title}
+            try:
+                bio_obj = wikipedia.WikipediaPage(title=page_title)
+                bio_html = bio_obj.html()
+                page_soup = bs(bio_html, 'html.parser')
+                infobox_soups_list = page_soup.find_all('table', attrs={'class': 'infobox'})
+                labels_list = []
+                for infobox_soup in infobox_soups_list:
+                    label_soups_list = infobox_soup.find_all('th', attrs={
+                        'scope': 'row', 'class': 'infobox-label', 'colspan': False
+                    })
+                    for infobox_label_soup in label_soups_list:
+                        key = ascii_regex.sub('_', clean_text(infobox_label_soup).lower()).strip('_')
+                        if key and (key not in labels_list):
+                            labels_list.append(key)
+                            value_soup = infobox_label_soup.find_next('td', attrs={'class': 'infobox-data'})
+                            row_dict[key] = clean_text(value_soup)
+            except: continue
+            rows_list.append(row_dict)
+        df = DataFrame(rows_list)
+        
+        return df
     
     
     ### Pandas Functions ###
@@ -1852,14 +1928,14 @@ class NotebookUtilities(object):
     
     
     @staticmethod
-    def modalize_columns(df, columns_list, new_column):
+    def modalize_columns(df, columns_list, new_column_name):
         """
         Create a new column in a DataFrame representing the modal value of specified columns.
         
         Parameters:
             df (pandas.DataFrame): The input DataFrame.
             columns_list (list): The list of column names from which to calculate the modal value.
-            new_column (str): The name of the new column to create.
+            new_column_name (str): The name of the new column to create.
         
         Returns:
             pandas.DataFrame: The modified DataFrame with the new column representing the modal value.
@@ -1868,17 +1944,17 @@ class NotebookUtilities(object):
         # Ensure that all columns are in the data frame
         columns_list = list(set(df.columns).intersection(set(columns_list)))
         
-        # Create a mask series indicating rows with unique values across the specified columns
+        # Create a mask series indicating rows with one unique value across the specified columns
         mask_series = (df[columns_list].apply(Series.nunique, axis='columns') == 1)
         
         # Replace non-unique or missing values with NaN
-        df.loc[~mask_series, new_column] = np.nan
+        df.loc[~mask_series, new_column_name] = np.nan
         
         # Define a function to extract the first valid value in each row
         f = lambda srs: srs[srs.first_valid_index()]
         
         # For rows with identical values in specified columns, set the new column to the modal value
-        df.loc[mask_series, new_column] = df[mask_series][columns_list].apply(f, axis='columns')
+        df.loc[mask_series, new_column_name] = df[mask_series][columns_list].apply(f, axis='columns')
     
         return df
     
@@ -1889,7 +1965,7 @@ class NotebookUtilities(object):
         Identify columns in a DataFrame that contain references based on a specified regex pattern.
         
         Parameters:
-            df (pd.DataFrame): The input DataFrame.
+            df (pandas.DataFrame): The input DataFrame.
             search_regex (re.Pattern, optional): The compiled regular expression pattern for identifying references.
                 If None, a default regex pattern is used to match names followed by '_Root'.
             verbose (bool, optional): If True, print additional information during processing. Default is False.
@@ -1973,7 +2049,7 @@ class NotebookUtilities(object):
     
     
     @staticmethod
-    def convert_to_df(row_index, row_series, verbose=True):
+    def convert_to_data_frame(row_index, row_series, verbose=True):
         """
         Convert a row represented as a Pandas Series into a single-row DataFrame.
         
@@ -2073,11 +2149,88 @@ class NotebookUtilities(object):
         # Apply a formatting function to convert milliseconds to a formatted timedelta for all elements in the DataFrame
         df = df.applymap(lambda x: self.format_timedelta(timedelta(milliseconds=int(x))), na_action='ignore').T
 
-        # Format the standard deviation (SD) column to include the '±' symbol
-        df.SD = df.SD.map(lambda x: '±' + str(x))
+        # Format the standard deviation (SD) column to include the plus-minus symbol
+        df.SD = df.SD.map(lambda x: '\xB1' + str(x))
         
         # Display the resulting DataFrame
         display(df)
+    
+    
+    ### LLM Functions ###
+    
+    
+    def download_lora_model(self, verbose=False):
+        """
+        Download the LoRA model file from a specified URL and save it to the local file system.
+        
+        Parameters:
+            verbose (bool, optional): Whether to print debug information. Defaults to False.
+        
+        Returns:
+            None
+        """
+        
+        # Check if the local file already exists
+        if not osp.exists(self.lora_path):
+            
+            # Construct the download URL
+            download_url = f'https://the-eye.eu/public/AI/models/downloadnomic-ai/gpt4all/{osp.basename(self.lora_path)}'
+            
+            # Download the model file from the URL
+            import requests
+            response = requests.get(download_url)
+            
+            # Create the necessary directories if they don't exist
+            makedirs(osp.dirname(self.lora_path), exist_ok=True)
+            
+            # Save the downloaded model file to disk
+            with open(self.lora_path, 'wb') as f: f.write(response.content)
+            
+            # Print a message if verbose mode is enabled
+            if verbose: print(f'LoRA model downloaded and saved to: {self.lora_path}')
+        
+        # Print a message if verbose mode is enabled and the file already exists
+        elif verbose: print(f'LoRA model already exists at: {self.lora_path}. Skipping download.')
+    
+    
+    def convert_lora_model_to_gpt4all(self, verbose=False):
+        """
+        Converts a LoRA model to a GPT-4all model.
+        
+        Parameters:
+            verbose (bool, optional): Whether to print debug output. Defaults to False.
+        
+        Raises:
+            OSError: If the GPT-4all model path does not exist.
+            subprocess.CalledProcessError: If the conversion process fails.
+        """
+        
+        # Check if the GPT-4-All model path exists
+        if not osp.exists(self.gpt4all_model_path):
+            
+            # Check if the LoRA model path exists
+            if not osp.exists(self.lora_path): raise FileNotFoundError(f"LoRA model path '{self.lora_path}' does not exist.")
+            
+            # Check if the PyLLamaC++ converter executable exists
+            converter_path = osp.abspath(osp.join(self.scripts_folder, 'pyllamacpp-convert-gpt4all.exe'))
+            if not osp.exists(converter_path): raise FileNotFoundError(f"PyLLamaC++ converter executable '{converter_path}' does not exist.")
+            
+            # Check if the tokenizer model file exists
+            llama_file = osp.abspath(osp.join(llama_folder, 'tokenizer.model'))
+            if not osp.exists(llama_file): raise FileNotFoundError(f"Llama tokenizer model file '{llama_file}' does not exist.")
+            
+            # Construct the conversion command
+            command_str = f'{converter_path} {self.lora_path} {llama_file} {self.gpt4all_model_path}'
+            
+            # Print verbose output if requested
+            if verbose: print(command_str, flush=True)
+            
+            # Execute the conversion process
+            output_str = subprocess.check_output(command_str.split(' '))
+            
+            # Print verbose conversion output if requested
+            if verbose:
+                for line_str in output_str.splitlines(): print(line_str.decode(), flush=True)
     
     
     ### 3D Point Functions ###
@@ -2122,7 +2275,6 @@ class NotebookUtilities(object):
             float: The Euclidean distance between the two points.
         """
         x1, x2, y1, y2, z1, z2 = self.get_coordinates(second_point, first_point=first_point)
-        import math
         euclidean_distance = math.sqrt((x1 - x2)**2 + (y1 - y2)**2 + (z1 - z2)**2)
     
         return euclidean_distance
@@ -2858,10 +3010,10 @@ class NotebookUtilities(object):
                     if verbose: print(f'bot={bot}, top={top}, left={left}, right={right}')
                     
                     line_width = 1
-                    plt.plot([left,right], [bot,bot], color='red', linewidth=line_width)
-                    plt.plot([left,right], [top,top], color='red', linewidth=line_width)
-                    plt.plot([left,left], [bot,top], color='red', linewidth=line_width)
-                    plt.plot([right,right], [bot,top], color='red', linewidth=line_width)
+                    plt.plot([left,right], [bot,bot], color='grey', linewidth=line_width, alpha=0.5)
+                    plt.plot([left,right], [top,top], color='grey', linewidth=line_width, alpha=0.5)
+                    plt.plot([left,left], [bot,top], color='grey', linewidth=line_width, alpha=0.5)
+                    plt.plot([right,right], [bot,top], color='grey', linewidth=line_width, alpha=0.5)
     
             # check if only one n-gram has been supplied
             if type(highlighted_ngrams[0]) is str: highlight_ngram([string_to_integer_map[x] for x in highlighted_ngrams])
