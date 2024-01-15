@@ -1748,8 +1748,8 @@ class NotebookUtilities(object):
                         key = ascii_regex.sub('_', clean_text(infobox_label_soup).lower()).strip('_')
                         if key and (key not in labels_list):
                             labels_list.append(key)
-                            value_soup = infobox_label_soup.find_next('td', attrs={'class': 'infobox-data'})
-                            row_dict[key] = clean_text(value_soup)
+                            infobox_data_soup = infobox_label_soup.find_next('td', attrs={'class': 'infobox-data'})
+                            row_dict[key] = clean_text(infobox_data_soup)
             except: continue
             rows_list.append(row_dict)
         df = DataFrame(rows_list)
@@ -2818,7 +2818,7 @@ class NotebookUtilities(object):
         bottom, top = ax.get_ylim()
         height = top - bottom
 
-        # Get the background shading width
+        # Get the background shading wrap width
         left, right = ax.get_xlim()
         min_shading_width = 9999
         min_turning_name = ''
@@ -2831,7 +2831,7 @@ class NotebookUtilities(object):
                 min_shading_width = width
                 min_turning_name = row_series.turning_name
                 wrap_width = len(min_turning_name)
-
+        
         # Add the turning names as background shading
         from matplotlib.patches import Rectangle
         for row_index, row_series in info_df.iterrows():
