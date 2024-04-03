@@ -1749,7 +1749,7 @@ class StraussHoweUtilities(object):
         # Get saecular Awakening information
         mask_series = (self.saecula_df.awakening_year_begin <= year)
         mask_series &= (self.saecula_df.awakening_year_end >= year)
-        if self.saecula_df[mask_series].shape[0]:
+        if mask_series.any()
             saeculum_name = self.saecula_df[mask_series].index.array[0]
             climax_mask_series = (self.saecula_df.awakening_climax_year == year)
             if self.saecula_df[climax_mask_series].shape[0]:
@@ -1762,7 +1762,7 @@ class StraussHoweUtilities(object):
         
         # Get saecular Crisis information
         mask_series = (self.saecula_df.crisis_year_begin <= year) & (self.saecula_df.crisis_year_end >= year)
-        if self.saecula_df[mask_series].shape[0]:
+        if mask_series.any()
             saeculum_name = self.saecula_df[mask_series].index.array[0]
             climax_mask_series = (self.saecula_df.crisis_climax_year == year)
             if self.saecula_df[climax_mask_series].shape[0]:
@@ -1790,14 +1790,14 @@ class StraussHoweUtilities(object):
         
         # Get Turning notes
         mask_series = (self.turnings_df.turning_year_end > year) & (self.turnings_df.turning_year_begin <= year)
-        if self.turnings_df[mask_series].shape[0]:
+        if mask_series.any()
             turning_notes = self.turnings_df[mask_series].turning_notes.squeeze().strip()
             print(f'turning_notes = "{turning_notes}"')
         
         # Get presidential information
         mask_series = (self.us_presidents_df.year_reign_end >= year)
         mask_series &= (self.us_presidents_df.year_reign_begin <= year)
-        if self.us_presidents_df[mask_series].shape[0]:
+        if mask_series.any()
             president_name = self.us_presidents_df[mask_series].index.array[0]
             print(f'{president_name} was president during this year.')
         

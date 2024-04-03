@@ -1531,7 +1531,7 @@ class StraussHoweUtilities(object):
         for column_name_prefix in set(df[mask_series].column_name.map(lambda x: x.replace('_begin', '').replace('_end', ''))):
             mask_series = (self.turnings_df[f'{column_name_prefix}_begin'] <= event_year)
             mask_series &= (self.turnings_df[f'{column_name_prefix}_end'] >= event_year)
-            if self.turnings_df[mask_series].shape[0]:
+            if mask_series.any()
                 turning_name = self.turnings_df[mask_series].iloc[-1].name
                 saeculum_name = self.turnings_df[mask_series].iloc[-1].saeculum_name
                 entering_elderhood = self.turnings_df[mask_series].iloc[-1].entering_elderhood
@@ -1560,7 +1560,7 @@ class StraussHoweUtilities(object):
             begin_mask_series = (self.saecula_df[f'{column_name_prefix}_year_begin'] <= event_year)
             end_mask_series = (self.saecula_df[f'{column_name_prefix}_year_end'] >= event_year)
             mask_series = begin_mask_series & end_mask_series
-            if self.saecula_df[mask_series].shape[0]:
+            if mask_series.any()
                 saeculum_name = self.saecula_df[mask_series].iloc[-1].name
                 solstice_name = self.saecula_df[mask_series].iloc[-1][f'{column_name_prefix}_name']
                 solstice_name = f"{saeculum_name} saeculum's {solstice_name}"
@@ -1735,7 +1735,7 @@ class StraussHoweUtilities(object):
         # Get saecular Awakening information
         mask_series = (self.saecula_df.awakening_year_begin <= year)
         mask_series &= (self.saecula_df.awakening_year_end >= year)
-        if self.saecula_df[mask_series].shape[0]:
+        if mask_series.any()
             saeculum_name = self.saecula_df[mask_series].index.array[0]
             climax_mask_series = (self.saecula_df.awakening_climax_year == year)
             if self.saecula_df[climax_mask_series].shape[0]:
@@ -1748,7 +1748,7 @@ class StraussHoweUtilities(object):
         
         # Get saecular Crisis information
         mask_series = (self.saecula_df.crisis_year_begin <= year) & (self.saecula_df.crisis_year_end >= year)
-        if self.saecula_df[mask_series].shape[0]:
+        if mask_series.any()
             saeculum_name = self.saecula_df[mask_series].index.array[0]
             climax_mask_series = (self.saecula_df.crisis_climax_year == year)
             if self.saecula_df[climax_mask_series].shape[0]:
@@ -1776,14 +1776,14 @@ class StraussHoweUtilities(object):
         
         # Get Turning notes
         mask_series = (self.turnings_df.turning_year_end > year) & (self.turnings_df.turning_year_begin <= year)
-        if self.turnings_df[mask_series].shape[0]:
+        if mask_series.any()
             turning_notes = self.turnings_df[mask_series].turning_notes.squeeze().strip()
             print(f'turning_notes = "{turning_notes}"')
         
         # Get presidential information
         mask_series = (self.us_presidents_df.year_reign_end >= year)
         mask_series &= (self.us_presidents_df.year_reign_begin <= year)
-        if self.us_presidents_df[mask_series].shape[0]:
+        if mask_series.any()
             president_name = self.us_presidents_df[mask_series].index.array[0]
             print(f'{president_name} was president during this year.')
         
