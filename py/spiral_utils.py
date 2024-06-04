@@ -1570,8 +1570,7 @@ class StraussHoweUtilities(object):
         return story_str
     
     def get_column_descriptions(self, df, column_list=None):
-        if column_list is None:
-            column_list = df.columns
+        if column_list is None: column_list = df.columns
         groups_dict = df.columns.to_series().groupby(df.dtypes).groups
         rows_list = []
         for dtype, dtype_column_list in groups_dict.items():
@@ -1590,7 +1589,7 @@ class StraussHoweUtilities(object):
 
                     # Count how many unique numbers there are
                     try:
-                        row_dict['count_uniques'] = len(df[column_name].unique())
+                        row_dict['count_uniques'] = df[column_name].nunique()
                     except Exception:
                         row_dict['count_uniques'] = np.nan
 
