@@ -1502,6 +1502,7 @@ class StraussHoweUtilities(object):
     def get_event_story(self, event_year=None, event_name=None, verbose=False):
         if event_year is None: event_year = 1961
         if event_name is None: event_name = f'year of {event_year}'
+        statements_list = []
         
         # Get patriline birth/death mask
         begin_mask_series = (self.patriline_df.year_of_birth <= event_year)
@@ -1510,17 +1511,27 @@ class StraussHoweUtilities(object):
         end_mask_series |= self.patriline_df.year_of_death.isnull()
         mask_series = begin_mask_series & end_mask_series
         
-        f_str = f'The members of the patriline that were alive during the {event_name} '
-        f_str += 'were {}. '
-        p_list = self.patriline_df[mask_series].index
-        story_str = f_str.format(self.conjunctify_nouns(p_list)).replace('..', '.')
+        # Create the "alive" sentence and append it to the statements list
+        f_str = 'The members of the patriline that were alive during '
+        if event_name.startswith('The'):
+            f_str += event_name
+        else:
+            f_str += f'the {event_name} '
+        f_str += 'were {}.'
+        p_list = self.patriline_df[mask_series].index.tolist()
+        if p_list:
+            story_str = f_str.format(self.conjunctify_nouns(p_list)).replace('..', '.')
+            statements_list.append(story_str)
+        
+        # Create the "years old" conjunction and append it to the statements list
         f_str = '{} was {} years old at this time'
         patriarch_strs_list = []
         for patriarch, row_series in self.patriline_df[mask_series].iterrows():
             patriarch_str = f_str.format(patriarch, event_year - row_series.year_of_birth)
             patriarch_strs_list.append(patriarch_str)
-        story_str += self.conjunctify_nouns(patriarch_strs_list)
+        story_str = self.conjunctify_nouns(patriarch_strs_list)
         if not story_str.endswith('.'): story_str += '.'
+        statements_list.append(story_str)
         
         # Get Turning information
         column_descriptions_df = self.get_column_descriptions(self.turnings_df)
@@ -1532,42 +1543,78 @@ class StraussHoweUtilities(object):
             mask_series = (self.turnings_df[f'{column_name_prefix}_begin'] <= event_year)
             mask_series &= (self.turnings_df[f'{column_name_prefix}_end'] >= event_year)
             if mask_series.any():
+                
+                # Get the Turning Type
+                turning_number = self.turnings_df[mask_series].iloc[-1].turning_number
+                turning_mask = (self.turning_numbers_df.index == turning_number)
+                turning_type = self.turning_numbers_df[turning_mask].iloc[-1].turning_type
+                
+                # Get the "year during" statement and add it to the list
                 turning_name = self.turnings_df[mask_series].iloc[-1].name
+                if not turning_name.startswith('The'):
+                    turning_name = 'the ' + turning_name
+                a_an = 'an' if turning_type.startswith('A') else 'a'
                 saeculum_name = self.turnings_df[mask_series].iloc[-1].saeculum_name
+                if not saeculum_name.startswith('The'):
+                    saeculum_name = 'the ' + saeculum_name
+                statements_list.append(
+                    f'This year was during {turning_name}, {a_an} {turning_type} turning of {saeculum_name} saeculum.'
+                )
+                
+                # Get who is entering elderhood
                 entering_elderhood = self.turnings_df[mask_series].iloc[-1].entering_elderhood
                 # if verbose: print(entering_elderhood); display(self.turnings_df[mask_series])
                 if not entering_elderhood.endswith('s'): entering_elderhood += ' Generation'
+                
+                # Get who is entering midlife
                 entering_midlife = self.turnings_df[mask_series].iloc[-1].entering_midlife
                 if not entering_midlife.endswith('s'): entering_midlife += ' Generation'
+                
+                # Get who is entering young adulthood
                 entering_young_adulthood = self.turnings_df[mask_series].iloc[-1].entering_young_adulthood
                 if not entering_young_adulthood.endswith('s'): entering_young_adulthood += ' Generation'
+                
+                # Get who is entering childhood
                 entering_childhood = self.turnings_df[mask_series].iloc[-1].entering_childhood
                 if not entering_childhood.endswith('s'): entering_childhood += ' Generation'
-                if not story_str.endswith(' '): story_str += ' '
-                story_str += f'This year was during the {turning_name}, a turning of the {saeculum_name} saeculum.'
-                story_str += f' During this era the {entering_elderhood} were entering elderhood, the {entering_midlife} were'
+                
+                # Get the "entering" conjunction and add it to the statements list
+                story_str = f'During this era the {entering_elderhood} were entering elderhood, the {entering_midlife} were'
                 story_str += f' entering midlife, the {entering_young_adulthood} were entering young adulthood, and the'
                 story_str += f' {entering_childhood} were entering childhood.'
+                statements_list.append(story_str)
         
-        # Get saecular Awakening/Crisis information
+        # Get the year begin/end column names
         column_descriptions_df = self.get_column_descriptions(self.saecula_df)
         mask_series = (column_descriptions_df.dtype != 'object')
         mask_series &= column_descriptions_df.column_name.map(lambda x: x.endswith('_year_begin') or x.endswith('_year_end'))
         df = column_descriptions_df[mask_series]
         mask_series = df.min_value.map(lambda x: event_year >= float(x)) & df.max_value.map(lambda x: event_year <= float(x))
         prefixes_list = df[mask_series].column_name.map(lambda x: x.replace('_year_begin', '').replace('_year_end', ''))
+        
+        # Loop through the year begin/end columns
         for column_name_prefix in set(prefixes_list):
+            
+            # Filter for those that contain our event year
             begin_mask_series = (self.saecula_df[f'{column_name_prefix}_year_begin'] <= event_year)
             end_mask_series = (self.saecula_df[f'{column_name_prefix}_year_end'] >= event_year)
             mask_series = begin_mask_series & end_mask_series
             if mask_series.any():
-                saeculum_name = self.saecula_df[mask_series].iloc[-1].name
-                solstice_name = self.saecula_df[mask_series].iloc[-1][f'{column_name_prefix}_name']
-                solstice_name = f"{saeculum_name} saeculum's {solstice_name}"
+                
+                # If contained, check if the event year is a climax year
                 climax_mask_series = (self.saecula_df[f'{column_name_prefix}_climax_year'] == event_year)
-                if self.saecula_df[climax_mask_series].shape[0]: story_str += f' The {solstice_name} was climaxing at this time.'
+                if climax_mask_series.any():
+                
+                    # If climaxing, get the solstice name and add its sentence to the statements list
+                    saeculum_name = self.saecula_df[mask_series].iloc[-1].name
+                    solstice_name = self.saecula_df[mask_series].iloc[-1][f'{column_name_prefix}_name']
+                    solstice_name = f"{saeculum_name} saeculum's {solstice_name}"
+                    statements_list.append(f'The {solstice_name} was climaxing at this time.')
         
-        return story_str
+        # TODO: Add other saecular Awakening/Crisis information
+        
+        if len(statements_list) > 1:
+            return ' '.join(statements_list)
     
     def get_column_descriptions(self, df, column_list=None):
         if column_list is None: column_list = df.columns
