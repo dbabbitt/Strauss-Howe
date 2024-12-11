@@ -1,1154 +1,195 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.0"
-   width="800"
-   height="512"
-   id="svg2"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="Protestant_branches.svg">
-  <metadata
-     id="metadata3159">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1846"
-     inkscape:window-height="1057"
-     id="namedview3157"
-     showgrid="false"
-     inkscape:zoom="0.74039055"
-     inkscape:cx="487.62863"
-     inkscape:cy="-93.247226"
-     inkscape:window-x="66"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="Text"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3149" />
-  </sodipodi:namedview>
-  <defs
-     id="defs5" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Rectangles">
-    <rect
-       style="opacity:0.92000002;fill:#cfaeff;fill-opacity:0.43786986;fill-rule:evenodd;stroke:none;stroke-width:0.46000001;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4215"
-       width="190.51724"
-       height="491.3793"
-       x="43.965519"
-       y="-3.5172412"
-       ry="0"
-       inkscape:label="Protestant Reformation  Rectangle" />
-    <rect
-       style="display:inline;opacity:0.92000002;fill:#0000ff;fill-opacity:0.27218939;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4213"
-       width="49.137939"
-       height="492.24139"
-       x="357.75861"
-       y="-5.2413793"
-       inkscape:label="Great Awakening Rectangle" />
-    <rect
-       style="opacity:0.92000002;fill:#0000ff;fill-opacity:0.27218939;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4216"
-       width="82.758621"
-       height="492.24136"
-       x="447.41379"
-       y="-5.2413869"
-       ry="0"
-       inkscape:label="Transcendental Awakening Rectangle" />
-    <rect
-       style="font-size:13px;line-height:125%;font-family:Arial;opacity:0.92000002;fill:#0000ff;fill-opacity:0.06508879;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4216-2"
-       width="79.310349"
-       height="492.24136"
-       x="545.06897"
-       y="-4.4310303"
-       ry="0"
-       inkscape:label="Third Great Awakening Rectangle" />
-    <rect
-       style="font-size:13px;line-height:125%;font-family:Arial;opacity:0.92000002;fill:#0000ff;fill-opacity:0.06508879;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4216-2-2"
-       width="46.551727"
-       height="491.3793"
-       x="699.49316"
-       y="-2.6379235"
-       ry="0"
-       inkscape:label="Consciousness Revolution Rectangle" />
-  </g>
-  <g
-     id="Strokes"
-     style="fill:none;stroke:#ff00ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4">
-    <path
-       d="m 183.26315,217.45532 0.0733,131.56148"
-       id="path5453"
-       style="stroke:#0099bf;stroke-width:2;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:6.44916439"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Congregationalism Feeder Path" />
-    <path
-       d="m 515,102 1.92755,230.75459"
-       id="path5449"
-       style="stroke:#9f5000;stroke-linecap:square;stroke-dasharray:8, 8;stroke-dashoffset:5"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Holiness Feeder Path" />
-    <path
-       d="m 501.508,83.561825 0.35356,250.215835"
-       id="path5447"
-       style="stroke:#fe4b10;stroke-linecap:square;stroke-dasharray:8, 8;stroke-dashoffset:5"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Adventism Feeder Path" />
-    <path
-       d="m 265,427 24.63833,-26.13156 174.61227,0.003"
-       id="path4556"
-       style="stroke:#0060ff"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Pietism Path" />
-    <path
-       d="M 790,427 H 43.559609"
-       id="path3649"
-       style="stroke:#0000ff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Lutheranism Path" />
-    <path
-       d="m 203.48475,33.016866 0.15894,317.894974"
-       id="path5451"
-       style="stroke:#800000;stroke-width:2;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:1.98370814"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Baptist Feeder Path" />
-    <path
-       d="M 789.29288,32.707107 65.018409,32.669456"
-       id="path3651"
-       style="stroke:#ff0000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Anabaptist Path" />
-    <path
-       d="m 790,127 -586.57744,0.463"
-       id="path3657"
-       style="stroke:#800000"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Baptist Path" />
-    <path
-       d="m 790,257 -606.20365,0.6067"
-       id="path3659"
-       style="stroke:#0099bf"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Congregationalism Path" />
-    <path
-       d="M 637.576,57.361836 V 100.62353"
-       id="path4560"
-       style="stroke:#808000;stroke-linecap:square;stroke-dasharray:8, 8;stroke-dashoffset:6.5"
-       inkscape:connector-curvature="0"
-       inkscape:label="Pentacostalism Feeder Path" />
-    <path
-       d="M 790,102 H 515"
-       id="path3663"
-       style="stroke:#9f5000"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Holiness Path" />
-    <path
-       d="M 790,57 H 637.24138"
-       id="path3665"
-       style="stroke:#808000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Pentecostalism Path" />
-    <path
-       d="M 95.257043,371.7431 420.37334,301.67732 h 368.91064"
-       id="path3669"
-       style="stroke:#ff0080;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Puritanism Path" />
-    <path
-       d="m 375,372 85,-40 h 330"
-       id="path4558"
-       style="stroke:#ff8000"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Methodism Path" />
-    <path
-       d="m 465.16574,400.78216 82.75286,0.10299"
-       id="path5457"
-       style="stroke:#0060ff;stroke-linecap:square;stroke-dasharray:8, 8"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Pietism Extension Path" />
-    <path
-       d="M 90.42272,161.62674 125.23154,216.57 790,217"
-       id="use6348"
-       style="stroke:#004000"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Presbyterianism Path" />
-    <g
-       id="Time-axis"
-       style="stroke:#000000">
-      <path
-         d="M 23.038147,487.66289 H 790.40596"
-         id="path1873"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cc" />
-      <path
-         d="m 24,482.69243 v 4.97046"
-         id="path6374"
-         inkscape:connector-curvature="0"
-         inkscape:label="1500 Tick" />
-      <path
-         d="m 174.599,482.69243 v 4.97046"
-         id="path6386"
-         inkscape:connector-curvature="0"
-         inkscape:label="1600 Tick" />
-      <path
-         d="m 324.518,482.69243 v 4.97046"
-         id="path6388"
-         inkscape:connector-curvature="0"
-         inkscape:label="1700 Tick" />
-      <path
-         d="m 474.479,482.69243 v 4.97046"
-         id="path6390"
-         inkscape:connector-curvature="0"
-         inkscape:label="1800 Tick" />
-      <path
-         d="m 624.50251,482.69243 v 4.97046"
-         id="path6392"
-         inkscape:connector-curvature="0"
-         inkscape:label="1900 Tick" />
-      <path
-         d="m 774.573,482.69243 v 4.97046"
-         id="path6394"
-         inkscape:connector-curvature="0"
-         inkscape:label="2000 Tick" />
-    </g>
-    <path
-       d="M 790,372 H 87.723718"
-       id="path3647"
-       style="stroke:#400080;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Anglicanism Path" />
-    <path
-       d="M 790,82 500.70711,82.353553"
-       id="path3661"
-       style="stroke:#fe4b10"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:label="Adventism Path" />
-    <path
-       d="m 54.3911,162.13529 60.77086,0.28868 674.83835,-0.42391"
-       id="path6346"
-       style="stroke:#008000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Calvinism Path" />
-    <path
-       d="m 181.42495,161.92161 30.24643,30.65601 577.63715,0.23991"
-       id="use6348-5"
-       style="fill:none;stroke:#00fe00;stroke-width:1.3925885;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Arminianism Path" />
-    <path
-       d="m 91.125621,161.49875 34.752829,-17.41966 663.69928,-0.13642"
-       id="use6348-5-4"
-       style="fill:none;stroke:#008080;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Reformed Path" />
-    <path
-       d="m 516.62608,371.4245 55.7776,-10.20411 h 216.5483"
-       id="path4558-1"
-       style="fill:none;stroke:#8030ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
-       inkscape:label="Plymouth Bretheren Path" />
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 23.264048,553.0 c 46.522479,0 46.522479,0 46.522479,0 h -6.20302"
-       id="path10001"
-       inkscape:connector-curvature="0"
-       inkscape:label="Johannes Oecolampadius (1482-1531)">
-      <desc
-         id="desc10001">Johannes Oecolampadius, an Adaptive Artist of the Humanist generation in the Late Medieval saeculum.</desc>
-      <title
-         id="title10001">Johannes Oecolampadius (1482-1531)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 23.264048,583.0 c 46.522479,0 46.522479,0 46.522479,0 h -6.20302"
-       id="path10002"
-       inkscape:connector-curvature="0"
-       inkscape:label="Huldrych Zwingli (1484-1531)">
-      <desc
-         id="desc10002">Huldrych Zwingli, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</desc>
-      <title
-         id="title10002">Huldrych Zwingli (1484-1531)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 23.264048,613.0 c 97.547134,0 97.547134,0 97.547134,0 h -6.20302"
-       id="path10003"
-       inkscape:connector-curvature="0"
-       inkscape:label="William Farel (1489-1565)">
-      <desc
-         id="desc10003">William Farel, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</desc>
-      <title
-         id="title10003">William Farel (1489-1565)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 23.264048,643.0 c 76.536982,0 76.536982,0 76.536982,0 h -6.20302"
-       id="path10004"
-       inkscape:connector-curvature="0"
-       inkscape:label="Martin Bucer (1491-1551)">
-      <desc
-         id="desc10004">Martin Bucer, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</desc>
-      <title
-         id="title10004">Martin Bucer (1491-1551)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 23.264048,673.0 c 93.044959,0 93.044959,0 93.044959,0 h -6.20302"
-       id="path10005"
-       inkscape:connector-curvature="0"
-       inkscape:label="Peter Martyr Vermigli (1499-1562)">
-      <desc
-         id="desc10005">Peter Martyr Vermigli, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</desc>
-      <title
-         id="title10005">Peter Martyr Vermigli (1499-1562)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 29.266948,703.0 c 106.551485,0 106.551485,0 106.551485,0 h -6.20302"
-       id="path10006"
-       inkscape:connector-curvature="0"
-       inkscape:label="Heinrich Bullinger (1504-1575)">
-      <desc
-         id="desc10006">Heinrich Bullinger, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</desc>
-      <title
-         id="title10006">Heinrich Bullinger (1504-1575)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 36.770574,733.0 c 82.539883,0 82.539883,0 82.539883,0 h -6.20302"
-       id="path10007"
-       inkscape:connector-curvature="0"
-       inkscape:label="John Calvin (1509-1564)">
-      <desc
-         id="desc10007">John Calvin, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</desc>
-      <title
-         id="title10007">John Calvin (1509-1564)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 44.274200,763.0 c 87.042058,0 87.042058,0 87.042058,0 h -6.20302"
-       id="path10008"
-       inkscape:connector-curvature="0"
-       inkscape:label="John Knox (1514-1572)">
-      <desc
-         id="desc10008">John Knox, a Reactive Nomad of the Reprisal generation in the Reformation saeculum.</desc>
-      <title
-         id="title10008">John Knox (1514-1572)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 51.777825,793.0 c 129.062362,0 129.062362,0 129.062362,0 h -6.20302"
-       id="path10009"
-       inkscape:connector-curvature="0"
-       inkscape:label="Theodore Beza (1519-1605)">
-      <desc
-         id="desc10009">Theodore Beza, a Reactive Nomad of the Reprisal generation in the Reformation saeculum.</desc>
-      <title
-         id="title10009">Theodore Beza (1519-1605)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 529.008421,823.0 c 124.560187,0 124.560187,0 124.560187,0 h -6.20302"
-       id="path10010"
-       inkscape:connector-curvature="0"
-       inkscape:label="Abraham Kuyper (1837-1920)">
-      <desc
-         id="desc10010">Abraham Kuyper, a Reactive Nomad of the Gilded generation in the Civil War saeculum.</desc>
-      <title
-         id="title10010">Abraham Kuyper (1837-1920)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 550.018573,853.0 c 105.050760,0 105.050760,0 105.050760,0 h -6.20302"
-       id="path10011"
-       inkscape:connector-curvature="0"
-       inkscape:label="B. B. Warfield (1851-1921)">
-      <desc
-         id="desc10011">B. B. Warfield, an Adaptive Artist of the Progressive generation in the Civil War saeculum.</desc>
-      <title
-         id="title10011">B. B. Warfield (1851-1921)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 554.520748,883.0 c 100.548585,0 100.548585,0 100.548585,0 h -6.20302"
-       id="path10012"
-       inkscape:connector-curvature="0"
-       inkscape:label="Herman Bavinck (1854-1921)">
-      <desc
-         id="desc10012">Herman Bavinck, an Adaptive Artist of the Progressive generation in the Civil War saeculum.</desc>
-      <title
-         id="title10012">Herman Bavinck (1854-1921)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 595.040327,913.0 c 84.040608,0 84.040608,0 84.040608,0 h -6.20302"
-       id="path10013"
-       inkscape:connector-curvature="0"
-       inkscape:label="J. Gresham Machen (1881-1937)">
-      <desc
-         id="desc10013">J. Gresham Machen, an Idealist Prophet of the Missionary generation in the Great Power saeculum.</desc>
-      <title
-         id="title10013">J. Gresham Machen (1881-1937)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 602.543953,943.0 c 123.059462,0 123.059462,0 123.059462,0 h -6.20302"
-       id="path10014"
-       inkscape:connector-curvature="0"
-       inkscape:label="Karl Barth (1886-1968)">
-      <desc
-         id="desc10014">Karl Barth, a Reactive Nomad of the Lost generation in the Great Power saeculum.</desc>
-      <title
-         id="title10014">Karl Barth (1886-1968)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 616.050479,973.0 c 138.066713,0 138.066713,0 138.066713,0 h -6.20302"
-       id="path10015"
-       inkscape:connector-curvature="0"
-       inkscape:label="Cornelius Van Til (1895-1987)">
-      <desc
-         id="desc10015">Cornelius Van Til, a Reactive Nomad of the Lost generation in the Great Power saeculum.</desc>
-      <title
-         id="title10015">Cornelius Van Til (1895-1987)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 622.053380,1003.0 c 123.059462,0 123.059462,0 123.059462,0 h -6.20302"
-       id="path10016"
-       inkscape:connector-curvature="0"
-       inkscape:label="Martyn Lloyd-Jones (1899-1981)">
-      <desc
-         id="desc10016">Martyn Lloyd-Jones, a Reactive Nomad of the Lost generation in the Great Power saeculum.</desc>
-      <title
-         id="title10016">Martyn Lloyd-Jones (1899-1981)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 626.555555,1033.0 c 124.560187,0 124.560187,0 124.560187,0 h -6.20302"
-       id="path10017"
-       inkscape:connector-curvature="0"
-       inkscape:label="Gordon Clark (1902-1985)">
-      <desc
-         id="desc10017">Gordon Clark, a Civic Hero of the G.I. generation in the Great Power saeculum.</desc>
-      <title
-         id="title10017">Gordon Clark (1902-1985)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 662.572958,1063.0 c 141.068163,0 141.068163,0 141.068163,0 h -6.20302"
-       id="path10018"
-       inkscape:connector-curvature="0"
-       inkscape:label="J. I. Packer (1926-present)">
-      <desc
-         id="desc10018">J. I. Packer, an Adaptive Artist of the Silent generation in the Great Power saeculum.</desc>
-      <title
-         id="title10018">J. I. Packer (1926-present)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 682.082385,1093.0 c 117.056561,0 117.056561,0 117.056561,0 h -6.20302"
-       id="path10019"
-       inkscape:connector-curvature="0"
-       inkscape:label="R. C. Sproul (1939-2017)">
-      <desc
-         id="desc10019">R. C. Sproul, an Adaptive Artist of the Silent generation in the Great Power saeculum.</desc>
-      <title
-         id="title10019">R. C. Sproul (1939-2017)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 682.082385,1123.0 c 121.558737,0 121.558737,0 121.558737,0 h -6.20302"
-       id="path10020"
-       inkscape:connector-curvature="0"
-       inkscape:label="John F. MacArthur (1939-present)">
-      <desc
-         id="desc10020">John F. MacArthur, an Adaptive Artist of the Silent generation in the Great Power saeculum.</desc>
-      <title
-         id="title10020">John F. MacArthur (1939-present)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 682.082385,1153.0 c 121.558737,0 121.558737,0 121.558737,0 h -6.20302"
-       id="path10021"
-       inkscape:connector-curvature="0"
-       inkscape:label="David F. Wells (1939-present)">
-      <desc
-         id="desc10021">David F. Wells, an Adaptive Artist of the Silent generation in the Great Power saeculum.</desc>
-      <title
-         id="title10021">David F. Wells (1939-present)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 698.590362,1183.0 c 105.050760,0 105.050760,0 105.050760,0 h -6.20302"
-       id="path10022"
-       inkscape:connector-curvature="0"
-       inkscape:label="Timothy J. Keller (1950-present)">
-      <desc
-         id="desc10022">Timothy J. Keller, an Idealist Prophet of the Baby Boom generation in the Millennial saeculum.</desc>
-      <title
-         id="title10022">Timothy J. Keller (1950-present)</title>
-    </path>
-    <path
-       style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 719.600514,1213.0 c 84.040608,0 84.040608,0 84.040608,0 h -6.20302"
-       id="path10023"
-       inkscape:connector-curvature="0"
-       inkscape:label="Michael Horton (theologian) (1964-present)">
-      <desc
-         id="desc10023">Michael Horton (theologian), a Reactive Nomad of the 13th generation in the Millennial saeculum.</desc>
-      <title
-         id="title10023">Michael Horton (theologian) (1964-present)</title>
-    </path>
-  </g>
-  <g
-     id="Text"
-     style="font-size:13px;line-height:125%;font-family:Arial;fill:#000000">
-    <text
-       x="23.264047611376554"
-       y="548"
-       id="text10001"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Johannes Oecolampadius (1482-1531)"><tspan
-         sodipodi:role="line"
-         id="tspan10001"
-         x="23.264047611376554"
-         y="553"
-         style="font-size:13px;line-height:1.25">Johannes Oecolampadius (1482-1531)</tspan></text>
-    <text
-       x="23.264047611376554"
-       y="578"
-       id="text10002"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Huldrych Zwingli (1484-1531)"><tspan
-         sodipodi:role="line"
-         id="tspan10002"
-         x="23.264047611376554"
-         y="583"
-         style="font-size:13px;line-height:1.25">Huldrych Zwingli (1484-1531)</tspan></text>
-    <text
-       x="23.264047611376554"
-       y="608"
-       id="text10003"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="William Farel (1489-1565)"><tspan
-         sodipodi:role="line"
-         id="tspan10003"
-         x="23.264047611376554"
-         y="613"
-         style="font-size:13px;line-height:1.25">William Farel (1489-1565)</tspan></text>
-    <text
-       x="23.264047611376554"
-       y="638"
-       id="text10004"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Martin Bucer (1491-1551)"><tspan
-         sodipodi:role="line"
-         id="tspan10004"
-         x="23.264047611376554"
-         y="643"
-         style="font-size:13px;line-height:1.25">Martin Bucer (1491-1551)</tspan></text>
-    <text
-       x="23.264047611376554"
-       y="668"
-       id="text10005"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Peter Martyr Vermigli (1499-1562)"><tspan
-         sodipodi:role="line"
-         id="tspan10005"
-         x="23.264047611376554"
-         y="673"
-         style="font-size:13px;line-height:1.25">Peter Martyr Vermigli (1499-1562)</tspan></text>
-    <text
-       x="29.26694818292799"
-       y="698"
-       id="text10006"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Heinrich Bullinger (1504-1575)"><tspan
-         sodipodi:role="line"
-         id="tspan10006"
-         x="29.26694818292799"
-         y="703"
-         style="font-size:13px;line-height:1.25">Heinrich Bullinger (1504-1575)</tspan></text>
-    <text
-       x="36.770573897367285"
-       y="728"
-       id="text10007"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="John Calvin (1509-1564)"><tspan
-         sodipodi:role="line"
-         id="tspan10007"
-         x="36.770573897367285"
-         y="733"
-         style="font-size:13px;line-height:1.25">John Calvin (1509-1564)</tspan></text>
-    <text
-       x="44.274199611806125"
-       y="758"
-       id="text10008"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="John Knox (1514-1572)"><tspan
-         sodipodi:role="line"
-         id="tspan10008"
-         x="44.274199611806125"
-         y="763"
-         style="font-size:13px;line-height:1.25">John Knox (1514-1572)</tspan></text>
-    <text
-       x="51.77782532624542"
-       y="788"
-       id="text10009"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Theodore Beza (1519-1605)"><tspan
-         sodipodi:role="line"
-         id="tspan10009"
-         x="51.77782532624542"
-         y="793"
-         style="font-size:13px;line-height:1.25">Theodore Beza (1519-1605)</tspan></text>
-    <text
-       x="529.0084207645741"
-       y="818"
-       id="text10010"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Abraham Kuyper (1837-1920)"><tspan
-         sodipodi:role="line"
-         id="tspan10010"
-         x="529.0084207645741"
-         y="823"
-         style="font-size:13px;line-height:1.25">Abraham Kuyper (1837-1920)</tspan></text>
-    <text
-       x="550.0185727650037"
-       y="848"
-       id="text10011"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="B. B. Warfield (1851-1921)"><tspan
-         sodipodi:role="line"
-         id="tspan10011"
-         x="550.0185727650037"
-         y="853"
-         style="font-size:13px;line-height:1.25">B. B. Warfield (1851-1921)</tspan></text>
-    <text
-       x="554.5207481936668"
-       y="878"
-       id="text10012"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Herman Bavinck (1854-1921)"><tspan
-         sodipodi:role="line"
-         id="tspan10012"
-         x="554.5207481936668"
-         y="883"
-         style="font-size:13px;line-height:1.25">Herman Bavinck (1854-1921)</tspan></text>
-    <text
-       x="595.0403270516381"
-       y="908"
-       id="text10013"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="J. Gresham Machen (1881-1937)"><tspan
-         sodipodi:role="line"
-         id="tspan10013"
-         x="595.0403270516381"
-         y="913"
-         style="font-size:13px;line-height:1.25">J. Gresham Machen (1881-1937)</tspan></text>
-    <text
-       x="602.5439527660774"
-       y="938"
-       id="text10014"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Karl Barth (1886-1968)"><tspan
-         sodipodi:role="line"
-         id="tspan10014"
-         x="602.5439527660774"
-         y="943"
-         style="font-size:13px;line-height:1.25">Karl Barth (1886-1968)</tspan></text>
-    <text
-       x="616.0504790520677"
-       y="968"
-       id="text10015"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Cornelius Van Til (1895-1987)"><tspan
-         sodipodi:role="line"
-         id="tspan10015"
-         x="616.0504790520677"
-         y="973"
-         style="font-size:13px;line-height:1.25">Cornelius Van Til (1895-1987)</tspan></text>
-    <text
-       x="622.0533796236191"
-       y="998"
-       id="text10016"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Martyn Lloyd-Jones (1899-1981)"><tspan
-         sodipodi:role="line"
-         id="tspan10016"
-         x="622.0533796236191"
-         y="1003"
-         style="font-size:13px;line-height:1.25">Martyn Lloyd-Jones (1899-1981)</tspan></text>
-    <text
-       x="626.5555550522827"
-       y="1028"
-       id="text10017"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Gordon Clark (1902-1985)"><tspan
-         sodipodi:role="line"
-         id="tspan10017"
-         x="626.5555550522827"
-         y="1033"
-         style="font-size:13px;line-height:1.25">Gordon Clark (1902-1985)</tspan></text>
-    <text
-       x="662.5729584815904"
-       y="1058"
-       id="text10018"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="J. I. Packer (1926-present)"><tspan
-         sodipodi:role="line"
-         id="tspan10018"
-         x="662.5729584815904"
-         y="1063"
-         style="font-size:13px;line-height:1.25">J. I. Packer (1926-present)</tspan></text>
-    <text
-       x="682.0823853391321"
-       y="1088"
-       id="text10019"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="R. C. Sproul (1939-2017)"><tspan
-         sodipodi:role="line"
-         id="tspan10019"
-         x="682.0823853391321"
-         y="1093"
-         style="font-size:13px;line-height:1.25">R. C. Sproul (1939-2017)</tspan></text>
-    <text
-       x="682.0823853391321"
-       y="1118"
-       id="text10020"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="John F. MacArthur (1939-present)"><tspan
-         sodipodi:role="line"
-         id="tspan10020"
-         x="682.0823853391321"
-         y="1123"
-         style="font-size:13px;line-height:1.25">John F. MacArthur (1939-present)</tspan></text>
-    <text
-       x="682.0823853391321"
-       y="1148"
-       id="text10021"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="David F. Wells (1939-present)"><tspan
-         sodipodi:role="line"
-         id="tspan10021"
-         x="682.0823853391321"
-         y="1153"
-         style="font-size:13px;line-height:1.25">David F. Wells (1939-present)</tspan></text>
-    <text
-       x="698.5903619108981"
-       y="1178"
-       id="text10022"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Timothy J. Keller (1950-present)"><tspan
-         sodipodi:role="line"
-         id="tspan10022"
-         x="698.5903619108981"
-         y="1183"
-         style="font-size:13px;line-height:1.25">Timothy J. Keller (1950-present)</tspan></text>
-    <text
-       x="719.6005139113277"
-       y="1208"
-       id="text10023"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1"
-       inkscape:label="Michael Horton (theologian) (1964-present)"><tspan
-         sodipodi:role="line"
-         id="tspan10023"
-         x="719.6005139113277"
-         y="1213"
-         style="font-size:13px;line-height:1.25">Michael Horton (theologian) (1964-present)</tspan></text>
-    <text
-       x="333.28125"
-       y="188.87112"
-       id="text2447-3"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#00ff00;fill-opacity:1"
-       inkscape:label="Arminianism Text"><tspan
-         sodipodi:role="line"
-         id="tspan4268"
-         x="333.28125"
-         y="188.87112"
-         style="font-size:12.99999905px;line-height:1.25">Arminianism</tspan></text>
-    <text
-       x="66.382416"
-       y="45.967991"
-       id="text2425"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-       inkscape:label="Anabaptism Text"><tspan
-         sodipodi:role="line"
-         id="tspan4270"
-         x="66.382416"
-         y="45.967991"
-         style="font-size:12.99999905px;line-height:1.25">Anabaptism</tspan></text>
-    <text
-       x="332.62701"
-       y="120.93421"
-       id="text2429"
-       xml:space="preserve"
-       style="line-height:0%;fill:#800000"
-       inkscape:label="Baptism Text"><tspan
-         x="332.62701"
-         y="120.93421"
-         id="tspan2431">Baptists</tspan></text>
-    <text
-       x="119.08521"
-       y="159.56227"
-       id="text2439"
-       xml:space="preserve"
-       style="line-height:0%;fill:#008000"
-       inkscape:label="Calvanism Text"><tspan
-         x="119.08521"
-         y="159.56227"
-         id="tspan2441">Calvinism</tspan></text>
-    <text
-       x="293.55344"
-       y="141.2787"
-       id="text2443"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#008080"
-       inkscape:label="Reformed Text"><tspan
-         sodipodi:role="line"
-         id="tspan3408"
-         x="293.55344"
-         y="141.2787"
-         style="font-size:12.99999905px;line-height:1.25">Continental Reformed churches</tspan></text>
-    <text
-       x="319.6069"
-       y="212.22021"
-       id="text2447"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#004000"
-       inkscape:label="Presbyterianism Text"><tspan
-         sodipodi:role="line"
-         id="tspan3410"
-         x="319.6069"
-         y="212.22021"
-         style="font-size:12.99999905px;line-height:1.25">Presbyterianism</tspan></text>
-    <text
-       x="321.11301"
-       y="251.67813"
-       id="use2471"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#0099bf;fill-opacity:1"
-       inkscape:label="Congregationalism"><tspan
-         sodipodi:role="line"
-         id="tspan3412"
-         x="321.11301"
-         y="251.67813"
-         style="font-size:12.99999905px;line-height:1.25">Congregationalism</tspan></text>
-    <text
-       x="522.30664"
-       y="297.82849"
-       id="use2477"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0080;fill-opacity:1"
-       inkscape:label="Puritanism Text"><tspan
-         sodipodi:role="line"
-         id="tspan3415"
-         x="522.30664"
-         y="297.82849"
-         style="font-size:12.99999905px;line-height:1.25">Puritanism, Quakers &amp; other English Dissenters</tspan></text>
-    <text
-       x="70.341812"
-       y="441.01236"
-       id="use2483"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:0.94117599"
-       inkscape:label="Lutheranism Text"><tspan
-         sodipodi:role="line"
-         id="tspan3418"
-         x="70.341812"
-         y="441.01236"
-         style="font-size:12.99999905px;line-height:1.25">Lutheranism</tspan></text>
-    <text
-       x="81.077591"
-       y="384.63263"
-       id="use2489"
-       xml:space="preserve"
-       style="line-height:0%;fill:#400080;fill-opacity:1"
-       inkscape:label="Anglicanism Text"><tspan
-         x="81.077591"
-         y="384.63263"
-         id="tspan2535">Anglicanism</tspan></text>
-    <text
-       x="398.17401"
-       y="397.74014"
-       id="use2491"
-       xml:space="preserve"
-       style="line-height:0%;fill:#0060ff;fill-opacity:1"
-       inkscape:label="Pietism Text"><tspan
-         x="398.17401"
-         y="397.74014"
-         id="tspan2495">Pietism</tspan></text>
-    <text
-       x="673.05438"
-       y="328.65652"
-       id="use2497"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff8000;fill-opacity:1"
-       inkscape:label="Methodism Text"><tspan
-         sodipodi:role="line"
-         id="tspan3406"
-         x="673.05438"
-         y="328.65652"
-         style="font-size:12.99999905px;line-height:1.25">Methodism</tspan></text>
-    <text
-       x="655.90399"
-       y="98.002998"
-       id="use2503"
-       xml:space="preserve"
-       style="line-height:0%;fill:#9f5000;fill-opacity:1"
-       inkscape:label="Holiness movement Text"><tspan
-         x="655.90399"
-         y="98.002998"
-         id="tspan2507">Holiness movement</tspan></text>
-    <text
-       x="682.86804"
-       y="78.711006"
-       id="use2509"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fe4b10;fill-opacity:1"
-       inkscape:label="Adventism Text"><tspan
-         sodipodi:role="line"
-         id="tspan3404"
-         x="682.86804"
-         y="78.711006"
-         style="font-size:12.99999905px;line-height:1.25">Adventism</tspan></text>
-    <text
-       x="672.86993"
-       y="53.602207"
-       id="use2515"
-       xml:space="preserve"
-       style="line-height:0%;fill:#808000;fill-opacity:1"
-       inkscape:label="Pentecostalism Text"><tspan
-         x="672.86993"
-         y="53.602207"
-         id="tspan2519">Pentecostalism</tspan></text>
-    <text
-       x="5.7031202"
-       y="502.21799"
-       id="1500"
-       xml:space="preserve"
-       style="font-size:15px;line-height:0%"
-       inkscape:label="1500 Text"><tspan
-         x="5.7031202"
-         y="502.21799"
-         id="tspan2541">1500</tspan></text>
-    <text
-       x="156.302"
-       y="502.21799"
-       id="1600"
-       xml:space="preserve"
-       style="font-size:15px;line-height:0%"
-       inkscape:label="1600 Text"><tspan
-         x="156.302"
-         y="502.21799"
-         id="tspan2547">1600</tspan></text>
-    <text
-       x="306.22101"
-       y="502.21799"
-       id="1700"
-       xml:space="preserve"
-       style="font-size:15px;line-height:0%"
-       inkscape:label="1700 Text"><tspan
-         x="306.22101"
-         y="502.21799"
-         id="tspan2553">1700</tspan></text>
-    <text
-       x="456.18201"
-       y="502.21799"
-       id="1800"
-       xml:space="preserve"
-       style="font-size:15px;line-height:0%"
-       inkscape:label="1800 Text"><tspan
-         x="456.18201"
-         y="502.21799"
-         id="tspan2559">1800</tspan></text>
-    <text
-       x="606.20599"
-       y="502.21799"
-       id="1900"
-       xml:space="preserve"
-       style="font-size:15px;line-height:0%"
-       inkscape:label="1900 Text"><tspan
-         x="606.20599"
-         y="502.21799"
-         id="tspan2565">1900</tspan></text>
-    <text
-       x="756.91302"
-       y="502.21799"
-       id="2000"
-       xml:space="preserve"
-       style="font-size:15px;line-height:0%"
-       inkscape:label="2000 Text"><tspan
-         x="756.91302"
-         y="502.21799"
-         id="tspan2575">2000</tspan></text>
-    <text
-       x="622.11615"
-       y="356.45395"
-       id="use2497-4"
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#8030ff;fill-opacity:1"
-       inkscape:label="Plymouth Brethren Text"><tspan
-         sodipodi:role="line"
-         id="tspan4255"
-         x="622.11615"
-         y="356.45395"
-         style="font-size:12.99999905px;line-height:1.25">Plymouth Brethren</tspan></text>
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4756"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       transform="translate(208.53363,152.22173)"
-       inkscape:label="Great Awakening Text"><flowRegion
-         id="flowRegion4758"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><rect
-           id="rect4760"
-           width="42.341316"
-           height="20.582588"
-           x="152.89923"
-           y="-151.34746"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" /></flowRegion><flowPara
-         id="flowPara4766">Great</flowPara><flowPara
-         id="flowPara4768">Awakening</flowPara><flowPara
-         id="flowPara4770" /></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4756-6"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       transform="translate(305.50404,152.12407)"
-       inkscape:label="Transcendental Awakening Text"><flowRegion
-         id="flowRegion4758-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><rect
-           id="rect4760-9"
-           width="61.159676"
-           height="22.346817"
-           x="152.89923"
-           y="-151.34746"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" /></flowRegion><flowPara
-         id="flowPara4802">Transcendental</flowPara><flowPara
-         id="flowPara4804">Awakening</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4756-6-2"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       transform="translate(409.4595,152.12407)"
-       inkscape:label="Third Great Awakening Text"><flowRegion
-         id="flowRegion4758-1-9"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><rect
-           id="rect4760-9-5"
-           width="45.28167"
-           height="31.756001"
-           x="152.89923"
-           y="-151.34746"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" /></flowRegion><flowPara
-         id="flowPara4833">Third</flowPara><flowPara
-         id="flowPara4835">Great</flowPara><flowPara
-         id="flowPara4837">Awakening</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4756-6-2-8"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       transform="translate(540.42139,152.22173)"
-       inkscape:label="Consciousness Revolution Text"><flowRegion
-         id="flowRegion4758-1-9-8"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><rect
-           id="rect4760-9-5-3"
-           width="58.807381"
-           height="19.406443"
-           x="152.89923"
-           y="-151.34746"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" /></flowRegion><flowPara
-         id="flowPara4869">Consciousness</flowPara><flowPara
-         id="flowPara4871">Revolution</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4756-9"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-       transform="translate(-103.74431,147.6363)"
-       inkscape:label="Puritan Awakening Text"><flowRegion
-         id="flowRegion4758-7"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><rect
-           id="rect4760-3"
-           width="176.34932"
-           height="40.161678"
-           x="152.89923"
-           y="-151.34746"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" /></flowRegion><flowPara
-         id="flowPara11490">Protestant Reformation/</flowPara><flowPara
-         id="flowPara11492">Puritan Awakening</flowPara><flowPara
-         id="flowPara11494" /></flowRoot>  </g>
-</svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) --><svg:svg height="512" id="svg2" inkscape:version="0.92.4 (5da689c313, 2019-01-14)" sodipodi:docname="Protestant_branches.svg" version="1.0" width="800" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+<svg:metadata id="metadata3159">
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+<dc:title/>
+</cc:Work>
+</rdf:RDF>
+</svg:metadata>
+<sodipodi:namedview bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview3157" inkscape:current-layer="Text" inkscape:cx="487.62863" inkscape:cy="-93.247226" inkscape:guide-bbox="true" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="1057" inkscape:window-maximized="1" inkscape:window-width="1846" inkscape:window-x="66" inkscape:window-y="-8" inkscape:zoom="0.74039055" objecttolerance="10" pagecolor="#ffffff" showgrid="false" showguides="true">
+<inkscape:grid id="grid3149" type="xygrid"/>
+</sodipodi:namedview>
+<svg:defs id="defs5"/>
+<svg:g id="Rectangles" inkscape:groupmode="layer">
+<svg:rect height="491.3793" id="Protestant Reformation  Rectangle" ry="0" style="opacity:0.92000002;fill:#cfaeff;fill-opacity:0.43786986;fill-rule:evenodd;stroke:none;stroke-width:0.46000001;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="190.51724" x="43.965519" y="-3.5172412"/>
+<svg:rect height="492.24139" id="Great Awakening Rectangle" style="display:inline;opacity:0.92000002;fill:#0000ff;fill-opacity:0.27218939;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="49.137939" x="357.75861" y="-5.2413793"/>
+<svg:rect height="492.24136" id="Transcendental Awakening Rectangle" ry="0" style="opacity:0.92000002;fill:#0000ff;fill-opacity:0.27218939;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="82.758621" x="447.41379" y="-5.2413869"/>
+<svg:rect height="492.24136" id="Third Great Awakening Rectangle" ry="0" style="font-size:13px;line-height:125%;font-family:Arial;opacity:0.92000002;fill:#0000ff;fill-opacity:0.06508879;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="79.310349" x="545.06897" y="-4.4310303"/>
+<svg:rect height="491.3793" id="Consciousness Revolution Rectangle" ry="0" style="font-size:13px;line-height:125%;font-family:Arial;opacity:0.92000002;fill:#0000ff;fill-opacity:0.06508879;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" width="46.551727" x="699.49316" y="-2.6379235"/>
+</svg:g>
+<svg:g id="Strokes" style="fill:none;stroke:#ff00ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4">
+<svg:path d="m 183.26315,217.45532 0.0733,131.56148" id="Congregationalism Feeder Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#0099bf;stroke-width:2;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:6.44916439"/>
+<svg:path d="m 515,102 1.92755,230.75459" id="Holiness Feeder Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#9f5000;stroke-linecap:square;stroke-dasharray:8, 8;stroke-dashoffset:5"/>
+<svg:path d="m 501.508,83.561825 0.35356,250.215835" id="Adventism Feeder Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#fe4b10;stroke-linecap:square;stroke-dasharray:8, 8;stroke-dashoffset:5"/>
+<svg:path d="m 265,427 24.63833,-26.13156 174.61227,0.003" id="Pietism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="stroke:#0060ff"/>
+<svg:path d="M 790,427 H 43.559609" id="Lutheranism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#0000ff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="m 203.48475,33.016866 0.15894,317.894974" id="Baptist Feeder Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#800000;stroke-width:2;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:1.98370814"/>
+<svg:path d="M 789.29288,32.707107 65.018409,32.669456" id="Anabaptist Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#ff0000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="m 790,127 -586.57744,0.463" id="Baptist Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#800000"/>
+<svg:path d="m 790,257 -606.20365,0.6067" id="Congregationalism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#0099bf"/>
+<svg:path d="M 637.576,57.361836 V 100.62353" id="Pentacostalism Feeder Path" inkscape:connector-curvature="0" style="stroke:#808000;stroke-linecap:square;stroke-dasharray:8, 8;stroke-dashoffset:6.5"/>
+<svg:path d="M 790,102 H 515" id="Holiness Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#9f5000"/>
+<svg:path d="M 790,57 H 637.24138" id="Pentecostalism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#808000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="M 95.257043,371.7431 420.37334,301.67732 h 368.91064" id="Puritanism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="stroke:#ff0080;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="m 375,372 85,-40 h 330" id="Methodism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="stroke:#ff8000"/>
+<svg:path d="m 465.16574,400.78216 82.75286,0.10299" id="Pietism Extension Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#0060ff;stroke-linecap:square;stroke-dasharray:8, 8"/>
+<svg:path d="M 90.42272,161.62674 125.23154,216.57 790,217" id="Presbyterianism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="stroke:#004000"/>
+<svg:g id="Time-axis" style="stroke:#000000">
+<svg:path d="M 23.038147,487.66289 H 790.40596" id="path1873" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+<svg:path d="m 24,482.69243 v 4.97046" id="1500 Tick" inkscape:connector-curvature="0"/>
+<svg:path d="m 174.599,482.69243 v 4.97046" id="1600 Tick" inkscape:connector-curvature="0"/>
+<svg:path d="m 324.518,482.69243 v 4.97046" id="1700 Tick" inkscape:connector-curvature="0"/>
+<svg:path d="m 474.479,482.69243 v 4.97046" id="1800 Tick" inkscape:connector-curvature="0"/>
+<svg:path d="m 624.50251,482.69243 v 4.97046" id="1900 Tick" inkscape:connector-curvature="0"/>
+<svg:path d="m 774.573,482.69243 v 4.97046" id="2000 Tick" inkscape:connector-curvature="0"/>
+</svg:g>
+<svg:path d="M 790,372 H 87.723718" id="Anglicanism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#400080;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="M 790,82 500.70711,82.353553" id="Adventism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="stroke:#fe4b10"/>
+<svg:path d="m 54.3911,162.13529 60.77086,0.28868 674.83835,-0.42391" id="Calvinism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="stroke:#008000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="m 181.42495,161.92161 30.24643,30.65601 577.63715,0.23991" id="Arminianism Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="fill:none;stroke:#00fe00;stroke-width:1.3925885;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"/>
+<svg:path d="m 91.125621,161.49875 34.752829,-17.41966 663.69928,-0.13642" id="Reformed Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="fill:none;stroke:#008080;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"/>
+<svg:path d="m 516.62608,371.4245 55.7776,-10.20411 h 216.5483" id="Plymouth Bretheren Path" inkscape:connector-curvature="0" sodipodi:nodetypes="ccc" style="fill:none;stroke:#8030ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"/>
+<svg:path d="m 23.264048,553.0 c 46.522479,0 46.522479,0 46.522479,0 h -6.20302" id="Johannes Oecolampadius (1482-1531)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10001">Johannes Oecolampadius, an Adaptive Artist of the Humanist generation in the Late Medieval saeculum.</svg:desc>
+<svg:title id="title10001">Johannes Oecolampadius (1482-1531)</svg:title>
+</svg:path>
+<svg:path d="m 23.264048,583.0 c 46.522479,0 46.522479,0 46.522479,0 h -6.20302" id="Huldrych Zwingli (1484-1531)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10002">Huldrych Zwingli, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10002">Huldrych Zwingli (1484-1531)</svg:title>
+</svg:path>
+<svg:path d="m 23.264048,613.0 c 97.547134,0 97.547134,0 97.547134,0 h -6.20302" id="William Farel (1489-1565)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10003">William Farel, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10003">William Farel (1489-1565)</svg:title>
+</svg:path>
+<svg:path d="m 23.264048,643.0 c 76.536982,0 76.536982,0 76.536982,0 h -6.20302" id="Martin Bucer (1491-1551)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10004">Martin Bucer, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10004">Martin Bucer (1491-1551)</svg:title>
+</svg:path>
+<svg:path d="m 23.264048,673.0 c 93.044959,0 93.044959,0 93.044959,0 h -6.20302" id="Peter Martyr Vermigli (1499-1562)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10005">Peter Martyr Vermigli, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10005">Peter Martyr Vermigli (1499-1562)</svg:title>
+</svg:path>
+<svg:path d="m 29.266948,703.0 c 106.551485,0 106.551485,0 106.551485,0 h -6.20302" id="Heinrich Bullinger (1504-1575)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10006">Heinrich Bullinger, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10006">Heinrich Bullinger (1504-1575)</svg:title>
+</svg:path>
+<svg:path d="m 36.770574,733.0 c 82.539883,0 82.539883,0 82.539883,0 h -6.20302" id="John Calvin (1509-1564)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10007">John Calvin, an Idealist Prophet of the Reformation generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10007">John Calvin (1509-1564)</svg:title>
+</svg:path>
+<svg:path d="m 44.274200,763.0 c 87.042058,0 87.042058,0 87.042058,0 h -6.20302" id="John Knox (1514-1572)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10008">John Knox, a Reactive Nomad of the Reprisal generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10008">John Knox (1514-1572)</svg:title>
+</svg:path>
+<svg:path d="m 51.777825,793.0 c 129.062362,0 129.062362,0 129.062362,0 h -6.20302" id="Theodore Beza (1519-1605)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10009">Theodore Beza, a Reactive Nomad of the Reprisal generation in the Reformation saeculum.</svg:desc>
+<svg:title id="title10009">Theodore Beza (1519-1605)</svg:title>
+</svg:path>
+<svg:path d="m 529.008421,823.0 c 124.560187,0 124.560187,0 124.560187,0 h -6.20302" id="Abraham Kuyper (1837-1920)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10010">Abraham Kuyper, a Reactive Nomad of the Gilded generation in the Civil War saeculum.</svg:desc>
+<svg:title id="title10010">Abraham Kuyper (1837-1920)</svg:title>
+</svg:path>
+<svg:path d="m 550.018573,853.0 c 105.050760,0 105.050760,0 105.050760,0 h -6.20302" id="B. B. Warfield (1851-1921)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10011">B. B. Warfield, an Adaptive Artist of the Progressive generation in the Civil War saeculum.</svg:desc>
+<svg:title id="title10011">B. B. Warfield (1851-1921)</svg:title>
+</svg:path>
+<svg:path d="m 554.520748,883.0 c 100.548585,0 100.548585,0 100.548585,0 h -6.20302" id="Herman Bavinck (1854-1921)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10012">Herman Bavinck, an Adaptive Artist of the Progressive generation in the Civil War saeculum.</svg:desc>
+<svg:title id="title10012">Herman Bavinck (1854-1921)</svg:title>
+</svg:path>
+<svg:path d="m 595.040327,913.0 c 84.040608,0 84.040608,0 84.040608,0 h -6.20302" id="J. Gresham Machen (1881-1937)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10013">J. Gresham Machen, an Idealist Prophet of the Missionary generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10013">J. Gresham Machen (1881-1937)</svg:title>
+</svg:path>
+<svg:path d="m 602.543953,943.0 c 123.059462,0 123.059462,0 123.059462,0 h -6.20302" id="Karl Barth (1886-1968)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10014">Karl Barth, a Reactive Nomad of the Lost generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10014">Karl Barth (1886-1968)</svg:title>
+</svg:path>
+<svg:path d="m 616.050479,973.0 c 138.066713,0 138.066713,0 138.066713,0 h -6.20302" id="Cornelius Van Til (1895-1987)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10015">Cornelius Van Til, a Reactive Nomad of the Lost generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10015">Cornelius Van Til (1895-1987)</svg:title>
+</svg:path>
+<svg:path d="m 622.053380,1003.0 c 123.059462,0 123.059462,0 123.059462,0 h -6.20302" id="Martyn Lloyd-Jones (1899-1981)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10016">Martyn Lloyd-Jones, a Reactive Nomad of the Lost generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10016">Martyn Lloyd-Jones (1899-1981)</svg:title>
+</svg:path>
+<svg:path d="m 626.555555,1033.0 c 124.560187,0 124.560187,0 124.560187,0 h -6.20302" id="Gordon Clark (1902-1985)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10017">Gordon Clark, a Civic Hero of the G.I. generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10017">Gordon Clark (1902-1985)</svg:title>
+</svg:path>
+<svg:path d="m 662.572958,1063.0 c 141.068163,0 141.068163,0 141.068163,0 h -6.20302" id="J. I. Packer (1926-present)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10018">J. I. Packer, an Adaptive Artist of the Silent generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10018">J. I. Packer (1926-present)</svg:title>
+</svg:path>
+<svg:path d="m 682.082385,1093.0 c 117.056561,0 117.056561,0 117.056561,0 h -6.20302" id="R. C. Sproul (1939-2017)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10019">R. C. Sproul, an Adaptive Artist of the Silent generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10019">R. C. Sproul (1939-2017)</svg:title>
+</svg:path>
+<svg:path d="m 682.082385,1123.0 c 121.558737,0 121.558737,0 121.558737,0 h -6.20302" id="John F. MacArthur (1939-present)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10020">John F. MacArthur, an Adaptive Artist of the Silent generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10020">John F. MacArthur (1939-present)</svg:title>
+</svg:path>
+<svg:path d="m 682.082385,1153.0 c 121.558737,0 121.558737,0 121.558737,0 h -6.20302" id="David F. Wells (1939-present)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10021">David F. Wells, an Adaptive Artist of the Silent generation in the Great Power saeculum.</svg:desc>
+<svg:title id="title10021">David F. Wells (1939-present)</svg:title>
+</svg:path>
+<svg:path d="m 698.590362,1183.0 c 105.050760,0 105.050760,0 105.050760,0 h -6.20302" id="Timothy J. Keller (1950-present)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10022">Timothy J. Keller, an Idealist Prophet of the Baby Boom generation in the Millennial saeculum.</svg:desc>
+<svg:title id="title10022">Timothy J. Keller (1950-present)</svg:title>
+</svg:path>
+<svg:path d="m 719.600514,1213.0 c 84.040608,0 84.040608,0 84.040608,0 h -6.20302" id="Michael Horton (theologian) (1964-present)" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
+<svg:desc id="desc10023">Michael Horton (theologian), a Reactive Nomad of the 13th generation in the Millennial saeculum.</svg:desc>
+<svg:title id="title10023">Michael Horton (theologian) (1964-present)</svg:title>
+</svg:path>
+</svg:g>
+<svg:g id="Text" style="font-size:13px;line-height:125%;font-family:Arial;fill:#000000">
+<svg:text id="Johannes Oecolampadius (1482-1531)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="23.264047611376554" xml:space="preserve" y="548"><svg:tspan id="tspan10001" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="23.264047611376554" y="553">Johannes Oecolampadius (1482-1531)</svg:tspan></svg:text>
+<svg:text id="Huldrych Zwingli (1484-1531)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="23.264047611376554" xml:space="preserve" y="578"><svg:tspan id="tspan10002" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="23.264047611376554" y="583">Huldrych Zwingli (1484-1531)</svg:tspan></svg:text>
+<svg:text id="William Farel (1489-1565)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="23.264047611376554" xml:space="preserve" y="608"><svg:tspan id="tspan10003" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="23.264047611376554" y="613">William Farel (1489-1565)</svg:tspan></svg:text>
+<svg:text id="Martin Bucer (1491-1551)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="23.264047611376554" xml:space="preserve" y="638"><svg:tspan id="tspan10004" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="23.264047611376554" y="643">Martin Bucer (1491-1551)</svg:tspan></svg:text>
+<svg:text id="Peter Martyr Vermigli (1499-1562)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="23.264047611376554" xml:space="preserve" y="668"><svg:tspan id="tspan10005" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="23.264047611376554" y="673">Peter Martyr Vermigli (1499-1562)</svg:tspan></svg:text>
+<svg:text id="Heinrich Bullinger (1504-1575)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="29.26694818292799" xml:space="preserve" y="698"><svg:tspan id="tspan10006" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="29.26694818292799" y="703">Heinrich Bullinger (1504-1575)</svg:tspan></svg:text>
+<svg:text id="John Calvin (1509-1564)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="36.770573897367285" xml:space="preserve" y="728"><svg:tspan id="tspan10007" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="36.770573897367285" y="733">John Calvin (1509-1564)</svg:tspan></svg:text>
+<svg:text id="John Knox (1514-1572)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="44.274199611806125" xml:space="preserve" y="758"><svg:tspan id="tspan10008" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="44.274199611806125" y="763">John Knox (1514-1572)</svg:tspan></svg:text>
+<svg:text id="Theodore Beza (1519-1605)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="51.77782532624542" xml:space="preserve" y="788"><svg:tspan id="tspan10009" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="51.77782532624542" y="793">Theodore Beza (1519-1605)</svg:tspan></svg:text>
+<svg:text id="Abraham Kuyper (1837-1920)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="529.0084207645741" xml:space="preserve" y="818"><svg:tspan id="tspan10010" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="529.0084207645741" y="823">Abraham Kuyper (1837-1920)</svg:tspan></svg:text>
+<svg:text id="B. B. Warfield (1851-1921)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="550.0185727650037" xml:space="preserve" y="848"><svg:tspan id="tspan10011" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="550.0185727650037" y="853">B. B. Warfield (1851-1921)</svg:tspan></svg:text>
+<svg:text id="Herman Bavinck (1854-1921)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="554.5207481936668" xml:space="preserve" y="878"><svg:tspan id="tspan10012" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="554.5207481936668" y="883">Herman Bavinck (1854-1921)</svg:tspan></svg:text>
+<svg:text id="J. Gresham Machen (1881-1937)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="595.0403270516381" xml:space="preserve" y="908"><svg:tspan id="tspan10013" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="595.0403270516381" y="913">J. Gresham Machen (1881-1937)</svg:tspan></svg:text>
+<svg:text id="Karl Barth (1886-1968)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="602.5439527660774" xml:space="preserve" y="938"><svg:tspan id="tspan10014" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="602.5439527660774" y="943">Karl Barth (1886-1968)</svg:tspan></svg:text>
+<svg:text id="Cornelius Van Til (1895-1987)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="616.0504790520677" xml:space="preserve" y="968"><svg:tspan id="tspan10015" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="616.0504790520677" y="973">Cornelius Van Til (1895-1987)</svg:tspan></svg:text>
+<svg:text id="Martyn Lloyd-Jones (1899-1981)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="622.0533796236191" xml:space="preserve" y="998"><svg:tspan id="tspan10016" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="622.0533796236191" y="1003">Martyn Lloyd-Jones (1899-1981)</svg:tspan></svg:text>
+<svg:text id="Gordon Clark (1902-1985)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="626.5555550522827" xml:space="preserve" y="1028"><svg:tspan id="tspan10017" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="626.5555550522827" y="1033">Gordon Clark (1902-1985)</svg:tspan></svg:text>
+<svg:text id="J. I. Packer (1926-present)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="662.5729584815904" xml:space="preserve" y="1058"><svg:tspan id="tspan10018" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="662.5729584815904" y="1063">J. I. Packer (1926-present)</svg:tspan></svg:text>
+<svg:text id="R. C. Sproul (1939-2017)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="682.0823853391321" xml:space="preserve" y="1088"><svg:tspan id="tspan10019" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="682.0823853391321" y="1093">R. C. Sproul (1939-2017)</svg:tspan></svg:text>
+<svg:text id="John F. MacArthur (1939-present)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="682.0823853391321" xml:space="preserve" y="1118"><svg:tspan id="tspan10020" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="682.0823853391321" y="1123">John F. MacArthur (1939-present)</svg:tspan></svg:text>
+<svg:text id="David F. Wells (1939-present)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="682.0823853391321" xml:space="preserve" y="1148"><svg:tspan id="tspan10021" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="682.0823853391321" y="1153">David F. Wells (1939-present)</svg:tspan></svg:text>
+<svg:text id="Timothy J. Keller (1950-present)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="698.5903619108981" xml:space="preserve" y="1178"><svg:tspan id="tspan10022" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="698.5903619108981" y="1183">Timothy J. Keller (1950-present)</svg:tspan></svg:text>
+<svg:text id="Michael Horton (theologian) (1964-present)" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1" x="719.6005139113277" xml:space="preserve" y="1208"><svg:tspan id="tspan10023" sodipodi:role="line" style="font-size:13px;line-height:1.25" x="719.6005139113277" y="1213">Michael Horton (theologian) (1964-present)</svg:tspan></svg:text>
+<svg:text id="Arminianism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#00ff00;fill-opacity:1" x="333.28125" xml:space="preserve" y="188.87112"><svg:tspan id="tspan4268" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="333.28125" y="188.87112">Arminianism</svg:tspan></svg:text>
+<svg:text id="Anabaptism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000" x="66.382416" xml:space="preserve" y="45.967991"><svg:tspan id="tspan4270" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="66.382416" y="45.967991">Anabaptism</svg:tspan></svg:text>
+<svg:text id="Baptism Text" style="line-height:0%;fill:#800000" x="332.62701" xml:space="preserve" y="120.93421"><svg:tspan id="tspan2431" x="332.62701" y="120.93421">Baptists</svg:tspan></svg:text>
+<svg:text id="Calvanism Text" style="line-height:0%;fill:#008000" x="119.08521" xml:space="preserve" y="159.56227"><svg:tspan id="tspan2441" x="119.08521" y="159.56227">Calvinism</svg:tspan></svg:text>
+<svg:text id="Reformed Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#008080" x="293.55344" xml:space="preserve" y="141.2787"><svg:tspan id="tspan3408" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="293.55344" y="141.2787">Continental Reformed churches</svg:tspan></svg:text>
+<svg:text id="Presbyterianism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#004000" x="319.6069" xml:space="preserve" y="212.22021"><svg:tspan id="tspan3410" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="319.6069" y="212.22021">Presbyterianism</svg:tspan></svg:text>
+<svg:text id="Congregationalism" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#0099bf;fill-opacity:1" x="321.11301" xml:space="preserve" y="251.67813"><svg:tspan id="tspan3412" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="321.11301" y="251.67813">Congregationalism</svg:tspan></svg:text>
+<svg:text id="Puritanism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0080;fill-opacity:1" x="522.30664" xml:space="preserve" y="297.82849"><svg:tspan id="tspan3415" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="522.30664" y="297.82849">Puritanism, Quakers &amp; other English Dissenters</svg:tspan></svg:text>
+<svg:text id="Lutheranism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:0.94117599" x="70.341812" xml:space="preserve" y="441.01236"><svg:tspan id="tspan3418" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="70.341812" y="441.01236">Lutheranism</svg:tspan></svg:text>
+<svg:text id="Anglicanism Text" style="line-height:0%;fill:#400080;fill-opacity:1" x="81.077591" xml:space="preserve" y="384.63263"><svg:tspan id="tspan2535" x="81.077591" y="384.63263">Anglicanism</svg:tspan></svg:text>
+<svg:text id="Pietism Text" style="line-height:0%;fill:#0060ff;fill-opacity:1" x="398.17401" xml:space="preserve" y="397.74014"><svg:tspan id="tspan2495" x="398.17401" y="397.74014">Pietism</svg:tspan></svg:text>
+<svg:text id="Methodism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff8000;fill-opacity:1" x="673.05438" xml:space="preserve" y="328.65652"><svg:tspan id="tspan3406" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="673.05438" y="328.65652">Methodism</svg:tspan></svg:text>
+<svg:text id="Holiness movement Text" style="line-height:0%;fill:#9f5000;fill-opacity:1" x="655.90399" xml:space="preserve" y="98.002998"><svg:tspan id="tspan2507" x="655.90399" y="98.002998">Holiness movement</svg:tspan></svg:text>
+<svg:text id="Adventism Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fe4b10;fill-opacity:1" x="682.86804" xml:space="preserve" y="78.711006"><svg:tspan id="tspan3404" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="682.86804" y="78.711006">Adventism</svg:tspan></svg:text>
+<svg:text id="Pentecostalism Text" style="line-height:0%;fill:#808000;fill-opacity:1" x="672.86993" xml:space="preserve" y="53.602207"><svg:tspan id="tspan2519" x="672.86993" y="53.602207">Pentecostalism</svg:tspan></svg:text>
+<svg:text id="1500 Text" style="font-size:15px;line-height:0%" x="5.7031202" xml:space="preserve" y="502.21799"><svg:tspan id="tspan2541" x="5.7031202" y="502.21799">1500</svg:tspan></svg:text>
+<svg:text id="1600 Text" style="font-size:15px;line-height:0%" x="156.302" xml:space="preserve" y="502.21799"><svg:tspan id="tspan2547" x="156.302" y="502.21799">1600</svg:tspan></svg:text>
+<svg:text id="1700 Text" style="font-size:15px;line-height:0%" x="306.22101" xml:space="preserve" y="502.21799"><svg:tspan id="tspan2553" x="306.22101" y="502.21799">1700</svg:tspan></svg:text>
+<svg:text id="1800 Text" style="font-size:15px;line-height:0%" x="456.18201" xml:space="preserve" y="502.21799"><svg:tspan id="tspan2559" x="456.18201" y="502.21799">1800</svg:tspan></svg:text>
+<svg:text id="1900 Text" style="font-size:15px;line-height:0%" x="606.20599" xml:space="preserve" y="502.21799"><svg:tspan id="tspan2565" x="606.20599" y="502.21799">1900</svg:tspan></svg:text>
+<svg:text id="2000 Text" style="font-size:15px;line-height:0%" x="756.91302" xml:space="preserve" y="502.21799"><svg:tspan id="tspan2575" x="756.91302" y="502.21799">2000</svg:tspan></svg:text>
+<svg:text id="Plymouth Brethren Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#8030ff;fill-opacity:1" x="622.11615" xml:space="preserve" y="356.45395"><svg:tspan id="tspan4255" sodipodi:role="line" style="font-size:12.99999905px;line-height:1.25" x="622.11615" y="356.45395">Plymouth Brethren</svg:tspan></svg:text>
+<svg:flowRoot id="Great Awakening Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none" transform="translate(208.53363,152.22173)" xml:space="preserve"><svg:flowRegion id="flowRegion4758" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><svg:rect height="20.582588" id="rect4760" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" width="42.341316" x="152.89923" y="-151.34746"/></svg:flowRegion><svg:flowPara id="flowPara4766">Great</svg:flowPara><svg:flowPara id="flowPara4768">Awakening</svg:flowPara><svg:flowPara id="flowPara4770"/></svg:flowRoot> <svg:flowRoot id="Transcendental Awakening Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none" transform="translate(305.50404,152.12407)" xml:space="preserve"><svg:flowRegion id="flowRegion4758-1" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><svg:rect height="22.346817" id="rect4760-9" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" width="61.159676" x="152.89923" y="-151.34746"/></svg:flowRegion><svg:flowPara id="flowPara4802">Transcendental</svg:flowPara><svg:flowPara id="flowPara4804">Awakening</svg:flowPara></svg:flowRoot> <svg:flowRoot id="Third Great Awakening Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none" transform="translate(409.4595,152.12407)" xml:space="preserve"><svg:flowRegion id="flowRegion4758-1-9" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><svg:rect height="31.756001" id="rect4760-9-5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" width="45.28167" x="152.89923" y="-151.34746"/></svg:flowRegion><svg:flowPara id="flowPara4833">Third</svg:flowPara><svg:flowPara id="flowPara4835">Great</svg:flowPara><svg:flowPara id="flowPara4837">Awakening</svg:flowPara></svg:flowRoot> <svg:flowRoot id="Consciousness Revolution Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none" transform="translate(540.42139,152.22173)" xml:space="preserve"><svg:flowRegion id="flowRegion4758-1-9-8" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><svg:rect height="19.406443" id="rect4760-9-5-3" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" width="58.807381" x="152.89923" y="-151.34746"/></svg:flowRegion><svg:flowPara id="flowPara4869">Consciousness</svg:flowPara><svg:flowPara id="flowPara4871">Revolution</svg:flowPara></svg:flowRoot> <svg:flowRoot id="Puritan Awakening Text" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none" transform="translate(-103.74431,147.6363)" xml:space="preserve"><svg:flowRegion id="flowRegion4758-7" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"><svg:rect height="40.161678" id="rect4760-3" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" width="176.34932" x="152.89923" y="-151.34746"/></svg:flowRegion><svg:flowPara id="flowPara11490">Protestant Reformation/</svg:flowPara><svg:flowPara id="flowPara11492">Puritan Awakening</svg:flowPara><svg:flowPara id="flowPara11494"/></svg:flowRoot> </svg:g>
+</svg:svg>
