@@ -236,3 +236,4 @@ dmypy.json
 
 # Exclude Pyre type checker
 .pyre/
+share
