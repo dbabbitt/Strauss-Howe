@@ -12,7 +12,7 @@ import os.path as osp
 
 # Define the shared folder path using join for better compatibility
 shared_folder = osp.abspath(osp.join(
-    osp.dirname(__file__), '..', '..', '..', 'share'
+    osp.dirname(__file__), '..', '..', 'share'
 ))
 
 # Add the shared folder to sys.path if it's not already included
