@@ -49,5 +49,5 @@ print(speech_str)
 speech_engine.say(speech_str)
 speech_engine.runAndWait()
 
-print(f"from spirallib import ({', '.join(dir())})")
-print(r'\b(' + '|'.join(dir()) + r')\b')
+# print(f"from spirallib import ({', '.join(dir())})")
+# print(r'\b(' + '|'.join(dir()) + r')\b')
