@@ -1520,7 +1520,7 @@ class StraussHoweUtilities(object):
         f_str += 'were {}.'
         p_list = self.patriline_df[mask_series].index.tolist()
         if p_list:
-            story_str = f_str.format(self.conjunctify_nouns(p_list)).replace('..', '.')
+            story_str = f_str.format(self.conjunctify_nouns(p_list)).replace(os.pardir, '.')
             statements_list.append(story_str)
         
         # Create the "years old" conjunction and append it to the statements list

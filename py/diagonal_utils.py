@@ -1580,7 +1580,7 @@ class StraussHoweUtilities(object):
         f_str = f'The members of the patriline that were alive during the {event_name} '
         f_str += 'were {}. '
         p_list = self.patriline_df[mask_series].index
-        story_str = f_str.format(self.conjunctify_nouns(p_list)).replace('..', '.')
+        story_str = f_str.format(self.conjunctify_nouns(p_list)).replace(os.pardir, '.')
         f_str = '{} was {} years old at this time'
         patriarch_strs_list = []
         for patriarch, row_series in self.patriline_df[mask_series].iterrows():
